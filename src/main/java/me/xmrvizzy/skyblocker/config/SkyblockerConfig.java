@@ -62,6 +62,8 @@ public class SkyblockerConfig implements ConfigData {
 
     public static class Messages {
         public boolean hideAbility = false;
+        public boolean autoOpenMenu = false;
+        public boolean hideUnbreakable = false;
         public boolean hideHeal = false;
         public boolean hideAOTE = false;
         public boolean hideImplosion = false;

@@ -34,7 +34,7 @@ public class ChatHudListenerMixin {
         }
 
         if (Utils.isSkyblock) {
-            if (msg.contains("[OPEN MENU]")) {
+            if (SkyblockerConfig.get().messages.autoOpenMenu && msg.contains("[OPEN MENU]")) {
                 List<Text> siblings = message.getSiblings();
                 for (Text sibling : siblings) {
                     if (sibling.getString().contains("[OPEN MENU]")) {
@@ -55,15 +55,18 @@ public class ChatHudListenerMixin {
             }
 
             if (SkyblockerConfig.get().messages.hideAbility &&
-                    msg.contains("This ability is currently on cooldown for ") ||
+                    (msg.contains("This ability is currently on cooldown for ") ||
                     msg.contains("No more charges, next one in ") ||
-                    msg.contains("This ability is on cooldown for "))
+                    msg.contains("This ability is on cooldown for ")))
                 ci.cancel();
 
             if (SkyblockerConfig.get().messages.hideHeal &&
-                    msg.contains("You healed ") &&
-                    msg.contains(" health!") || msg.contains(" healed you for "))
-                ci.cancel();
+                    ((msg.contains("You healed ") &&
+                    msg.contains(" health!")) || msg.contains(" healed you for ")))
+                {    
+                    ci.cancel();
+                }
+
 
             if (SkyblockerConfig.get().messages.hideAOTE &&
                     msg.contains("There are blocks in the way!"))
@@ -75,6 +78,10 @@ public class ChatHudListenerMixin {
 
             if (SkyblockerConfig.get().messages.hideMoltenWave &&
                     msg.contains("Your Molten Wave hit "))
+                ci.cancel();
+            
+            if (SkyblockerConfig.get().messages.hideUnbreakable &&
+                (msg.contains("A magical force surrounding this area prevents you from breaking blocks!") || msg.contains("You cannot mine this close to an entrance!")))
                 ci.cancel();
         }
     }

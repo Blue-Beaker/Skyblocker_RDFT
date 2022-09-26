@@ -14,12 +14,15 @@
   "text.autoconfig.skyblocker.option.locations.dungeons.enableMap": "Enable Map",
   "text.autoconfig.skyblocker.option.locations.dungeons.solveThreeWeirdos": "Solve Three Weirdos Puzzle",
   "text.autoconfig.skyblocker.option.locations.dwarvenMines": "Dwarven Mines",
-  "text.autoconfig.skyblocker.option.locations.dwarvenMines.enableDrillFuel": "Enable Drill Fuel",
+  "text.autoconfig.skyblocker.option.locations.dwarvenMines.enableDrillFuel": "Enable Drill Fuel/Pickonimbus Uses",
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.solvePuzzler": "Solve Puzzler Puzzle",
 
   "text.autoconfig.skyblocker.category.messages": "Messages",
   "text.autoconfig.skyblocker.option.messages.hideAbility": "Hide Ability Cooldown",
   "text.autoconfig.skyblocker.option.messages.hideHeal": "Hide Heal Messages",
+  "text.autoconfig.skyblocker.option.messages.hideAOTE": "Hide AOTE Messages",
+  "text.autoconfig.skyblocker.option.messages.hideUnbreakable": "Hide 'Cant break block' Messages",
+  "text.autoconfig.skyblocker.option.messages.autoOpenMenu": "Auto open Menus in chat",
   "text.autoconfig.skyblocker.option.messages.hideAOTE": "Hide AOTE Messages",
   "text.autoconfig.skyblocker.option.messages.hideImplosion": "Hide Implosion Message",
   "text.autoconfig.skyblocker.option.messages.hideMoltenWave": "Hide Molten Wave Message"

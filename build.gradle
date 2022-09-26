@@ -10,7 +10,13 @@ archivesBaseName = project.archives_base_name
 repositories {
 	jcenter()
 	maven {
-		url "https://maven.falseresync.ru"
+		url "https://maven.aliyun.com/nexus/content/groups/public/"
+	}
+	maven {
+		url "https://maven.fabricmc.net/"
+	}
+	maven {
+		url "https://maven.terraformersmc.com/releases/"
 	}
 }
 
@@ -35,7 +41,7 @@ dependencies {
 	}
 
 	// Mod Menu
-	modImplementation "io.github.prospector:modmenu:${project.mod_menu_version}"
+	modImplementation "com.terraformersmc:modmenu:${project.mod_menu_version}"
 }
 
 tasks.withType(JavaCompile) {

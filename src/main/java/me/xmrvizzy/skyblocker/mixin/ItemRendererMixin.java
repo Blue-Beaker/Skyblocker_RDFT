@@ -31,8 +31,8 @@ public abstract class ItemRendererMixin {
             if (!stack.isEmpty()) {
                 CompoundTag tag = stack.getTag();
                 if (tag != null && tag.contains("ExtraAttributes")) {
-                    if (tag.getCompound("ExtraAttributes").contains("drill_fuel")) {
-                        float current = 3000.0F;
+                    if (tag.getCompound("ExtraAttributes").contains("drill_fuel") || tag.getCompound("ExtraAttributes").getString("id")=="PICKONIMBUS" || tag.getCompound("ExtraAttributes").contains("pickonimbus_durability")) {
+                        float current = 1500.0F;
                         float max = 3000.0F;
 
                         for (String line : ItemUtils.getTooltipStrings(stack)) {
@@ -41,6 +41,12 @@ public abstract class ItemRendererMixin {
                                 String[] split = clear.split("/");
                                 current = Integer.parseInt(split[0]);
                                 max = Integer.parseInt(split[1]) * 1000;
+                                break;
+                            }
+                            else if (line.contains("after") && line.contains("uses")) {
+                                String clear = Pattern.compile("[^0-9]").matcher(line).replaceAll("").trim();
+                                current = Integer.parseInt(clear);
+                                max = 5000;
                                 break;
                             }
                         }
