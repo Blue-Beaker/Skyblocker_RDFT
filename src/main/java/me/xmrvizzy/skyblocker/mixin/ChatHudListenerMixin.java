@@ -45,6 +45,14 @@ public class ChatHudListenerMixin {
                 }
             }
 
+            if (SkyblockerConfig.get().messages.autoOpenMenu && msg.contains("[PICK UP]")) {
+                List<Text> siblings = message.getSiblings();
+                for (Text sibling : siblings) {
+                    if (sibling.getString().contains("[PICK UP]")) {
+                        this.client.player.sendChatMessage(sibling.getStyle().getClickEvent().getValue());
+                    }
+                }
+            }
             if (msg.contains("[NPC]")) {
                 if (SkyblockerConfig.get().locations.dwarvenMines.solveFetchur &&
                         msg.contains("Fetchur")) {
