@@ -30,6 +30,10 @@ public class SkyblockerConfig implements ConfigData {
         @ConfigEntry.Category("bars")
         @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
         public Bars bars = new Bars();
+        
+        @ConfigEntry.Category("hitbox")
+        @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+        public Hitbox hitbox = new Hitbox();
 
         @ConfigEntry.Gui.Excluded
         public List<Integer> lockedSlots = new ArrayList<>();
@@ -37,6 +41,10 @@ public class SkyblockerConfig implements ConfigData {
 
     public static class Bars {
         public boolean enableBars = true;
+    }
+
+    public static class Hitbox {
+        public boolean oldFarmlandHitbox = true;
     }
 
     public static class Locations {

@@ -8,6 +8,8 @@
   "text.autoconfig.skyblocker.option.general.apiKey": "Hypixel API Key (WIP)",
   "text.autoconfig.skyblocker.option.general.bars": "Health, Mana, Defence & XP Bars",
   "text.autoconfig.skyblocker.option.general.bars.enableBars": "Enable Bars",
+  "text.autoconfig.skyblocker.option.general.hitbox": "Hitbox",
+  "text.autoconfig.skyblocker.option.general.hitbox.oldFarmlandHitbox": "Use 1.8 Farmland Hitbox",
 
   "text.autoconfig.skyblocker.category.locations": "Locations",
   "text.autoconfig.skyblocker.option.locations.dungeons": "Dungeons",
@@ -15,6 +17,7 @@
   "text.autoconfig.skyblocker.option.locations.dungeons.solveThreeWeirdos": "Solve Three Weirdos Puzzle",
   "text.autoconfig.skyblocker.option.locations.dwarvenMines": "Dwarven Mines",
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.enableDrillFuel": "Enable Drill Fuel/Pickonimbus Uses",
+  "text.autoconfig.skyblocker.option.locations.dwarvenMines.solveFetchur": "Solve Fetchur Items",
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.solvePuzzler": "Solve Puzzler Puzzle",
 
   "text.autoconfig.skyblocker.category.messages": "Messages",

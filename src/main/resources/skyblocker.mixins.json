@@ -9,6 +9,7 @@
     "ClientPlayNetworkHandlerMixin",
     "InGameHudMixin",
     "ItemRendererMixin",
+    "FarmlandBlockMixin",
     "MinecraftClientMixin",
 
   ],
