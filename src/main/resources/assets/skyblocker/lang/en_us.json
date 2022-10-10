@@ -1,6 +1,9 @@
 {
   "key.categories.skyblocker": "Skyblocker",
   "key.hotbarSlotLock": "Slot Lock (Hotbar)",
+  "key.clearLocatorLines": "Clear locator rays",
+  "key.useCurrentLine": "Store current ray",
+  "key.keyClearLocatedTargets": "Clear located targets",
 
   "text.autoconfig.skyblocker.title": "Skyblocker Settings",
 
@@ -19,6 +22,8 @@
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.enableDrillFuel": "Enable Drill Fuel/Pickonimbus Uses",
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.solveFetchur": "Solve Fetchur Items",
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.solvePuzzler": "Solve Puzzler Puzzle",
+  "text.autoconfig.skyblocker.option.locations.dwarvenMines.wishingCompassLocator": "Wishing Compass Locator(ALPHA)",
+  "text.autoconfig.skyblocker.option.locations.events.ancestorSpadeLocator": "Ancestor Spade Locator(ALPHA)",
 
   "text.autoconfig.skyblocker.category.messages": "Messages",
   "text.autoconfig.skyblocker.option.messages.hideAbility": "Hide Ability Cooldown",
@@ -28,5 +33,10 @@
   "text.autoconfig.skyblocker.option.messages.autoOpenMenu": "Auto open Menus in chat",
   "text.autoconfig.skyblocker.option.messages.hideAOTE": "Hide AOTE Messages",
   "text.autoconfig.skyblocker.option.messages.hideImplosion": "Hide Implosion Message",
-  "text.autoconfig.skyblocker.option.messages.hideMoltenWave": "Hide Molten Wave Message"
+  "text.autoconfig.skyblocker.option.messages.hideMoltenWave": "Hide Molten Wave Message",
+
+  "text.autoconfig.skyblocker.category.debug": "Debug",
+  "text.autoconfig.skyblocker.category.debug.showInternalNameOnRightClick": "Show Internal Names on Right Click",
+  "text.autoconfig.skyblocker.category.debug.debugPointingLocator": "Debug Compass/Spade Locators"
+
 }

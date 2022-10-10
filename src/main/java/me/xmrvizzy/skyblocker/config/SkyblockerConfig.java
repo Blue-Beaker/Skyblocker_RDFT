@@ -24,6 +24,10 @@ public class SkyblockerConfig implements ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     public Messages messages = new Messages();
 
+    @ConfigEntry.Category("debug")
+    @ConfigEntry.Gui.TransitiveObject
+    public Debug debug = new Debug();
+
     public static class General {
         public String apiKey;
 
@@ -55,6 +59,10 @@ public class SkyblockerConfig implements ConfigData {
         @ConfigEntry.Category("dwarvenmines")
         @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
         public DwarvenMines dwarvenMines = new DwarvenMines();
+
+        @ConfigEntry.Category("events")
+        @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+        public Events events = new Events();
     }
 
     public static class Dungeons {
@@ -66,6 +74,10 @@ public class SkyblockerConfig implements ConfigData {
         public boolean enableDrillFuel = true;
         public boolean solveFetchur = true;
         public boolean solvePuzzler = true;
+        public boolean wishingCompassLocator = true;
+    }
+    public static class Events {
+        public boolean ancestorSpadeLocator = true;
     }
 
     public static class Messages {
@@ -76,6 +88,10 @@ public class SkyblockerConfig implements ConfigData {
         public boolean hideAOTE = false;
         public boolean hideImplosion = false;
         public boolean hideMoltenWave = false;
+    }
+    public static class Debug {
+        public boolean showInternalNameOnRightClick = false;
+        public boolean debugPointingLocator = false;
     }
 
     public static void init() {
