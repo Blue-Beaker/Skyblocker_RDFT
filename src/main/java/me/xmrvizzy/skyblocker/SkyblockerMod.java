@@ -47,6 +47,9 @@ public class SkyblockerMod implements ClientModInitializer {
 			if (Locator.keyClearLocatedTargets.wasPressed()) {
 				Locator.clearLocatedTargets();
 			}
+			if (Locator.keyShowLocatedTargets.wasPressed()) {
+				Locator.showLocatedTargets();
+			}
 			Locator.tick(client);
 		}
 		TICKS++;

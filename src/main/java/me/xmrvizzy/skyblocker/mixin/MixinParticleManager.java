@@ -24,16 +24,16 @@ import me.xmrvizzy.skyblocker.skyblock.Locator;
 public class MixinParticleManager {
     @Inject(method = "addParticle(Lnet/minecraft/particle/ParticleEffect;DDDDDD)Lnet/minecraft/client/particle/Particle;", at = @At(value = "RETURN"), cancellable = true)
     public void addParticle(ParticleEffect parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ, CallbackInfoReturnable<Particle> cir) {
-        if (SkyblockerConfig.get().locations.dwarvenMines.wishingCompassLocator && Locator.compassLocating() && parameters.getType().equals(ParticleTypes.HAPPY_VILLAGER)){
+        if (SkyblockerConfig.get().locations.dwarvenMines.wishingCompassLocator && Locator.compassLocator>0 && parameters.getType().equals(ParticleTypes.HAPPY_VILLAGER)){
             Vec3d particlePos = new Vec3d(x,y,z);
 		    //MinecraftClient client = MinecraftClient.getInstance();
-            Locator.addCompassParticle(particlePos);
+            Locator.compassParticleList.add(particlePos);
             //client.player.sendMessage(Text.of(""+x+","+y+","+z), false);
         }
-        if (SkyblockerConfig.get().locations.events.ancestorSpadeLocator && Locator.spadeLocating() && parameters.getType().equals(ParticleTypes.DRIPPING_LAVA)){
+        if (SkyblockerConfig.get().locations.events.ancestorSpadeLocator && Locator.spadeLocator>0 && parameters.getType().equals(ParticleTypes.DRIPPING_LAVA)){
             Vec3d particlePos = new Vec3d(x,y,z);
 		    //MinecraftClient client = MinecraftClient.getInstance();
-            Locator.addSpadeParticle(particlePos);
+            Locator.spadeParticleList.add(particlePos);
             //client.player.sendMessage(Text.of(""+x+","+y+","+z), false);
         }
     }

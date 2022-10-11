@@ -1,5 +1,6 @@
 package me.xmrvizzy.skyblocker.skyblock;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,9 +14,11 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.loader.util.sat4j.core.Vec;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.util.math.Vector3d;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -24,19 +27,31 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 
 public class Locator {
+    static final int LOCATION_NOTHING = 0;
+    static final int LOCATION_MAGMA = 1;
+    static final int LOCATION_JUNGLE = 2;
+    static final int LOCATION_GOBLINS = 3;
+    static final int LOCATION_MITHRIL = 4;
+    static final int LOCATION_PRECURSOR = 5;
+    static final int LOCATION_BURROW = 6;
+    static final String[] LOCATION_NAMES = {"Nucleus","Khazad-dûm","Temple/Odawa","King/Queen","Divan","City","Griffin Burrow"};
+
     static MinecraftClient client = MinecraftClient.getInstance();
-    static int compassLocator = 0;
-    static int spadeLocator = 0;
-    static ArrayList<Vec3d> compassParticleList = new ArrayList<Vec3d>();
-    static ArrayList<Vec3d> spadeParticleList = new ArrayList<Vec3d>();
-    static ArrayList<double[]> lineList = new ArrayList<double[]>();
+    public static int compassLocator = 0;
+    public static int spadeLocator = 0;
+    public static ArrayList<Vec3d> compassParticleList = new ArrayList<Vec3d>();
+    public static ArrayList<Vec3d> spadeParticleList = new ArrayList<Vec3d>();
+    static int locationOnLastCompassUse = 0;
     static double[] currentLine = {0.0,0.0,0.0,0.0};
     static boolean hasCurrentLine = false;
-    static ArrayList<Vec3d> targetList = new ArrayList<Vec3d>();
+
     static ArrayList<double[]> targetLineList = new ArrayList<double[]>();
+    static HashMap<Integer,ArrayList<double[]>> rayLists = new HashMap<Integer,ArrayList<double[]>>();
+    static HashMap<String,Vec3d> targetList = new HashMap<String,Vec3d>();
     static boolean renderHooked = false;
     public static KeyBinding keyClearLocatorLines;
     public static KeyBinding keyClearLocatedTargets;
+    public static KeyBinding keyShowLocatedTargets;
     public static KeyBinding keyUseCurrentLine;
 
     public static void init() {
@@ -55,16 +70,28 @@ public class Locator {
                 GLFW.GLFW_KEY_F7,
                 "key.categories.skyblocker"
         ));
+        keyShowLocatedTargets = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.keyShowLocatedTargets",
+                GLFW.GLFW_KEY_F8,
+                "key.categories.skyblocker"
+        ));
     }
     public static void onUseLocator(MinecraftClient client){
         String skyblockId = PriceInfoTooltip.getInternalNameForItem(client.player.getMainHandStack());
         if(SkyblockerConfig.get().locations.dwarvenMines.wishingCompassLocator && "WISHING_COMPASS".equals(skyblockId)){
             Locator.compassParticleList.clear();
+            Locator.locationOnLastCompassUse=Locator.getPlayerLocation();
             Locator.compassLocator = 20;
+            String targetName = LOCATION_NAMES[locationOnLastCompassUse];
+            client.player.sendMessage(new LiteralText("[Skyblocker] Started Locating "+targetName).formatted(Formatting.AQUA), false);
+            
         }
         else if(SkyblockerConfig.get().locations.events.ancestorSpadeLocator && "ANCESTRAL_SPADE".equals(skyblockId)){
             Locator.spadeParticleList.clear();
+            Locator.locationOnLastCompassUse=LOCATION_BURROW;
             Locator.spadeLocator = 20;
+            String targetName = LOCATION_NAMES[locationOnLastCompassUse];
+            client.player.sendMessage(new LiteralText("[Skyblocker] Started Locating "+targetName).formatted(Formatting.AQUA), false);
         }
         if(SkyblockerConfig.get().debug.showInternalNameOnRightClick){
             client.player.sendMessage(Text.of("" + skyblockId), false);
@@ -82,18 +109,6 @@ public class Locator {
             }
         }
         catch(Exception e){}
-    }
-    public static void addCompassParticle(Vec3d pos){
-        Locator.compassParticleList.add(pos);
-    }
-    public static void addSpadeParticle(Vec3d pos){
-        Locator.spadeParticleList.add(pos);
-    }
-    public static boolean compassLocating(){
-        return(Locator.compassLocator>0);
-    }
-    public static boolean spadeLocating(){
-        return(Locator.spadeLocator>0);
     }
     public static ArrayList<Vec3d> removeDuplicatedPoints(ArrayList<Vec3d> posList){
         List<Vec3d> newList = new ArrayList<>();
@@ -176,26 +191,34 @@ public class Locator {
         return(result);
     }
     public static void useCurrentLine(){
-        Locator.lineList.add(Locator.currentLine);
-        if(Locator.lineList.size()>=2){
-            Vec3d position = calculatePosition(Locator.lineList.get(0), Locator.lineList.get(1));
-            targetList.add(position);
-            client.player.sendMessage(new LiteralText(String.format("[Skyblocker] Calculated target: (%.0f,%.0f,%.0f),",position.x,position.y,position.z)+" Press "+keyClearLocatedTargets.getBoundKeyLocalizedText().asString()+" to clear").formatted(Formatting.GREEN), false);
+        Locator.rayLists.putIfAbsent(locationOnLastCompassUse,new ArrayList<double[]>());
+        ArrayList<double[]> rayList = Locator.rayLists.get(locationOnLastCompassUse);
+        String targetName = LOCATION_NAMES[locationOnLastCompassUse];
+        rayList.add(Locator.currentLine);
+        if(rayList.size()>=2){
+            Vec3d position = calculatePosition(rayList.get(0), rayList.get(1));
+            int targetRenameIndex = 1;
+            while(targetList.get(targetName+"("+targetRenameIndex+")")!=null){
+                targetRenameIndex++;
+            }
+            targetList.put(targetName+"("+targetRenameIndex+")",position);
+            client.player.sendMessage(new LiteralText(String.format("[Skyblocker] Calculated %s at (%.0f,%.0f,%.0f),",targetName,position.x,position.y,position.z)+" Press "+keyClearLocatedTargets.getBoundKeyLocalizedText().asString()+" to clear").formatted(Formatting.GREEN), false);
             if(position.x>=463&&position.x<=563&&position.z>=460&&position.z<=564&&position.y>=63){
                 client.player.sendMessage(new LiteralText("[Skyblocker]The target is in Crystal Nucleus, maybe the tracked location doesn't exist in this lobby if you haven't got the corresponding crystal yet.").formatted(Formatting.YELLOW), false);
             }
-            targetLineList.addAll(lineList);
+            targetLineList.addAll(rayList);
             clearLocatorLines();
         }else{
-            client.player.sendMessage(new LiteralText("[Skyblocker] Locator stored this line, store one more line to calculate or press "+keyClearLocatorLines.getBoundKeyLocalizedText().asString()+" to reset").formatted(Formatting.AQUA), false);
+            client.player.sendMessage(new LiteralText("[Skyblocker] Locator stored this ray for "+targetName+" , store one more ray to calculate or press "+keyClearLocatorLines.getBoundKeyLocalizedText().asString()+" to reset").formatted(Formatting.AQUA), false);
         }
     }
     public static void clearLocatorLines(){
-        Locator.lineList.clear();
+        Locator.rayLists.clear();
     }
     public static void clearLocatedTargets(){
         Locator.targetList.clear();
         Locator.targetLineList.clear();
+        client.player.sendMessage(new LiteralText("[Skyblocker]Cleared ALL stored targets.").formatted(Formatting.GREEN),false);
     }
     public static Vec3d calculatePosition(double[] line1,double[] line2){
         double ky1=line1[0];
@@ -210,6 +233,15 @@ public class Locator {
         double z=kz1*x+bz1;
         double y=((ky1*x+by1)+(ky2*x+by2))/2;
         return new Vec3d(x,y,z);
+    }
+    public static void showLocatedTargets(){
+        client.player.sendMessage(new LiteralText("======[Skyblocker Stored Locations]======").formatted(Formatting.GREEN),false);
+        for(String name : Locator.targetList.keySet()){
+            Vec3d pos = Locator.targetList.get(name);
+            client.player.sendMessage(new LiteralText(String.format("%s (%.0f,%.0f,%.0f),",name,pos.x,pos.y,pos.z)).formatted(Formatting.GREEN), false);
+        }
+        client.player.sendMessage(new LiteralText(" Press "+keyClearLocatedTargets.getBoundKeyLocalizedText().asString()+" to clear").formatted(Formatting.GREEN),false);
+        client.player.sendMessage(new LiteralText("======[Skyblocker Stored Locations END]======").formatted(Formatting.GREEN),false);
     }
     public static void drawLine(double[] line, float r, float g, float b, float t){
         double k1=line[0];
@@ -226,14 +258,17 @@ public class Locator {
     }
     public static void lineRenderer(WorldRenderContext wrc){
         try{
-            for(double[] line:Locator.lineList){
-                Locator.drawLine(line, 1.0f, 1.0f, 1.0f, 2.0f);
+            for(int index:Locator.rayLists.keySet()){
+                ArrayList<double[]> lineList = Locator.rayLists.get(index);
+                for(double[] line:lineList){
+                    Locator.drawLine(line, 1.0f, 1.0f, 1.0f, 2.0f);
+                }
             }
             Locator.drawLine(currentLine, 0.0f, 1.0f, 0.0f, 2.0f);
             for(double[] line:Locator.targetLineList){
                 Locator.drawLine(line, 0.0f, 0.0f, 1.0f, 5.0f);
             }
-            for(Vec3d target : Locator.targetList){
+            for(Vec3d target : Locator.targetList.values()){
                 //Locator.drawLineEnds(target, new Vec3d(client.player.getX(),client.player.getEyeY(),client.player.getZ()), 0.0f,0.0f,1.0f,1.0f);
                 RenderUtils.drawOutlineBox(new BlockPos(target), 0.0f, 0.0f, 1.0f, 5.0f);
             }
@@ -241,5 +276,30 @@ public class Locator {
         catch(Exception e){
             System.out.println("LocatorLineRenderer: " + e.getStackTrace());
         }
+    }
+    public static int getPlayerLocation(){
+        //JUNGLE 2   z<513    MITHRIL 4
+        //x<512    NUCLEUS    x>513
+        //GOBLINS 3  z>513    PRECURSOR 5
+        ClientPlayerEntity player = client.player;
+        int location;
+        if(player.getY()<=63){
+            location = LOCATION_MAGMA;
+        }
+        else{
+                if(player.getZ()<513){
+                    location = LOCATION_JUNGLE;
+                }
+                else{
+                    location = LOCATION_GOBLINS;
+                }
+                if(player.getX()>513){
+                    location=location+2;
+                }
+                else if(player.getX()>512){
+                    location=LOCATION_NOTHING;
+                }
+        }
+        return location;
     }
 }
