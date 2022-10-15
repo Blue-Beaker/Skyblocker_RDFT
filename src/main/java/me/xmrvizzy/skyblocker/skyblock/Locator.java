@@ -2,28 +2,25 @@ package me.xmrvizzy.skyblocker.skyblock;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.lwjgl.glfw.GLFW;
 
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
 import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
+import me.xmrvizzy.skyblocker.skyblock.waypoints.Waypoint;
+import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointList;
 import me.xmrvizzy.skyblocker.utils.RenderUtils;
+import me.xmrvizzy.skyblocker.utils.Utils;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
-import net.fabricmc.loader.util.sat4j.core.Vec;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.options.KeyBinding;
-import net.minecraft.client.sound.SoundManager;
-import net.minecraft.client.util.math.Vector3d;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 
 public class Locator {
@@ -35,6 +32,7 @@ public class Locator {
     static final int LOCATION_PRECURSOR = 5;
     static final int LOCATION_BURROW = 6;
     static final String[] LOCATION_NAMES = {"Nucleus","Khazad-dûm","Temple/Odawa","King/Queen","Divan","City","Griffin Burrow"};
+    static final float[][] LOCATION_COLORS = {{1f,1f,1f},{1f,1f,0f},{0.5f,0f,1f},{1f,0.5f,0f},{0f,1f,0f},{0f,0f,1f},{1f,0.5f,0f}};
 
     static MinecraftClient client = MinecraftClient.getInstance();
     public static int compassLocator = 0;
@@ -45,12 +43,9 @@ public class Locator {
     static double[] currentLine = {0.0,0.0,0.0,0.0};
     static boolean hasCurrentLine = false;
 
-    static ArrayList<double[]> targetLineList = new ArrayList<double[]>();
     static HashMap<Integer,ArrayList<double[]>> rayLists = new HashMap<Integer,ArrayList<double[]>>();
-    static HashMap<String,Vec3d> targetList = new HashMap<String,Vec3d>();
     static boolean renderHooked = false;
     public static KeyBinding keyClearLocatorLines;
-    public static KeyBinding keyClearLocatedTargets;
     public static KeyBinding keyShowLocatedTargets;
     public static KeyBinding keyUseCurrentLine;
 
@@ -63,11 +58,6 @@ public class Locator {
         keyUseCurrentLine = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.useCurrentLine",
                 GLFW.GLFW_KEY_RIGHT_BRACKET,
-                "key.categories.skyblocker"
-        ));
-        keyClearLocatedTargets = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.keyClearLocatedTargets",
-                GLFW.GLFW_KEY_F7,
                 "key.categories.skyblocker"
         ));
         keyShowLocatedTargets = KeyBindingHelper.registerKeyBinding(new KeyBinding(
@@ -185,7 +175,7 @@ public class Locator {
         client.player.sendMessage(new LiteralText(String.format("avgPoint:(%.2f,%.2f,%.2f),mostDistantPoint:(%.2f,%.2f,%.2f),maxDistance=%2f",avgPoint.x,avgPoint.y,avgPoint.z,particleList.get(mostDistantPoint).x,particleList.get(mostDistantPoint).y,particleList.get(mostDistantPoint).z,maxDistance)).formatted(Formatting.DARK_GREEN), false);
         client.player.sendMessage(new LiteralText("======[Skyblocker DEBUG End]======").formatted(Formatting.DARK_GREEN), false);
         }
-        client.player.sendMessage(new LiteralText(String.format("[Skyblocker] Captured ray: k1=%.2f,k2=%.2f,b1=%.2f,b2=%.2f, ",k1,k2,b1,b2)+"press "+keyUseCurrentLine.getBoundKeyLocalizedText().asString()+" To store this ray").formatted(Formatting.AQUA), false);
+        client.player.sendMessage(new LiteralText(String.format("[Skyblocker] Captured ray: k1=%.2f,k2=%.2f,b1=%.2f,b2=%.2f, ",k1,k2,b1,b2)+"press ").append(keyUseCurrentLine.getBoundKeyLocalizedText()).append(" to store for calculation").formatted(Formatting.AQUA), false);
         double[] result = {k1,k2,b1,b2,maxDistance,mostDistantPoint};
         Locator.currentLine=new double[] {k1,k2,b1,b2};
         return(result);
@@ -197,28 +187,20 @@ public class Locator {
         rayList.add(Locator.currentLine);
         if(rayList.size()>=2){
             Vec3d position = calculatePosition(rayList.get(0), rayList.get(1));
-            int targetRenameIndex = 1;
-            while(targetList.get(targetName+"("+targetRenameIndex+")")!=null){
-                targetRenameIndex++;
+            Waypoint waypoint = new Waypoint(position,LOCATION_COLORS[locationOnLastCompassUse]);
+            waypoint.locatorLines.addAll(rayList);
+            String name = WaypointList.addAutoRenaming(targetName,waypoint);
+            client.player.sendMessage(new LiteralText(String.format("[Skyblocker] Calculated %s at (%.0f,%.0f,%.0f), type /sbr wp list to list all waypoints",name,position.x,position.y,position.z)).formatted(Formatting.GREEN), false);
+            if(position.x>=463&&position.x<=563&&position.z>=460&&position.z<=564&&position.y>=63){ // Check if the target is in nucleus
+                client.player.sendMessage(new LiteralText("[Skyblocker]The target is in Crystal Nucleus, maybe "+targetName+" doesn't exist in this lobby?").formatted(Formatting.YELLOW), false);
             }
-            targetList.put(targetName+"("+targetRenameIndex+")",position);
-            client.player.sendMessage(new LiteralText(String.format("[Skyblocker] Calculated %s at (%.0f,%.0f,%.0f),",targetName,position.x,position.y,position.z)+" Press "+keyClearLocatedTargets.getBoundKeyLocalizedText().asString()+" to clear").formatted(Formatting.GREEN), false);
-            if(position.x>=463&&position.x<=563&&position.z>=460&&position.z<=564&&position.y>=63){
-                client.player.sendMessage(new LiteralText("[Skyblocker]The target is in Crystal Nucleus, maybe the tracked location doesn't exist in this lobby if you haven't got the corresponding crystal yet.").formatted(Formatting.YELLOW), false);
-            }
-            targetLineList.addAll(rayList);
             clearLocatorLines();
         }else{
-            client.player.sendMessage(new LiteralText("[Skyblocker] Locator stored this ray for "+targetName+" , store one more ray to calculate or press "+keyClearLocatorLines.getBoundKeyLocalizedText().asString()+" to reset").formatted(Formatting.AQUA), false);
+            client.player.sendMessage(new LiteralText("[Skyblocker] Locator stored this ray for "+targetName+" , store one more ray to calculate or press ").append(keyClearLocatorLines.getBoundKeyLocalizedText()).append(" to reset").formatted(Formatting.AQUA), false);
         }
     }
     public static void clearLocatorLines(){
-        Locator.rayLists.clear();
-    }
-    public static void clearLocatedTargets(){
-        Locator.targetList.clear();
-        Locator.targetLineList.clear();
-        client.player.sendMessage(new LiteralText("[Skyblocker]Cleared ALL stored targets.").formatted(Formatting.GREEN),false);
+        Locator.rayLists.get(locationOnLastCompassUse).clear();
     }
     public static Vec3d calculatePosition(double[] line1,double[] line2){
         double ky1=line1[0];
@@ -235,13 +217,14 @@ public class Locator {
         return new Vec3d(x,y,z);
     }
     public static void showLocatedTargets(){
-        client.player.sendMessage(new LiteralText("======[Skyblocker Stored Locations]======").formatted(Formatting.GREEN),false);
-        for(String name : Locator.targetList.keySet()){
-            Vec3d pos = Locator.targetList.get(name);
-            client.player.sendMessage(new LiteralText(String.format("%s (%.0f,%.0f,%.0f),",name,pos.x,pos.y,pos.z)).formatted(Formatting.GREEN), false);
+        HashMap<String,Waypoint> list = WaypointList.get(Utils.serverArea);
+        client.player.sendMessage(new LiteralText(String.format("======[Skyblocker Waypoints in %s]======",Utils.serverArea)).formatted(Formatting.GREEN),false);
+        for(String name : list.keySet()){
+            BlockPos pos = list.get(name).blockPos;
+            client.player.sendMessage(new LiteralText(String.format("%s at (%d,%d,%d)",name,pos.getX(),pos.getY(),pos.getZ())).formatted(Formatting.GREEN),false);
         }
-        client.player.sendMessage(new LiteralText(" Press "+keyClearLocatedTargets.getBoundKeyLocalizedText().asString()+" to clear").formatted(Formatting.GREEN),false);
         client.player.sendMessage(new LiteralText("======[Skyblocker Stored Locations END]======").formatted(Formatting.GREEN),false);
+  
     }
     public static void drawLine(double[] line, float r, float g, float b, float t){
         double k1=line[0];
@@ -261,17 +244,10 @@ public class Locator {
             for(int index:Locator.rayLists.keySet()){
                 ArrayList<double[]> lineList = Locator.rayLists.get(index);
                 for(double[] line:lineList){
-                    Locator.drawLine(line, 1.0f, 1.0f, 1.0f, 2.0f);
+                    Locator.drawLine(line, 1f, 1f, 1f, 2.0f);
                 }
             }
-            Locator.drawLine(currentLine, 0.0f, 1.0f, 0.0f, 2.0f);
-            for(double[] line:Locator.targetLineList){
-                Locator.drawLine(line, 0.0f, 0.0f, 1.0f, 5.0f);
-            }
-            for(Vec3d target : Locator.targetList.values()){
-                //Locator.drawLineEnds(target, new Vec3d(client.player.getX(),client.player.getEyeY(),client.player.getZ()), 0.0f,0.0f,1.0f,1.0f);
-                RenderUtils.drawOutlineBox(new BlockPos(target), 0.0f, 0.0f, 1.0f, 5.0f);
-            }
+            Locator.drawLine(currentLine, 0f, 1f, 0f, 2.0f);
         }
         catch(Exception e){
             System.out.println("LocatorLineRenderer: " + e.getStackTrace());

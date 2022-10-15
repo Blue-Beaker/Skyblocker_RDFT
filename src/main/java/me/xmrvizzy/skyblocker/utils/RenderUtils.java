@@ -55,8 +55,16 @@ public class RenderUtils {
         gl11Cleanup();
     }
 
+    public static void drawOutlineBox(BlockPos blockPos, float r, float g, float b, float a, float t) {
+        drawOutlineBox(new Box(blockPos), r, g, b, a,t);
+    }
+
     public static void drawOutlineBox(BlockPos blockPos, float r, float g, float b, float a) {
-        drawOutlineBox(new Box(blockPos), r, g, b, a);
+        drawOutlineBox(new Box(blockPos), r, g, b, a,1.0f);
+    }
+
+    public static void drawOutlineBox(Box box, float r, float g, float b, float a) {
+        drawOutlineBox(box, r, g, b, a,1.0f);
     }
 
     public static void fillGradient(MatrixStack matrix, int x1, int y1, int x2, int y2, int color1, int color2) {
@@ -79,8 +87,9 @@ public class RenderUtils {
     }
 
 
-    public static void drawOutlineBox(Box box, float r, float g, float b, float a) {
+    public static void drawOutlineBox(Box box, float r, float g, float b, float a, float t) {
         gl11Setup();
+        GL11.glLineWidth(t);
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();

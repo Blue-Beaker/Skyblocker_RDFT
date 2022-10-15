@@ -7,6 +7,8 @@ import me.xmrvizzy.skyblocker.skyblock.Attribute;
 import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
@@ -23,6 +25,7 @@ public class Utils {
     public static boolean isSkyblock = false;
     public static boolean isDungeons = false;
     public static boolean isInjected = false;
+    public static String serverArea = "None";
     public static String parseActionBar(String msg) {
         String[] sections = msg.split(" {3,}");
         List<String> unused = new ArrayList<String>();
@@ -74,6 +77,7 @@ public class Utils {
             isSkyblock = false;
             isDungeons = false;
         }
+        serverArea=getArea(getTabInfo());
     }
 
     public static List<String> getSidebar() {
@@ -109,5 +113,28 @@ public class Utils {
         Collections.reverse(lines);
 
         return lines;
+    }
+    public static List<String> getTabInfo(){
+        List<String> lines = new ArrayList<>();
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.world == null) return lines;
+        Collection<PlayerListEntry> players = client.player.networkHandler.getPlayerList();
+        for (PlayerListEntry player:players){
+            if(player.getDisplayName()!=null){
+                String line = player.getDisplayName().getString();
+                if(line.length()>0){
+                    lines.add(line);
+                }
+            }
+        }
+        return lines;
+    }
+    public static String getArea(List<String> tabLines){
+        for(String line:tabLines){
+            if(line.contains("Area:")){
+                return(line.replace("Area:", "").replaceAll(" ", ""));
+            }
+        }
+        return("None");
     }
 }
