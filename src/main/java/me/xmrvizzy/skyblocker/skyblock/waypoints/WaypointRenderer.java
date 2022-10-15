@@ -16,16 +16,18 @@ public class WaypointRenderer {
     }
     public static void drawWaypoints(WorldRenderContext wrc){
         try{
-        for(Waypoint target : WaypointList.get(Utils.serverArea).values()){
-            //Locator.drawLineEnds(target, new Vec3d(client.player.getX(),client.player.getEyeY(),client.player.getZ()), 0.0f,0.0f,1.0f,1.0f);
-            RenderUtils.drawOutlineBox(target.blockPos, target.color[0], target.color[1], target.color[2],1.0f, 5.0f);
-            for(double[] line : target.locatorLines){
-                Locator.drawLine(line, target.color[0], target.color[1], target.color[2], 5.0f);
+            if(WaypointList.get(Utils.serverArea)!=null){
+                for(Waypoint target : WaypointList.get(Utils.serverArea).values()){
+                    //Locator.drawLineEnds(target, new Vec3d(client.player.getX(),client.player.getEyeY(),client.player.getZ()), 0.0f,0.0f,1.0f,1.0f);
+                    RenderUtils.drawOutlineBox(target.blockPos, target.color[0], target.color[1], target.color[2],1.0f, 5.0f);
+                    for(double[] line : target.locatorLines){
+                        Locator.drawLine(line, target.color[0], target.color[1], target.color[2], 5.0f);
+                    }
+                }
             }
         }
-        }
         catch(Exception e){
-            System.out.println("WaypointRenderer: " + e.getStackTrace());
+            System.out.println("WaypointRenderer: " + e.getMessage());
         }
     }
 }
