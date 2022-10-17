@@ -57,15 +57,14 @@ public class DungeonBlaze {
 	private static int lastCalculationMinY = 0;
 	private static int lastCalculationWidth = 0;
 	private static int lastCalculationHeight = 0;
-    
+    static MinecraftClient client = MinecraftClient.getInstance();
     public static void DungeonBlaze() {
-        MinecraftClient client = MinecraftClient.getInstance();
         if(!renderHooked){
             
             WorldRenderEvents.END.register(DungeonBlaze::blazeRenderer);
-            MinecraftClient.getInstance().player.sendMessage(new LiteralText("--- BlazeSolver ---"), false);
-            MinecraftClient.getInstance().player.sendMessage(new LiteralText("Blaze Low: ").append(new LiteralText("Red").formatted(Formatting.RED)), false);
-            MinecraftClient.getInstance().player.sendMessage(new LiteralText("Blaze High: ").append(new LiteralText("Green").formatted(Formatting.GREEN)), false);
+            client.player.sendMessage(new LiteralText("--- BlazeSolver ---"), false);
+            client.player.sendMessage(new LiteralText("Blaze Low: ").append(new LiteralText("Red").formatted(Formatting.RED)), false);
+            client.player.sendMessage(new LiteralText("Blaze High: ").append(new LiteralText("Green").formatted(Formatting.GREEN)), false);
             renderHooked = true;
         }
         Iterable<Entity> entities = client.world.getEntities();
@@ -99,8 +98,8 @@ public class DungeonBlaze {
     }
     public static void blazeRenderer(WorldRenderContext wrc) {
         try {
-        TextRenderer tr = MinecraftClient.getInstance().textRenderer;
-        DebugRenderer wc = MinecraftClient.getInstance().debugRenderer;
+        TextRenderer tr = client.textRenderer;
+        DebugRenderer wc = client.debugRenderer;
             
             if(highestBlaze != null){  
                                 /* Outline */

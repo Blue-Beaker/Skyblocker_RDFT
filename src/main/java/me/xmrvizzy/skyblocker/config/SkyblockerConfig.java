@@ -30,6 +30,7 @@ public class SkyblockerConfig implements ConfigData {
 
     public static class General {
         public String apiKey;
+        public boolean readableBazaarGraphs = false;
 
         @ConfigEntry.Category("bars")
         @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)

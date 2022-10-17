@@ -19,6 +19,7 @@ import java.util.zip.GZIPInputStream;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
@@ -32,6 +33,8 @@ import com.google.gson.JsonPrimitive;
 
 
 import me.xmrvizzy.skyblocker.SkyblockerMod;
+import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
+import me.xmrvizzy.skyblocker.config.SkyblockerConfig.General;
 
 public class PriceInfoTooltip {
     private JsonObject auctionPricesJson = null;
@@ -39,8 +42,15 @@ public class PriceInfoTooltip {
     public static JsonObject prices = PriceInfoTooltip.downloadPrices();
     public static void onInjectTooltip(ItemStack stack, TooltipContext context, List<Text> list) {
         String name = getInternalNameForItem(stack);
-
         try {
+            if(SkyblockerConfig.get().general.readableBazaarGraphs && stack.isItemEqual(Items.PAPER.getDefaultStack()) && list.toString().contains("·")){
+                for(int i=0; i<list.size();i++){
+                    Text line = list.get(i);
+                    if(line.getString().contains("·")){
+                        list.set(i, new LiteralText(line.getString().replace("·", "-").replace("+", "│")).setStyle(line.getStyle()));
+                    }
+                }
+            }
             if(!list.toString().contains("Avg. BIN Price") && prices.has(name) ){
                 if(prices != null){
                 

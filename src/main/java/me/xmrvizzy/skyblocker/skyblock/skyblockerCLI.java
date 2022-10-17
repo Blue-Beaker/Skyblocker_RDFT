@@ -26,15 +26,14 @@ import java.util.HashMap;
 public class skyblockerCLI {
 	MinecraftClient client = MinecraftClient.getInstance();
     public skyblockerCLI(CommandDispatcher<FabricClientCommandSource> dispatcher){
-        LiteralCommandNode<FabricClientCommandSource> sbrCommand = dispatcher.register(literal("sbr")
-            .then(literal("wp")
+        LiteralCommandNode<FabricClientCommandSource> waypointCommand = dispatcher.register(literal("sbwp")
                 .then(literal("add")
                     .then(ClientCommandManager.argument("name", StringArgumentType.string())
                         .then(ClientCommandManager.argument("X", IntegerArgumentType.integer())
                         .then(ClientCommandManager.argument("Y", IntegerArgumentType.integer())
                         .then(ClientCommandManager.argument("Z", IntegerArgumentType.integer())
                         .executes(context -> {
-                            return addWaypoint(context,StringArgumentType.getString(context, "name"), new BlockPos(IntegerArgumentType.getInteger(context, "X"),IntegerArgumentType.getInteger(context, "Y"),IntegerArgumentType.getInteger(context, "Z")), new float[]{FloatArgumentType.getFloat(context, "R"),FloatArgumentType.getFloat(context, "G"),FloatArgumentType.getFloat(context, "B")});
+                            return addWaypoint(context,StringArgumentType.getString(context, "name"), new BlockPos(IntegerArgumentType.getInteger(context, "X"),IntegerArgumentType.getInteger(context, "Y"),IntegerArgumentType.getInteger(context, "Z")));
                         })
                         )))
                         .executes(context -> {
@@ -42,18 +41,30 @@ public class skyblockerCLI {
                         })
                     )
                     .executes(context -> {
-                        context.getSource().sendFeedback(new LiteralText("Usage: /sbr wp add (WaypointName) [Coords: X Y Z]").formatted(Formatting.RED));
+                        context.getSource().sendFeedback(new LiteralText("Usage:  /sbwp add (WaypointName) [Coords: X Y Z]").formatted(Formatting.RED));
                         return 0;
                     })
                 )
                 .then(literal("remove")
                     .then(ClientCommandManager.argument("name",StringArgumentType.string())
                         .executes(context -> {
-                            return removeWaypoint(context, "name");
+                            return removeWaypoint(context, StringArgumentType.getString(context, "name"));
                         })
                     )
                 .executes(context -> {
-                    context.getSource().sendFeedback(new LiteralText("Usage: /sbr wp remove (WaypointName)").formatted(Formatting.RED));
+                    context.getSource().sendFeedback(new LiteralText("Usage:  /sbwp remove (WaypointName)").formatted(Formatting.RED));
+                    return 0;
+                })
+                )
+                .then(literal("rename")
+                    .then(ClientCommandManager.argument("name1",StringArgumentType.string())
+                    .then(ClientCommandManager.argument("name2",StringArgumentType.string())
+                        .executes(context -> {
+                            return renameWaypoint(context, StringArgumentType.getString(context, "name1"), StringArgumentType.getString(context, "name2"));
+                        })
+                    ))
+                .executes(context -> {
+                    context.getSource().sendFeedback(new LiteralText("Usage:  /sbwp rename (Waypoint) (NewName)").formatted(Formatting.RED));
                     return 0;
                 })
                 )
@@ -92,7 +103,7 @@ public class skyblockerCLI {
                     )))
                     )
                     .executes(context -> {
-                        context.getSource().sendFeedback(new LiteralText("Usage: /sbr wp color (WaypointName) [Color: R G B]").formatted(Formatting.RED));
+                        context.getSource().sendFeedback(new LiteralText("Usage: /sbwp color (WaypointName) [Color: R G B]").formatted(Formatting.RED));
                         return 0;
                     })
                 )
@@ -108,9 +119,9 @@ public class skyblockerCLI {
                         return 1;
                     })
                 )
-            )
         );
-        dispatcher.register(ClientCommandManager.literal("skyblocker").redirect(sbrCommand));
+        dispatcher.register(ClientCommandManager.literal("waypoint").redirect(waypointCommand));
+        dispatcher.register(ClientCommandManager.literal("skyblockerwaypoint").redirect(waypointCommand));
         LiteralCommandNode<FabricClientCommandSource> sbrDebug = dispatcher.register(literal("skyblockerdebug")
             .then(literal("getTabInfo")
                 .executes(context -> {
