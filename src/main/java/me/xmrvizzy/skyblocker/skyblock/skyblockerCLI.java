@@ -192,6 +192,7 @@ public class skyblockerCLI {
         }
     }
     public void listWaypoint(CommandContext<FabricClientCommandSource> context, String area){
+        try{
         HashMap<String,Waypoint> list = WaypointList.get(area);
         if(list!=null){
             context.getSource().sendFeedback(new LiteralText(String.format("======[Skyblocker Waypoints in %s]======",area)).formatted(Formatting.GREEN));
@@ -203,6 +204,10 @@ public class skyblockerCLI {
         }
         else{
             context.getSource().sendError(new LiteralText(String.format("There are no waypoints in %s",area)).formatted(Formatting.GREEN));
+        }
+        }
+        catch(Exception e){
+            context.getSource().sendError(new LiteralText(String.format("Failed: %s",e.getLocalizedMessage())).formatted(Formatting.RED));
         }
     }
     public void listWaypoint(CommandContext<FabricClientCommandSource> context){
