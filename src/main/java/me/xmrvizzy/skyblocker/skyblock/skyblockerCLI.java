@@ -2,6 +2,8 @@ package me.xmrvizzy.skyblocker.skyblock;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
@@ -198,7 +200,14 @@ public class skyblockerCLI {
             context.getSource().sendFeedback(new LiteralText(String.format("======[Skyblocker Waypoints in %s]======",area)).formatted(Formatting.GREEN));
             for(String name : list.keySet()){
                 BlockPos pos = list.get(name).blockPos;
-                context.getSource().sendFeedback(new LiteralText(String.format("%s at (%d,%d,%d)",name,pos.getX(),pos.getY(),pos.getZ())).formatted(Formatting.GREEN));
+                float[] color = list.get(name).color;
+                context.getSource().sendFeedback(new LiteralText(String.format("%s at (%d,%d,%d) ",name,pos.getX(),pos.getY(),pos.getZ())).formatted(Formatting.GREEN)
+                .append(new LiteralText("[COLOR]").styled((style) -> {
+                    return style.withColor(Formatting.BLUE).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, String.format("/sbwp color '%s' %.2f %.2f %.2f", name,color[0],color[1],color[2]))).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("/sbwp color '"+name+"' (R G B)")));
+                }))
+                .append(new LiteralText("[REMOVE]").styled((style) -> {
+                    return style.withColor(Formatting.RED).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sbwp remove '"+name+"'")).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("/sbwp remove '"+name+"'")));
+                })));
             }
             context.getSource().sendFeedback(new LiteralText("======[Skyblocker Stored Locations END]======").formatted(Formatting.GREEN));
         }
