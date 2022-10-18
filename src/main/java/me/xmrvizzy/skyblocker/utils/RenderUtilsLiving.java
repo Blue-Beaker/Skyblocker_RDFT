@@ -128,11 +128,58 @@ public class RenderUtilsLiving {
 
     }
 
+    public static void glSetupWithoutDepth(double x, double y, double z) {
+        GL11.glPushMatrix();
+        RenderUtils.offsetRender();
+        GL11.glTranslated(x, y, z);
+        GL11.glNormal3f(0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(-mc.player.yaw, 0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(mc.player.pitch, 1.0F, 0.0F, 0.0F);
+        //GL11.glDisable(GL11.GL_LIGHTING);
+        //GL11.glDisable(GL11.GL_DEPTH_TEST);
+
+        GL11.glEnable(GL11.GL_BLEND);
+        GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+
+    }
     public static void glCleanup() {
         //GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glPopMatrix();
+    }
+    public static void glCleanupWithoutDepth() {
+        //GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        //GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glPopMatrix();
+    }
+    public static void drawTextColored(MatrixStack matrices,String str, double x, double y, double z, double scale, float red, float green, float blue,float transparency) {
+        glSetupWithoutDepth(x, y, z);
+
+        GL11.glScaled(-0.025 * scale, -0.025 * scale, 0.025 * scale);
+
+        int i = mc.textRenderer.getWidth(str) / 2;
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, VertexFormats.POSITION_COLOR);
+        float f = mc.options.getTextBackgroundOpacity(0.25F);
+        bufferbuilder.vertex(-i - 1, -1, 0.0D).color(0f, 0f, 0f, f).next();
+        bufferbuilder.vertex(-i - 1, 8, 0.0D).color(0f, 0f, 0f, f).next();
+        bufferbuilder.vertex(i + 1, 8, 0.0D).color(0f, 0f, 0f, f).next();
+        bufferbuilder.vertex(i + 1, -1, 0.0D).color(0f, 0f, 0f, f).next();
+        tessellator.draw();
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        int colorR = Math.round(red*255);
+        int colorG = Math.round(green*255);
+        int colorB = Math.round(blue*255);
+        int colorT = Math.round(transparency*255);
+        int color = colorT*16777216+Math.round(colorR*65536+colorG*256+colorB);
+        mc.textRenderer.draw(matrices, str, -i, 0, color);
+
+        glCleanupWithoutDepth();
     }
 }

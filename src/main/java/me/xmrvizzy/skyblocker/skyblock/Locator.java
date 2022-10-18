@@ -217,14 +217,16 @@ public class Locator {
         return new Vec3d(x,y,z);
     }
     public static void showLocatedTargets(){
-        HashMap<String,Waypoint> list = WaypointList.get(Utils.serverArea);
+        client.player.sendChatMessage("/sbwp list");
+        /*HashMap<String,Waypoint> list = WaypointList.get(Utils.serverArea);
+        if(list!=null){
         client.player.sendMessage(new LiteralText(String.format("======[Skyblocker Waypoints in %s]======",Utils.serverArea)).formatted(Formatting.GREEN),false);
         for(String name : list.keySet()){
             BlockPos pos = list.get(name).blockPos;
             client.player.sendMessage(new LiteralText(String.format("%s at (%d,%d,%d)",name,pos.getX(),pos.getY(),pos.getZ())).formatted(Formatting.GREEN),false);
         }
         client.player.sendMessage(new LiteralText("======[Skyblocker Stored Locations END]======").formatted(Formatting.GREEN),false);
-  
+        }*/
     }
     public static void drawLine(double[] line, float r, float g, float b, float t){
         double k1=line[0];
