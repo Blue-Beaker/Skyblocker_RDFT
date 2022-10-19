@@ -254,7 +254,9 @@ public class PointedLocator {
                     drawLine(line, 1f, 1f, 1f, 2.0f);
                 }
             }
-            drawLine(currentLine, 0f, 1f, 0f, 2.0f);
+            if(hasCurrentLine){
+                drawLine(currentLine, 0f, 1f, 0f, 2.0f);
+            }
         }
         catch(Exception e){
             System.out.println("LocatorLineRenderer: " + e.getStackTrace());
