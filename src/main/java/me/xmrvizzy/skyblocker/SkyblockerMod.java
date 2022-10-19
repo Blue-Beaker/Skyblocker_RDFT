@@ -8,7 +8,6 @@ import org.apache.commons.lang3.ObjectUtils.Null;
 
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
 import me.xmrvizzy.skyblocker.skyblock.HotbarSlotLock;
-import me.xmrvizzy.skyblocker.skyblock.Locator;
 import me.xmrvizzy.skyblocker.skyblock.skyblockerCLI;
 import me.xmrvizzy.skyblocker.skyblock.dungeon.DungeonBlaze;
 import me.xmrvizzy.skyblocker.utils.Utils;
@@ -18,6 +17,8 @@ import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
+import me.xmrvizzy.skyblocker.skyblock.locator.DistancedLocator;
+import me.xmrvizzy.skyblocker.skyblock.locator.PointedLocator;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointRenderer;
 import me.xmrvizzy.skyblocker.skyblock.skyblockerCLI;
 
@@ -28,7 +29,7 @@ public class SkyblockerMod implements ClientModInitializer {
 	public void onInitializeClient() {
 		HotbarSlotLock.init();
 		SkyblockerConfig.init();
-		Locator.init();
+		PointedLocator.init();
         new skyblockerCLI(ClientCommandManager.DISPATCHER);
 	}
 
@@ -38,19 +39,22 @@ public class SkyblockerMod implements ClientModInitializer {
 		if (client.world == null) return;
 		if (SkyblockerConfig.get().locations.dwarvenMines.wishingCompassLocator || SkyblockerConfig.get().locations.events.ancestorSpadeLocator){
 			if (client.options.keyUse.wasPressed()) {
-				Locator.onUseLocator(client);
+				PointedLocator.onUseLocator(client);
 			}
-			if (Locator.keyUseCurrentLine.wasPressed()) {
-				Locator.useCurrentLine();
+			if (PointedLocator.keyUseCurrentLine.wasPressed()) {
+				PointedLocator.useCurrentLine();
 			}
-			if (Locator.keyClearLocatorLines.wasPressed()) {
-				Locator.clearLocatorLines();
+			if (PointedLocator.keyClearLocatorLines.wasPressed()) {
+				PointedLocator.clearLocatorLines();
 			}
-			if (Locator.keyShowLocatedTargets.wasPressed()) {
-				Locator.showLocatedTargets();
+			if (PointedLocator.keyShowLocatedTargets.wasPressed()) {
+				PointedLocator.showLocatedTargets();
 			}
-			Locator.tick(client);
+			PointedLocator.tick(client);
 			WaypointRenderer.tick();
+			if(SkyblockerConfig.get().locations.dwarvenMines.metalDetectorLocator){
+				DistancedLocator.tick();
+			}
 		}
 		TICKS++;
 		if (TICKS % 4 == 0) 

@@ -2,6 +2,7 @@ package me.xmrvizzy.skyblocker.mixin;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -30,4 +31,5 @@ public class ClientPlayNetworkHandlerMixin {
     private void onCommandTree(CommandTreeS2CPacket packet, CallbackInfo ci) {
         commandDispatcher.register(literal("skb"));
     }
+
 }

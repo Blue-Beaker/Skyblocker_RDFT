@@ -2,7 +2,7 @@ package me.xmrvizzy.skyblocker.skyblock.waypoints;
 
 import org.lwjgl.opengl.GL11;
 
-import me.xmrvizzy.skyblocker.skyblock.Locator;
+import me.xmrvizzy.skyblocker.skyblock.locator.PointedLocator;
 import me.xmrvizzy.skyblocker.utils.RenderUtils;
 import me.xmrvizzy.skyblocker.utils.RenderUtilsLiving;
 import me.xmrvizzy.skyblocker.utils.Utils;
@@ -34,7 +34,7 @@ public class WaypointRenderer {
                     RenderUtilsLiving.drawTextColored(matrices, String.format("%s[%.0fm]", name,distance), waypoint.blockPos.getX()+0.5, waypoint.blockPos.getY()+0.5, waypoint.blockPos.getZ()+0.5, sqrtdistance*0.5, waypoint.color[0], waypoint.color[1], waypoint.color[2], 1.0f);
                     GL11.glEnable(GL11.GL_DEPTH_TEST);
                     for(double[] line : waypoint.locatorLines){
-                        Locator.drawLine(line, waypoint.color[0], waypoint.color[1], waypoint.color[2], 5.0f);
+                        PointedLocator.drawLine(line, waypoint.color[0], waypoint.color[1], waypoint.color[2], 5.0f);
                     }
                 }
             }

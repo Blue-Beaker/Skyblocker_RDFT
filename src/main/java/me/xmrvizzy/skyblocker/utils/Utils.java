@@ -26,6 +26,7 @@ public class Utils {
     public static boolean isDungeons = false;
     public static boolean isInjected = false;
     public static String serverArea = "None";
+    static MinecraftClient client = MinecraftClient.getInstance();
     public static String parseActionBar(String msg) {
         String[] sections = msg.split(" {3,}");
         List<String> unused = new ArrayList<String>();
@@ -136,5 +137,8 @@ public class Utils {
             }
         }
         return("None");
+    }
+    public static String getHeldItemId(){
+        return PriceInfoTooltip.getInternalNameForItem(client.player.getMainHandStack());
     }
 }

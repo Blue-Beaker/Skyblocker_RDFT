@@ -5,6 +5,7 @@ import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
 import me.xmrvizzy.skyblocker.skyblock.Attribute;
 import me.xmrvizzy.skyblocker.skyblock.HotbarSlotLock;
 import me.xmrvizzy.skyblocker.skyblock.dungeon.DungeonMap;
+import me.xmrvizzy.skyblocker.skyblock.locator.DistancedLocator;
 import me.xmrvizzy.skyblocker.utils.Utils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -47,6 +48,14 @@ public abstract class InGameHudMixin extends DrawableHelper {
     @ModifyVariable(method = "setOverlayMessage(Lnet/minecraft/text/Text;Z)V", at = @At("HEAD"))
     private Text setOverlayMessage(Text message) {
         String msg = message.getString();
+        if (SkyblockerConfig.get().locations.dwarvenMines.metalDetectorLocator && msg != null &&  "DWARVEN_METAL_DETECTOR".equals(Utils.getHeldItemId())){
+            try{
+                DistancedLocator.getDistance(msg);
+            }
+            catch(Exception e){
+                System.out.println("DistancedLocator: " + e.getMessage());
+            }
+        }
         if (msg != null && Utils.isSkyblock && SkyblockerConfig.get().general.bars.enableBars)
             msg = Utils.parseActionBar(msg);
         return Text.of(msg);

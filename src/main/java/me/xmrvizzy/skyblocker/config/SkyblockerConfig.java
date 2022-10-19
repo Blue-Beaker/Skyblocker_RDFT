@@ -76,6 +76,7 @@ public class SkyblockerConfig implements ConfigData {
         public boolean solveFetchur = true;
         public boolean solvePuzzler = true;
         public boolean wishingCompassLocator = true;
+        public boolean metalDetectorLocator = true;
     }
     public static class Events {
         public boolean ancestorSpadeLocator = true;
@@ -89,10 +90,12 @@ public class SkyblockerConfig implements ConfigData {
         public boolean hideAOTE = false;
         public boolean hideImplosion = false;
         public boolean hideMoltenWave = false;
+        public boolean chatCoords = true;
     }
     public static class Debug {
         public boolean showInternalNameOnRightClick = false;
         public boolean debugPointingLocator = false;
+        public boolean debugDistancedLocator = false;
     }
 
     public static void init() {

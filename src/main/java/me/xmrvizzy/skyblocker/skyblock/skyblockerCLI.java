@@ -2,6 +2,7 @@ package me.xmrvizzy.skyblocker.skyblock;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.network.packet.s2c.play.PlaySoundIdS2CPacket;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
@@ -124,6 +125,7 @@ public class skyblockerCLI {
         );
         dispatcher.register(ClientCommandManager.literal("waypoint").redirect(waypointCommand));
         dispatcher.register(ClientCommandManager.literal("skyblockerwaypoint").redirect(waypointCommand));
+        
         LiteralCommandNode<FabricClientCommandSource> sbrDebug = dispatcher.register(literal("skyblockerdebug")
             .then(literal("getTabInfo")
                 .executes(context -> {
@@ -140,8 +142,11 @@ public class skyblockerCLI {
             .executes(context -> {
                 context.getSource().sendFeedback(new LiteralText(Utils.serverArea));
                 return 1;
-            })
-        )
+            }))
+            .then(literal("getSoundPackets")
+            .executes(context -> {
+                return 1;
+            }))
         );
         dispatcher.register(ClientCommandManager.literal("sbrd").redirect(sbrDebug));
     }
@@ -149,7 +154,10 @@ public class skyblockerCLI {
         try{
             Waypoint waypoint = new Waypoint(pos,color);
             if(WaypointList.add(Utils.serverArea, name, waypoint)){
-                context.getSource().sendFeedback(new LiteralText(String.format("Added waypoint \'%s\' at %d,%d,%d",name, pos.getX(),pos.getY(),pos.getZ())).formatted(Formatting.GREEN));
+                context.getSource().sendFeedback(new LiteralText(String.format("Added waypoint \'%s\' at %d,%d,%d ",name, pos.getX(),pos.getY(),pos.getZ())).formatted(Formatting.GREEN)
+                .append(new LiteralText("[VIEW]").styled((style) -> {
+                    return style.withColor(Formatting.GREEN).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sbwp list")).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("/sbwp list")));
+                })));
                 return 1;
             }
             else{
@@ -205,6 +213,9 @@ public class skyblockerCLI {
                 .append(new LiteralText("[COLOR]").styled((style) -> {
                     return style.withColor(Formatting.BLUE).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, String.format("/sbwp color '%s' %.2f %.2f %.2f", name,color[0],color[1],color[2]))).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("/sbwp color '"+name+"' (R G B)")));
                 }))
+                .append(new LiteralText("[SHARE]").styled((style) -> {
+                    return style.withColor(Formatting.AQUA).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, String.format("%s %d %d %d", name,pos.getX(),pos.getY(),pos.getZ()))).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Share this in the chat!")));
+                }))
                 .append(new LiteralText("[REMOVE]").styled((style) -> {
                     return style.withColor(Formatting.RED).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sbwp remove '"+name+"'")).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("/sbwp remove '"+name+"'")));
                 })));
@@ -246,4 +257,5 @@ public class skyblockerCLI {
             return(1);
         }
     }
+
 }

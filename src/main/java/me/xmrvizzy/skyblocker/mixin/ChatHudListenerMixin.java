@@ -8,16 +8,26 @@ import me.xmrvizzy.skyblocker.utils.Utils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHudListener;
 import net.minecraft.network.MessageType;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Mixin(ChatHudListener.class)
 public class ChatHudListenerMixin {
@@ -94,6 +104,37 @@ public class ChatHudListenerMixin {
                 (msg.contains("A magical force surrounding this area prevents you from breaking blocks!") || msg.contains("You cannot mine this close to an entrance!")))
                 ci.cancel();
         }
+    }
+
+    @ModifyVariable(method = "onChatMessage", at = @At("HEAD"))
+    public Text onMessage(Text message) {
+        Text finalText = message;
+        if(SkyblockerConfig.get().messages.chatCoords){
+            String msg = message.getString();
+            Pattern coordsPattern = Pattern.compile("([0-9]+ [0-9]+ [0-9]+)");
+            Matcher coordsMatcher = coordsPattern.matcher(msg);
+            if(coordsMatcher.find()){
+                String coords = coordsMatcher.group(1);
+                Pattern namePattern = Pattern.compile("(temple|odawa|key guardian|divan|corleone|city|lpc|king|queen|bal|Khazad|grotto)",Pattern.CASE_INSENSITIVE);
+                Matcher nameMatcher = namePattern.matcher(msg);
+                MutableText addWaypointButton;
+                if(nameMatcher.find()){
+                    String name = nameMatcher.group(1);
+                    String command = String.format("/sbwp add '%s' %s", name,coords);
+                    addWaypointButton = new LiteralText(" [Add Waypoint "+name+"]").styled((style) -> {
+                        return style.withColor(Formatting.GREEN).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,command )).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(command)));
+                    });
+                }
+                else{
+                    String command = String.format("/sbwp add '%s' %s", "name",coords);
+                    addWaypointButton = new LiteralText(" [Add Waypoint]").styled((style) -> {
+                        return style.withColor(Formatting.GREEN).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,command )).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(command)));
+                    });
+                }
+                finalText = message.shallowCopy().append(addWaypointButton);
+            }
+        }
+        return finalText;
     }
 
 }
