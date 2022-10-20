@@ -14,6 +14,11 @@
   "text.autoconfig.skyblocker.option.general.hitbox": "Hitbox",
   "text.autoconfig.skyblocker.option.general.hitbox.oldFarmlandHitbox": "Use 1.8 Farmland Hitbox",
 
+  "text.autoconfig.skyblocker.category.waypoint": "Waypoint",
+  "text.autoconfig.skyblocker.option.waypoint.lineWidth": "Waypoint ray width",
+  "text.autoconfig.skyblocker.option.waypoint.outlineWidth": "Waypoint block outline width",
+  "text.autoconfig.skyblocker.option.waypoint.labelSize": "Waypoint label size",
+
   "text.autoconfig.skyblocker.category.locations": "Locations",
   "text.autoconfig.skyblocker.option.locations.dungeons": "Dungeons",
   "text.autoconfig.skyblocker.option.locations.dungeons.enableMap": "Enable Map",
@@ -23,6 +28,7 @@
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.solveFetchur": "Solve Fetchur Items",
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.solvePuzzler": "Solve Puzzler Puzzle",
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.wishingCompassLocator": "Wishing Compass Locator(ALPHA)",
+  "text.autoconfig.skyblocker.option.locations.dwarvenMines.metalDetectorLocator": "Metal Detector Locator(UNCOMPLETED)",
   "text.autoconfig.skyblocker.option.locations.events.ancestorSpadeLocator": "Ancestor Spade Locator(ALPHA)",
 
   "text.autoconfig.skyblocker.category.messages": "Messages",
@@ -31,12 +37,13 @@
   "text.autoconfig.skyblocker.option.messages.hideAOTE": "Hide AOTE Messages",
   "text.autoconfig.skyblocker.option.messages.hideUnbreakable": "Hide 'Cant break block' Messages",
   "text.autoconfig.skyblocker.option.messages.autoOpenMenu": "Auto open Menus in chat",
-  "text.autoconfig.skyblocker.option.messages.hideAOTE": "Hide AOTE Messages",
   "text.autoconfig.skyblocker.option.messages.hideImplosion": "Hide Implosion Message",
   "text.autoconfig.skyblocker.option.messages.hideMoltenWave": "Hide Molten Wave Message",
+  "text.autoconfig.skyblocker.option.messages.chatCoords": "Add coords from chat",
 
   "text.autoconfig.skyblocker.category.debug": "Debug",
   "text.autoconfig.skyblocker.category.debug.showInternalNameOnRightClick": "Show Internal Names on Right Click",
-  "text.autoconfig.skyblocker.category.debug.debugPointingLocator": "Debug Compass/Spade Locators"
+  "text.autoconfig.skyblocker.category.debug.debugPointingLocator": "Debug Compass/Spade Locators",
+  "text.autoconfig.skyblocker.category.debug.debugDistancedLocator": "Debug Metal Locator"
 
 }

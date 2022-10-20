@@ -24,6 +24,10 @@ public class SkyblockerConfig implements ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     public Messages messages = new Messages();
 
+    @ConfigEntry.Category("waypoint")
+    @ConfigEntry.Gui.TransitiveObject
+    public Waypoint waypoint = new Waypoint();
+
     @ConfigEntry.Category("debug")
     @ConfigEntry.Gui.TransitiveObject
     public Debug debug = new Debug();
@@ -64,6 +68,12 @@ public class SkyblockerConfig implements ConfigData {
         @ConfigEntry.Category("events")
         @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
         public Events events = new Events();
+    }
+
+    public static class Waypoint {
+        public Float lineWidth = 3.0f;
+        public Float outlineWidth = 3.0f;
+        public Double labelSize = 0.2d;
     }
 
     public static class Dungeons {
