@@ -2,8 +2,10 @@ package me.xmrvizzy.skyblocker.utils;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,5 +31,30 @@ public class ItemUtils {
         }
 
         return list;
+    }
+
+    public static List<List<String>> getTooltipStringsBlocks(ItemStack item) {
+        List<Text> lines = getTooltip(item);
+        List<List<String>> list = new ArrayList<List<String>>();
+        list.add(new ArrayList<String>());
+        for (Text line : lines) {
+            String string = line.getString();
+            if (!string.replaceAll("\\s+","").isEmpty()){
+                list.get(list.size()-1).add(string);
+            }
+            else{
+                if(list.get(list.size()-1).size()>0){
+                    list.add(new ArrayList<String>());
+                }
+            }
+        }
+
+        return list;
+    }
+    public static String getId(Item item){
+        return Registry.ITEM.getId(item).getPath();
+    }
+    public static String getId(ItemStack itemStack){
+        return getId(itemStack.getItem());
     }
 }

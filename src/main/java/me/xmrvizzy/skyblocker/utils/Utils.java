@@ -60,7 +60,19 @@ public class Utils {
     public static void sbChecker() {
         List<String> sidebar = getSidebar();
         String string = sidebar.toString();
-
+        if (SkyblockerConfig.get().debug.forceSkyblock){
+            isSkyblock = true;
+            isInjected = true;
+            ItemTooltipCallback.EVENT.register(PriceInfoTooltip::onInjectTooltip);
+            if(SkyblockerConfig.get().debug.forceDungeons){
+                isDungeons = true;
+            }
+            else{
+                isDungeons = false;
+            }
+            serverArea=SkyblockerConfig.get().debug.forceArea;
+            return;
+        }
         if (sidebar.isEmpty()) return;
         if (sidebar.get(sidebar.size() - 1).equals("www.hypixel.net")) {
             if (sidebar.get(0).contains("SKYBLOCK")){

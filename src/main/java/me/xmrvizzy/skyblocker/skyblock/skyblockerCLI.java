@@ -16,9 +16,11 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
+import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay.Ability;
 import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.Waypoint;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointList;
+import me.xmrvizzy.skyblocker.utils.ItemUtils;
 import me.xmrvizzy.skyblocker.utils.Utils;
 
 import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.literal;
@@ -143,8 +145,30 @@ public class skyblockerCLI {
                 context.getSource().sendFeedback(new LiteralText(Utils.serverArea));
                 return 1;
             }))
-            .then(literal("getSoundPackets")
+            .then(literal("getHeldItemTooltipBlocks")
             .executes(context -> {
+                context.getSource().sendFeedback(new LiteralText(ItemUtils.getTooltipStringsBlocks(context.getSource().getPlayer().getMainHandStack()).toString()));
+                return 1;
+            }))
+            .then(literal("getHeldItemAbilities")
+            .executes(context -> {
+                Ability ability1=CooldownDisplay.getAbility(0, context.getSource().getPlayer().getMainHandStack());
+                Ability ability2=CooldownDisplay.getAbility(1, context.getSource().getPlayer().getMainHandStack());
+                if(ability1!=null)
+                context.getSource().sendFeedback(new LiteralText(ability1.toString()));
+                if(ability2!=null)
+                context.getSource().sendFeedback(new LiteralText(ability2.toString()));
+                return 1;
+            }))
+            .then(literal("getCooldowns")
+            .executes(context -> {
+                for(String ability:CooldownDisplay.cooldowns.keySet())
+                context.getSource().sendFeedback(new LiteralText(ability.toString()+" "+CooldownDisplay.cooldowns.get(ability)));
+                return 1;
+            }))
+            .then(literal("getId")
+            .executes(context -> {
+                context.getSource().sendFeedback(new LiteralText(ItemUtils.getId(context.getSource().getPlayer().getMainHandStack())));
                 return 1;
             }))
         );

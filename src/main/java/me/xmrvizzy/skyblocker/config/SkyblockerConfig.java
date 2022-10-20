@@ -34,6 +34,7 @@ public class SkyblockerConfig implements ConfigData {
 
     public static class General {
         public String apiKey;
+        public boolean cooldownDisplay = true;
         public boolean readableBazaarGraphs = false;
 
         @ConfigEntry.Category("bars")
@@ -87,6 +88,7 @@ public class SkyblockerConfig implements ConfigData {
         public boolean solvePuzzler = true;
         public boolean wishingCompassLocator = true;
         public boolean metalDetectorLocator = true;
+        public boolean hotmPerkLevels = true;
     }
     public static class Events {
         public boolean ancestorSpadeLocator = true;
@@ -103,6 +105,9 @@ public class SkyblockerConfig implements ConfigData {
         public boolean chatCoords = true;
     }
     public static class Debug {
+        public boolean forceSkyblock = false;
+        public boolean forceDungeons = false;
+        public String forceArea = "CrystalHollows";
         public boolean showInternalNameOnRightClick = false;
         public boolean debugPointingLocator = false;
         public boolean debugDistancedLocator = false;

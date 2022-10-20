@@ -114,6 +114,9 @@ public class PointedLocator {
         return(posList);
     }
     public static double[] calculateLine(ArrayList<Vec3d> particleList){
+        if(particleList.size()<=2){
+            return null;
+        }
         String particleListString="Position:";
         Vec3d avgPoint = new Vec3d(0,0,0);
         for(Vec3d pos : particleList){

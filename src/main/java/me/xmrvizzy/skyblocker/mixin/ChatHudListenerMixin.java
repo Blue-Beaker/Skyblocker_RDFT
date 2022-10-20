@@ -1,6 +1,7 @@
 package me.xmrvizzy.skyblocker.mixin;
 
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
+import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay;
 import me.xmrvizzy.skyblocker.skyblock.dungeon.DungeonPuzzles;
 import me.xmrvizzy.skyblocker.skyblock.dwarven.Fetchur;
 import me.xmrvizzy.skyblocker.skyblock.dwarven.Puzzler;
@@ -73,7 +74,10 @@ public class ChatHudListenerMixin {
                         msg.contains("Puzzler"))
                     Puzzler.solve(msg);
             }
-
+            if(SkyblockerConfig.get().general.cooldownDisplay && msg.contains(" is now available!")){
+                String abilityName = msg.replace(" is now available!", "");
+                CooldownDisplay.cooldowns.remove(abilityName);
+            }
             if (SkyblockerConfig.get().messages.hideAbility &&
                     (msg.contains("This ability is currently on cooldown for ") ||
                     msg.contains("No more charges, next one in ") ||

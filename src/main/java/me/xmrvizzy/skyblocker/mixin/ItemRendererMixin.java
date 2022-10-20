@@ -2,25 +2,35 @@ package me.xmrvizzy.skyblocker.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
+import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay;
+import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay.Ability;
+import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
 import me.xmrvizzy.skyblocker.utils.ItemUtils;
 import me.xmrvizzy.skyblocker.utils.Utils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.Registry;
+
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.regex.Pattern;
+
 
 @Mixin(ItemRenderer.class)
 public abstract class ItemRendererMixin {
@@ -74,4 +84,47 @@ public abstract class ItemRendererMixin {
             }
         }
     }
+
+    @Inject(method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V", at = @At("HEAD"))
+    public void renderItemCooldown(TextRenderer renderer, ItemStack stack, int x, int y, @Nullable String countLabel, CallbackInfo ci) {
+        if(Utils.isSkyblock && SkyblockerConfig.get().general.cooldownDisplay && PriceInfoTooltip.getInternalNameForItem(stack)!=null){
+            float k=0.0f;
+            Ability ability = CooldownDisplay.getAbilityCached(CooldownDisplay.RIGHT_CLICK, stack);
+            if(ability!=null){
+                k = CooldownDisplay.getCooldownProgress(ability);
+            }
+            else{
+                ability = CooldownDisplay.getAbilityCached(CooldownDisplay.LEFT_CLICK, stack);
+                if(ability!=null) k = CooldownDisplay.getCooldownProgress(ability);
+            }
+            if (k > 0.0F) {
+               RenderSystem.disableDepthTest();
+               RenderSystem.disableTexture();
+               RenderSystem.enableBlend();
+               RenderSystem.defaultBlendFunc();
+               Tessellator tessellator2 = Tessellator.getInstance();
+               BufferBuilder bufferBuilder2 = tessellator2.getBuffer();
+               this.renderGuiQuad(bufferBuilder2, x, y + MathHelper.floor(16.0F * (1.0F - k)), 16, MathHelper.ceil(16.0F * k), 255, 255, 255, 127);
+               RenderSystem.enableTexture();
+               RenderSystem.enableDepthTest();
+            }
+        }
+    }
+
+    /*@ModifyVariable(method = "renderGuiItemOverlay", at = @At("HEAD"))
+    public ItemStack getHotmPerkLevels(ItemStack stack) {
+        if(Utils.isSkyblock && SkyblockerConfig.get().locations.dwarvenMines.hotmPerkLevels){
+            String name = Registry.ITEM.getId(stack.getItem()).getPath();
+            if("diamond".equals(name)||"emerald".equals(name)){
+                String levels = ItemUtils.getTooltip(stack).get(0).getString();
+                if(levels.contains("Level ")){
+                    int level = Integer.parseInt(levels.split("/",2)[0].replace("Level ", ""));
+                    ItemStack leveledStack = stack.copy();
+                    leveledStack.setCount(level);
+                    return leveledStack;
+                }
+            }
+        }
+        return stack;
+    }*/
 }

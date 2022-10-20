@@ -40,6 +40,7 @@ public class PriceInfoTooltip {
     private JsonObject auctionPricesJson = null;
     private JsonObject bazaarPricesJson = null;
     public static JsonObject prices = PriceInfoTooltip.downloadPrices();
+    static MinecraftClient client = MinecraftClient.getInstance();
     public static void onInjectTooltip(ItemStack stack, TooltipContext context, List<Text> list) {
         String name = getInternalNameForItem(stack);
         try {
@@ -61,7 +62,7 @@ public class PriceInfoTooltip {
                 }
             }
         }catch(Exception e) {
-            MinecraftClient.getInstance().player.sendMessage(new LiteralText(e.toString()), false);
+            client.player.sendMessage(new LiteralText(e.toString()), false);
         }
     
 	}

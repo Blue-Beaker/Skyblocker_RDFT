@@ -19,13 +19,13 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
         super(world, profile);
     }
 
-    @Inject(method = "sendChatMessage", at = @At("HEAD"), cancellable = true)
+    /*@Inject(method = "sendChatMessage", at = @At("HEAD"), cancellable = true)
     public void sendChatMessage(String message, CallbackInfo ci) {
         String[] split = message.toLowerCase().split(" ");
         if (split.length > 0 && split[0].contentEquals("/skb")) {
             ci.cancel();
         }
-    }
+    }*/
 
     @Inject(method = "dropSelectedItem", at = @At("HEAD"), cancellable = true)
     public void dropSelectedItem(boolean dropEntireStack, CallbackInfoReturnable<Boolean> cir) {
