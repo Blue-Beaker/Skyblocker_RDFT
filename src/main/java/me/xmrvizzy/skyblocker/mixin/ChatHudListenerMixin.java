@@ -80,6 +80,11 @@ public class ChatHudListenerMixin {
                     String abilityName = msg.replace(" is now available!", "");
                     CooldownDisplay.cooldowns.remove(abilityName);
                 }
+                else if(msg.contains("You used your Mining Speed Boost Pickaxe Ability!")){
+                    String abilityName = "Mining Speed Boost";
+                    Ability ability = CooldownDisplay.abilities.get(abilityName);
+                    CooldownDisplay.setCooldown(abilityName, ability.cooldown);
+                }
                 else if(msg.contains("Used ") && msg.contains("!")){
                     String abilityName = msg.replace("Used ", "").replace("!", "");
                     Ability ability = CooldownDisplay.abilities.get(abilityName);

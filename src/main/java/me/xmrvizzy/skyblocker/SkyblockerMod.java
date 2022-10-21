@@ -20,6 +20,7 @@ import net.minecraft.text.Text;
 import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
 import me.xmrvizzy.skyblocker.skyblock.locator.DistancedLocator;
 import me.xmrvizzy.skyblocker.skyblock.locator.PointedLocator;
+import me.xmrvizzy.skyblocker.skyblock.waypoints.AutoWaypoint;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointRenderer;
 import me.xmrvizzy.skyblocker.skyblock.skyblockerCLI;
 
@@ -32,6 +33,7 @@ public class SkyblockerMod implements ClientModInitializer {
 		SkyblockerConfig.init();
 		PointedLocator.init();
 		CooldownDisplay.init();
+		AutoWaypoint.init();
         new skyblockerCLI(ClientCommandManager.DISPATCHER);
 	}
 

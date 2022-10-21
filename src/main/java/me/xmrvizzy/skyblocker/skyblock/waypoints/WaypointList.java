@@ -4,6 +4,11 @@ import java.util.HashMap;
 import java.util.Set;
 
 import me.xmrvizzy.skyblocker.utils.Utils;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.LiteralText;
+import net.minecraft.util.Formatting;
 
 
 
@@ -11,6 +16,9 @@ public class WaypointList {
     static HashMap<String, HashMap<String, Waypoint>> list = new HashMap<String, HashMap<String, Waypoint>>();
     public static HashMap<String, Waypoint> get(String area){
         return list.get(area);
+    }
+    public static HashMap<String, Waypoint> get(){
+        return list.get(Utils.serverArea);
     }
     public static Set<String> getAreas(){
         return list.keySet();

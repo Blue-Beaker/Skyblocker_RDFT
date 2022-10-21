@@ -75,6 +75,7 @@ public class SkyblockerConfig implements ConfigData {
         public Float lineWidth = 3.0f;
         public Float outlineWidth = 3.0f;
         public Double labelSize = 0.2d;
+        public boolean autoWaypoints = true;
     }
 
     public static class Dungeons {

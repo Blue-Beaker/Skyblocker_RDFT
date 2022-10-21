@@ -13,11 +13,14 @@
   "text.autoconfig.skyblocker.option.general.bars.enableBars": "Enable Bars",
   "text.autoconfig.skyblocker.option.general.hitbox": "Hitbox",
   "text.autoconfig.skyblocker.option.general.hitbox.oldFarmlandHitbox": "Use 1.8 Farmland Hitbox",
+  "text.autoconfig.skyblocker.option.general.cooldownDisplay": "Cooldown Display",
+  "text.autoconfig.skyblocker.option.general.readableBazaarGraphs": "Aligned Bazaar Graphs",
 
   "text.autoconfig.skyblocker.category.waypoint": "Waypoint",
   "text.autoconfig.skyblocker.option.waypoint.lineWidth": "Waypoint ray width",
   "text.autoconfig.skyblocker.option.waypoint.outlineWidth": "Waypoint block outline width",
   "text.autoconfig.skyblocker.option.waypoint.labelSize": "Waypoint label size",
+  "text.autoconfig.skyblocker.option.waypoint.autoWaypoints": "Auto add waypoints for important locations",
 
   "text.autoconfig.skyblocker.category.locations": "Locations",
   "text.autoconfig.skyblocker.option.locations.dungeons": "Dungeons",
@@ -29,6 +32,9 @@
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.solvePuzzler": "Solve Puzzler Puzzle",
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.wishingCompassLocator": "Wishing Compass Locator(ALPHA)",
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.metalDetectorLocator": "Metal Detector Locator(UNCOMPLETED)",
+  "text.autoconfig.skyblocker.option.locations.dwarvenMines.hotmPerkLevels": "Display Hotm Perk Levels",
+
+  "text.autoconfig.skyblocker.option.locations.events": "Events",
   "text.autoconfig.skyblocker.option.locations.events.ancestorSpadeLocator": "Ancestor Spade Locator(ALPHA)",
 
   "text.autoconfig.skyblocker.category.messages": "Messages",
@@ -42,8 +48,11 @@
   "text.autoconfig.skyblocker.option.messages.chatCoords": "Add coords from chat",
 
   "text.autoconfig.skyblocker.category.debug": "Debug",
-  "text.autoconfig.skyblocker.category.debug.showInternalNameOnRightClick": "Show Internal Names on Right Click",
-  "text.autoconfig.skyblocker.category.debug.debugPointingLocator": "Debug Compass/Spade Locators",
-  "text.autoconfig.skyblocker.category.debug.debugDistancedLocator": "Debug Metal Locator"
+  "text.autoconfig.skyblocker.option.debug.showInternalNameOnRightClick": "Show Internal Names on Right Click",
+  "text.autoconfig.skyblocker.option.debug.debugPointingLocator": "Debug Compass/Spade Locators",
+  "text.autoconfig.skyblocker.option.debug.debugDistancedLocator": "Debug Metal Locator",
+  "text.autoconfig.skyblocker.option.debug.forceSkyblock": "Force everywhere as Skyblock for debug",
+  "text.autoconfig.skyblocker.option.debug.forceDungeons": "Force dungeons (only when force skyblock is on)",
+  "text.autoconfig.skyblocker.option.debug.forceArea": "Force area (only when force skyblock is on)"
 
 }

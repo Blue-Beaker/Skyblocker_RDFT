@@ -33,7 +33,7 @@ public class PointedLocator {
     static final int LOCATION_MITHRIL = 4;
     static final int LOCATION_PRECURSOR = 5;
     static final int LOCATION_BURROW = 6;
-    static final String[] LOCATION_NAMES = {"Nucleus","Khazad-dûm","Temple/Odawa","King/Queen","Divan","City","Griffin Burrow"};
+    static final String[] LOCATION_NAMES = {"Nucleus","Khazad-dum","Temple/Odawa","King/Queen","Divan","City","Griffin Burrow"};
     static final float[][] LOCATION_COLORS = {{1f,1f,1f},{1f,1f,0f},{0.5f,0f,1f},{1f,0.5f,0f},{0f,1f,0f},{0f,0f,1f},{1f,0.5f,0f}};
 
     static MinecraftClient client = MinecraftClient.getInstance();
@@ -206,7 +206,7 @@ public class PointedLocator {
             String name = WaypointList.addAutoRenaming(targetName,waypoint);
             client.player.sendMessage(new LiteralText(String.format("[Skyblocker] Calculated %s at (%.0f,%.0f,%.0f) ",name,position.x,position.y,position.z)).formatted(Formatting.GREEN)
             .append(new LiteralText("[VIEW]").styled((style) -> {
-                return style.withColor(Formatting.GREEN).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sbwp list")).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("/sbwp list")));
+                return style.withColor(Formatting.GREEN).withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sbwp list")).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("/sbwp list")));
             })), false);
             if(position.x>=463&&position.x<=563&&position.z>=460&&position.z<=564&&position.y>=63){ // Check if the target is in nucleus
                 client.player.sendMessage(new LiteralText("[Skyblocker]The target is in Crystal Nucleus, maybe "+targetName+" doesn't exist in this lobby?").formatted(Formatting.YELLOW), false);

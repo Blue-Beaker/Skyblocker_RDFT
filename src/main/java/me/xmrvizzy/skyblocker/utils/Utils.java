@@ -5,7 +5,10 @@ import com.google.common.collect.Lists;
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
 import me.xmrvizzy.skyblocker.skyblock.Attribute;
 import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
+import me.xmrvizzy.skyblocker.skyblock.waypoints.AutoWaypoint;
+import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointList;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+import net.minecraft.block.PlantBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.PlayerListEntry;
@@ -26,6 +29,7 @@ public class Utils {
     public static boolean isDungeons = false;
     public static boolean isInjected = false;
     public static String serverArea = "None";
+    public static String subLocation = "None";
     static MinecraftClient client = MinecraftClient.getInstance();
     public static String parseActionBar(String msg) {
         String[] sections = msg.split(" {3,}");
@@ -81,6 +85,10 @@ public class Utils {
                     ItemTooltipCallback.EVENT.register(PriceInfoTooltip::onInjectTooltip);
                 }
                 isSkyblock = true;
+                subLocation = getSubLocation(sidebar);
+                if(SkyblockerConfig.get().waypoint.autoWaypoints)
+                AutoWaypoint.autoWaypoint(subLocation);
+                serverArea=getArea(getTabInfo());
             }
             else isSkyblock = false;
 
@@ -90,7 +98,6 @@ public class Utils {
             isSkyblock = false;
             isDungeons = false;
         }
-        serverArea=getArea(getTabInfo());
     }
 
     public static List<String> getSidebar() {
@@ -148,6 +155,13 @@ public class Utils {
                 return(line.replace("Area:", "").replaceAll(" ", ""));
             }
         }
+        return("None");
+    }
+    public static String getSubLocation(List<String> lines){
+        String line = lines.get(4);
+            if(line.contains(" ⏣ ")){
+                return(line.replace(" ⏣ ", ""));
+            }
         return("None");
     }
     public static String getHeldItemId(){

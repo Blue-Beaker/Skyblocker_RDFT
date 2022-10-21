@@ -128,7 +128,7 @@ public class skyblockerCLI {
         dispatcher.register(ClientCommandManager.literal("waypoint").redirect(waypointCommand));
         dispatcher.register(ClientCommandManager.literal("skyblockerwaypoint").redirect(waypointCommand));
         
-        LiteralCommandNode<FabricClientCommandSource> sbrDebug = dispatcher.register(literal("skyblockerdebug")
+        LiteralCommandNode<FabricClientCommandSource> sbrDebug = dispatcher.register(literal("sbrd")
             .then(literal("getTabInfo")
                 .executes(context -> {
                     context.getSource().sendFeedback(new LiteralText(Utils.getTabInfo().toString()));
@@ -171,8 +171,18 @@ public class skyblockerCLI {
                 context.getSource().sendFeedback(new LiteralText(ItemUtils.getId(context.getSource().getPlayer().getMainHandStack())));
                 return 1;
             }))
+            .then(literal("getSidebar")
+            .executes(context -> {
+                context.getSource().sendFeedback(new LiteralText(Utils.getSidebar().toString()));
+                return 1;
+            }))
+            .then(literal("getSublocation")
+            .executes(context -> {
+                context.getSource().sendFeedback(new LiteralText(Utils.subLocation));
+                return 1;
+            }))
         );
-        dispatcher.register(ClientCommandManager.literal("sbrd").redirect(sbrDebug));
+        dispatcher.register(ClientCommandManager.literal("skyblockerdebug").redirect(sbrDebug));
     }
     public int addWaypoint(CommandContext<FabricClientCommandSource> context, String name, BlockPos pos, float[] color){
         try{
