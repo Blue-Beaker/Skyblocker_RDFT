@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
 import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay;
 import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay.Ability;
+import me.xmrvizzy.skyblocker.skyblock.dwarven.HotmLevel;
 import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
 import me.xmrvizzy.skyblocker.utils.ItemUtils;
 import me.xmrvizzy.skyblocker.utils.Utils;
@@ -28,6 +29,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.util.regex.Pattern;
 
@@ -36,7 +38,7 @@ import java.util.regex.Pattern;
 public abstract class ItemRendererMixin {
 
     @Shadow protected abstract void renderGuiQuad(BufferBuilder buffer, int x, int y, int width, int height, int red, int green, int blue, int alpha);
-
+    @Shadow protected float zOffset;
     @Inject(method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V", at = @At("HEAD"))
     public void renderItemBar(TextRenderer renderer, ItemStack stack, int x, int y, @Nullable String countLabel, CallbackInfo ci) {
 
@@ -111,20 +113,16 @@ public abstract class ItemRendererMixin {
         }
     }
 
-    /*@ModifyVariable(method = "renderGuiItemOverlay", at = @At("HEAD"))
-    public ItemStack getHotmPerkLevels(ItemStack stack) {
-        if(Utils.isSkyblock && SkyblockerConfig.get().locations.dwarvenMines.hotmPerkLevels){
-            String name = Registry.ITEM.getId(stack.getItem()).getPath();
-            if("diamond".equals(name)||"emerald".equals(name)){
-                String levels = ItemUtils.getTooltip(stack).get(0).getString();
-                if(levels.contains("Level ")){
-                    int level = Integer.parseInt(levels.split("/",2)[0].replace("Level ", ""));
-                    ItemStack leveledStack = stack.copy();
-                    leveledStack.setCount(level);
-                    return leveledStack;
-                }
-            }
+    @Inject(method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V", at = @At("HEAD"))
+    public void renderHotmPerkLevels(TextRenderer renderer, ItemStack stack, int x, int y, @Nullable String countLabel, CallbackInfo ci) {
+        int hotmLevel = HotmLevel.getHotmPerkLevel(stack);
+        if(hotmLevel>=1){
+            MatrixStack matrixStack = new MatrixStack();
+            String string = String.valueOf(hotmLevel);
+            matrixStack.translate(0.0D, 0.0D, (double)(this.zOffset + 200.0F));
+            VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
+            renderer.draw((String)string, (float)(x + 19 - 2 - renderer.getWidth(string)), (float)(y + 6 + 3), 16777215, true, matrixStack.peek().getModel(), immediate, false, 0, 15728880);
+            immediate.draw();
         }
-        return stack;
-    }*/
+    }
 }

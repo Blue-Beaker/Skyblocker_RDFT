@@ -14,6 +14,7 @@ public class CooldownDisplay {
     public static final int LEFT_CLICK = 1;
     public static final String[] buttonNames = new String[]{"RIGHT CLICK","LEFT CLICK"};
     public static HashMap<String,Integer> cooldowns = new HashMap<String,Integer>();
+    public static HashMap<String,Ability> abilities = new HashMap<String,Ability>();
     public static ArrayList<HashMap<String,Ability>> abilitiyOwners = new ArrayList<HashMap<String,Ability>>(2);
     public static MinecraftClient client = MinecraftClient.getInstance();
     public static class Ability{
@@ -59,6 +60,7 @@ public class CooldownDisplay {
                             ability = new Ability(abilityName, button, cooldown);
                             String skyblockId = PriceInfoTooltip.getInternalNameForItem(item);
                             abilitiyOwners.get(button).put(skyblockId, ability);
+                            abilities.put(abilityName, ability);
                             return ability;
                         }
                     }
