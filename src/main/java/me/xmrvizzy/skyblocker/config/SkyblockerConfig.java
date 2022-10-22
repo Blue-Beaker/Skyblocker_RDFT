@@ -28,6 +28,10 @@ public class SkyblockerConfig implements ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     public Waypoint waypoint = new Waypoint();
 
+    @ConfigEntry.Category("hitbox")
+    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+    public Hitbox hitbox = new Hitbox();
+    
     @ConfigEntry.Category("debug")
     @ConfigEntry.Gui.TransitiveObject
     public Debug debug = new Debug();
@@ -40,10 +44,6 @@ public class SkyblockerConfig implements ConfigData {
         @ConfigEntry.Category("bars")
         @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
         public Bars bars = new Bars();
-        
-        @ConfigEntry.Category("hitbox")
-        @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
-        public Hitbox hitbox = new Hitbox();
 
         @ConfigEntry.Gui.Excluded
         public List<Integer> lockedSlots = new ArrayList<>();
@@ -54,6 +54,7 @@ public class SkyblockerConfig implements ConfigData {
     }
 
     public static class Hitbox {
+        public boolean hitboxForAllHypixel = false;
         public boolean oldFarmlandHitbox = true;
     }
 

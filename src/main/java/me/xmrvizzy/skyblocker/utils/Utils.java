@@ -25,8 +25,11 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import javax.lang.model.util.ElementScanner6;
+
 public class Utils {
     public static boolean isSkyblock = false;
+    public static boolean isHypixel = false;
     public static boolean isDungeons = false;
     public static boolean isInjected = false;
     public static String serverArea = "None";
@@ -80,6 +83,7 @@ public class Utils {
         }
         if (sidebar.isEmpty()) return;
         if (getTabHeader().contains("You are playing on MC.HYPIXEL.NET")) {
+            isHypixel = true;
             if (sidebar.get(0).contains("SKYBLOCK")){
                 if(isInjected == false){
                     isInjected = true;
@@ -92,10 +96,10 @@ public class Utils {
                 serverArea=getArea(getTabInfo());
             }
             else isSkyblock = false;
-
             if (isSkyblock && string.contains("The Catacombs")) isDungeons = true;
             else isDungeons = false;
         } else {
+            isHypixel = false;
             isSkyblock = false;
             isDungeons = false;
         }

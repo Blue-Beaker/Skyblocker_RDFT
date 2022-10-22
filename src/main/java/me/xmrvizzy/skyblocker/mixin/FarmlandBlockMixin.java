@@ -9,6 +9,9 @@ import net.minecraft.block.ShapeContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
+
+import javax.rmi.CORBA.Util;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,7 +25,7 @@ public abstract class FarmlandBlockMixin extends Block {
 
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     public void onGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        if (Utils.isSkyblock && SkyblockerConfig.get().general.hitbox.oldFarmlandHitbox)
+        if ((Utils.isSkyblock || (Utils.isHypixel && SkyblockerConfig.get().hitbox.hitboxForAllHypixel)) && SkyblockerConfig.get().hitbox.oldFarmlandHitbox)
             cir.setReturnValue(Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 16.0));
     }
 
