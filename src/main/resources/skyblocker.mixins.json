@@ -11,7 +11,8 @@
     "ItemRendererMixin",
     "FarmlandBlockMixin",
     "MinecraftClientMixin",
-    "MixinParticleManager"
+    "MixinParticleManager",
+    "PlayerListHudAccessor"
 
   ],
   "injectors": {

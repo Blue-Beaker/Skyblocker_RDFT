@@ -181,6 +181,16 @@ public class skyblockerCLI {
                 context.getSource().sendFeedback(new LiteralText(Utils.subLocation));
                 return 1;
             }))
+            .then(literal("getHeader")
+            .executes(context -> {
+                context.getSource().sendFeedback(new LiteralText(Utils.getTabHeader()));
+                return 1;
+            }))
+            .then(literal("getFooter")
+            .executes(context -> {
+                context.getSource().sendFeedback(new LiteralText(Utils.getTabFooter()));
+                return 1;
+            }))
         );
         dispatcher.register(ClientCommandManager.literal("skyblockerdebug").redirect(sbrDebug));
     }

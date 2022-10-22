@@ -3,6 +3,7 @@ package me.xmrvizzy.skyblocker.utils;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
+import me.xmrvizzy.skyblocker.mixin.PlayerListHudAccessor;
 import me.xmrvizzy.skyblocker.skyblock.Attribute;
 import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.AutoWaypoint;
@@ -78,7 +79,7 @@ public class Utils {
             return;
         }
         if (sidebar.isEmpty()) return;
-        if (sidebar.get(sidebar.size() - 1).equals("www.hypixel.net")) {
+        if (getTabHeader().contains("You are playing on MC.HYPIXEL.NET")) {
             if (sidebar.get(0).contains("SKYBLOCK")){
                 if(isInjected == false){
                     isInjected = true;
@@ -148,6 +149,12 @@ public class Utils {
             }
         }
         return lines;
+    }
+    public static String getTabHeader(){
+        return ((PlayerListHudAccessor)client.inGameHud.getPlayerListHud()).getHeader().getString();
+    }
+    public static String getTabFooter(){
+        return ((PlayerListHudAccessor)client.inGameHud.getPlayerListHud()).getFooter().getString();
     }
     public static String getArea(List<String> tabLines){
         for(String line:tabLines){
