@@ -23,20 +23,31 @@ public class WaypointList {
     public static Set<String> getAreas(){
         return list.keySet();
     }
+
     public static Boolean add(String name, Waypoint waypoint){
         return add(Utils.serverArea,name,waypoint);
     }
     public static Boolean add(String area, String name, Waypoint waypoint){
         list.putIfAbsent(area, new HashMap<String, Waypoint>());
-        return list.get(area).putIfAbsent(name, waypoint)==null;
+        if(list.get(area).putIfAbsent(name, waypoint)==null){
+            store();
+            return true;
+        }
+        return false;
     }
+
     public static Boolean remove(String name){
         return remove(Utils.serverArea,name);
     }
     public static Boolean remove(String area, String name){
         list.putIfAbsent(area, new HashMap<String, Waypoint>());
-        return list.get(area).remove(name)!=null;
+        if(list.get(area).remove(name)!=null){
+            store();
+            return true;
+        }
+        return false;
     }
+
     public static Boolean rename(String area, String name, String name2){
         list.putIfAbsent(area, new HashMap<String, Waypoint>());
         Waypoint waypoint = list.get(area).remove(name);
@@ -64,13 +75,16 @@ public class WaypointList {
     public static String addAutoRenaming(String name, Waypoint waypoint){
         return addAutoRenaming(Utils.serverArea,name,waypoint);
     }
+
     public static void clear(String area){
         list.putIfAbsent(area, new HashMap<String, Waypoint>());
         list.get(area).clear();
+        store();
     }
     public static void clear(){
         clear(Utils.serverArea);
     }
+
     public static Boolean setColor(String area, String name, float[] color){
         list.putIfAbsent(area, new HashMap<String, Waypoint>());
         if(list.get(area).get(name)==null){
@@ -78,10 +92,14 @@ public class WaypointList {
         }
         else{
             list.get(area).get(name).color=color;
+            store();
             return true;
         }
     }
     public static Boolean setColor(String name, float[] color){
         return setColor(Utils.serverArea, name, color);
+    }
+    public static void store(){
+        WaypointStorage.storeJsonFile();
     }
 }

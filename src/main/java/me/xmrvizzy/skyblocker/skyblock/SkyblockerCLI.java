@@ -2,7 +2,6 @@ package me.xmrvizzy.skyblocker.skyblock;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.network.packet.s2c.play.PlaySoundIdS2CPacket;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
@@ -20,6 +19,7 @@ import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay.Ability;
 import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.Waypoint;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointList;
+import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointStorage;
 import me.xmrvizzy.skyblocker.utils.ItemUtils;
 import me.xmrvizzy.skyblocker.utils.Utils;
 
@@ -28,9 +28,9 @@ import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.lit
 import java.util.HashMap;
 
 
-public class skyblockerCLI {
+public class SkyblockerCLI {
 	MinecraftClient client = MinecraftClient.getInstance();
-    public skyblockerCLI(CommandDispatcher<FabricClientCommandSource> dispatcher){
+    public SkyblockerCLI(CommandDispatcher<FabricClientCommandSource> dispatcher){
         LiteralCommandNode<FabricClientCommandSource> waypointCommand = dispatcher.register(literal("sbwp")
                 .then(literal("add")
                     .then(ClientCommandManager.argument("name", StringArgumentType.string())
@@ -124,75 +124,15 @@ public class skyblockerCLI {
                         return 1;
                     })
                 )
+                .then(literal("reload")
+                    .executes(context -> {
+                        return reload(context);
+                    })
+                )
         );
         dispatcher.register(ClientCommandManager.literal("waypoint").redirect(waypointCommand));
         dispatcher.register(ClientCommandManager.literal("skyblockerwaypoint").redirect(waypointCommand));
         
-        LiteralCommandNode<FabricClientCommandSource> sbrDebug = dispatcher.register(literal("sbrd")
-            .then(literal("getTabInfo")
-                .executes(context -> {
-                    context.getSource().sendFeedback(new LiteralText(Utils.getTabInfo().toString()));
-                    return 1;
-                })
-            )
-            .then(literal("getInternalName")
-            .executes(context -> {
-                context.getSource().sendFeedback(new LiteralText(PriceInfoTooltip.getInternalNameForItem(client.player.getMainHandStack())));
-                return 1;
-            }))
-            .then(literal("getServerArea")
-            .executes(context -> {
-                context.getSource().sendFeedback(new LiteralText(Utils.serverArea));
-                return 1;
-            }))
-            .then(literal("getHeldItemTooltipBlocks")
-            .executes(context -> {
-                context.getSource().sendFeedback(new LiteralText(ItemUtils.getTooltipStringsBlocks(context.getSource().getPlayer().getMainHandStack()).toString()));
-                return 1;
-            }))
-            .then(literal("getHeldItemAbilities")
-            .executes(context -> {
-                Ability ability1=CooldownDisplay.getAbility(0, context.getSource().getPlayer().getMainHandStack());
-                Ability ability2=CooldownDisplay.getAbility(1, context.getSource().getPlayer().getMainHandStack());
-                if(ability1!=null)
-                context.getSource().sendFeedback(new LiteralText(ability1.toString()));
-                if(ability2!=null)
-                context.getSource().sendFeedback(new LiteralText(ability2.toString()));
-                return 1;
-            }))
-            .then(literal("getCooldowns")
-            .executes(context -> {
-                for(String ability:CooldownDisplay.cooldowns.keySet())
-                context.getSource().sendFeedback(new LiteralText(ability.toString()+" "+CooldownDisplay.cooldowns.get(ability)));
-                return 1;
-            }))
-            .then(literal("getId")
-            .executes(context -> {
-                context.getSource().sendFeedback(new LiteralText(ItemUtils.getId(context.getSource().getPlayer().getMainHandStack())));
-                return 1;
-            }))
-            .then(literal("getSidebar")
-            .executes(context -> {
-                context.getSource().sendFeedback(new LiteralText(Utils.getSidebar().toString()));
-                return 1;
-            }))
-            .then(literal("getSublocation")
-            .executes(context -> {
-                context.getSource().sendFeedback(new LiteralText(Utils.subLocation));
-                return 1;
-            }))
-            .then(literal("getHeader")
-            .executes(context -> {
-                context.getSource().sendFeedback(new LiteralText(Utils.getTabHeader()));
-                return 1;
-            }))
-            .then(literal("getFooter")
-            .executes(context -> {
-                context.getSource().sendFeedback(new LiteralText(Utils.getTabFooter()));
-                return 1;
-            }))
-        );
-        dispatcher.register(ClientCommandManager.literal("skyblockerdebug").redirect(sbrDebug));
     }
     public int addWaypoint(CommandContext<FabricClientCommandSource> context, String name, BlockPos pos, float[] color){
         try{
@@ -301,5 +241,14 @@ public class skyblockerCLI {
             return(1);
         }
     }
-
+    public int reload(CommandContext<FabricClientCommandSource> context){
+        try{
+            WaypointStorage.reloadJsonFile();
+            context.getSource().sendFeedback(new LiteralText("Reloaded waypoints!").formatted(Formatting.GREEN));
+            return 1;
+        } catch (Exception e) {
+            context.getSource().sendError(new LiteralText(e.getStackTrace().toString()).formatted(Formatting.RED));
+            return 0;
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package me.xmrvizzy.skyblocker;
 
+import java.nio.file.Path;
 import java.util.Map;
 
 import com.google.gson.JsonObject;
@@ -9,11 +10,13 @@ import org.apache.commons.lang3.ObjectUtils.Null;
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
 import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay;
 import me.xmrvizzy.skyblocker.skyblock.HotbarSlotLock;
-import me.xmrvizzy.skyblocker.skyblock.skyblockerCLI;
+import me.xmrvizzy.skyblocker.skyblock.SkyblockerCLI;
+import me.xmrvizzy.skyblocker.skyblock.SkyblockerDebugCLI;
 import me.xmrvizzy.skyblocker.skyblock.dungeon.DungeonBlaze;
 import me.xmrvizzy.skyblocker.utils.Utils;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
@@ -22,11 +25,13 @@ import me.xmrvizzy.skyblocker.skyblock.locator.DistancedLocator;
 import me.xmrvizzy.skyblocker.skyblock.locator.PointedLocator;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.AutoWaypoint;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointRenderer;
-import me.xmrvizzy.skyblocker.skyblock.skyblockerCLI;
+import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointStorage;
+import me.xmrvizzy.skyblocker.skyblock.SkyblockerCLI;
 
 public class SkyblockerMod implements ClientModInitializer {
 	public static final String NAMESPACE = "skyblocker";
 	private static int TICKS = 0;
+	public static Path configDir=FabricLoader.getInstance().getConfigDir().resolve("skyblocker/");
 	@Override
 	public void onInitializeClient() {
 		HotbarSlotLock.init();
@@ -34,7 +39,10 @@ public class SkyblockerMod implements ClientModInitializer {
 		PointedLocator.init();
 		CooldownDisplay.init();
 		AutoWaypoint.init();
-        new skyblockerCLI(ClientCommandManager.DISPATCHER);
+		configDir.toFile().mkdirs();
+		WaypointStorage.readJsonFile();
+        new SkyblockerCLI(ClientCommandManager.DISPATCHER);
+        new SkyblockerDebugCLI(ClientCommandManager.DISPATCHER);
 	}
 
 
