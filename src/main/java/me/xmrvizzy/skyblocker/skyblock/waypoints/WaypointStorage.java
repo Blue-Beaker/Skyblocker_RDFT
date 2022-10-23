@@ -9,6 +9,7 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.google.gson.Gson;
@@ -56,13 +57,26 @@ public class WaypointStorage {
             return false;
         }
     }
-    public static Boolean reloadJsonFile() throws IOException{
-            Path file = SkyblockerMod.configDir.resolve("waypoints.json");
-            java.lang.reflect.Type setType = new TypeToken<HashMap<String, HashMap<String, Waypoint>>>(){}.getType();
-            BufferedReader reader = Files.newBufferedReader(file);
-            Gson gson = new Gson();
-            gson.fromJson(reader, setType);
-            return true;
+    public static void reloadJsonFile() throws IOException{
+        Path file = SkyblockerMod.configDir.resolve("waypoints.json");
+        java.lang.reflect.Type setType = new TypeToken<HashMap<String, HashMap<String, Waypoint>>>(){}.getType();
+        BufferedReader reader = Files.newBufferedReader(file);
+        Gson gson = new Gson();
+        HashMap<String, HashMap<String, Waypoint>> list = gson.fromJson(reader, setType);
+        for(HashMap<String, Waypoint> waypoints:list.values()){
+            for(Waypoint waypoint:waypoints.values()){
+                if(waypoint.pos==null){
+                    waypoint.pos=new int[]{0,0,0};
+                }
+                if(waypoint.color==null){
+                    waypoint.color=new float[]{1f,1f,1f};
+                }
+                if(waypoint.locatorLines==null){
+                    waypoint.locatorLines=new ArrayList<double[]>();
+                }
+            }
+        }
+        WaypointList.list=list;
     }
     public static void readJsonFile(){
         try {
