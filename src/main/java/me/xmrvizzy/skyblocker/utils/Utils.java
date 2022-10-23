@@ -178,4 +178,7 @@ public class Utils {
     public static String getHeldItemId(){
         return PriceInfoTooltip.getInternalNameForItem(client.player.getMainHandStack());
     }
+    public static boolean useOldHitbox(){
+        return isSkyblock ||(SkyblockerConfig.get().hitbox.hitboxForAllHypixel && isHypixel);
+    }
 }

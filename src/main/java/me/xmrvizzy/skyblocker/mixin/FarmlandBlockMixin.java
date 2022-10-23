@@ -25,7 +25,7 @@ public abstract class FarmlandBlockMixin extends Block {
 
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     public void onGetOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        if ((Utils.isSkyblock || (Utils.isHypixel && SkyblockerConfig.get().hitbox.hitboxForAllHypixel)) && SkyblockerConfig.get().hitbox.oldFarmlandHitbox)
+        if (SkyblockerConfig.get().hitbox.oldFarmlandHitbox && Utils.useOldHitbox())
             cir.setReturnValue(Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 16.0));
     }
 

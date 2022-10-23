@@ -55,6 +55,8 @@ public class SkyblockerConfig implements ConfigData {
 
     public static class Hitbox {
         public boolean hitboxForAllHypixel = false;
+        public boolean oldPlayerHitbox = false;
+        public boolean oldSneakingEyeHeight = true;
         public boolean oldFarmlandHitbox = true;
     }
 

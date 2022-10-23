@@ -48,6 +48,8 @@
   "text.autoconfig.skyblocker.category.hitbox": "Hitbox",
   "text.autoconfig.skyblocker.option.hitbox.hitboxForAllHypixel": "Enable old hitbox everywhere in Hypixel",
   "text.autoconfig.skyblocker.option.hitbox.oldFarmlandHitbox": "Use 1.8 Farmland Hitbox",
+  "text.autoconfig.skyblocker.option.hitbox.oldPlayerHitbox": "Use 1.8 player hitbox: no hitbox change when sneaking and no auto crouching",
+  "text.autoconfig.skyblocker.option.hitbox.oldSneakingEyeHeight": "Use 1.8 sneaking eye height",
 
   "text.autoconfig.skyblocker.category.debug": "Debug",
   "text.autoconfig.skyblocker.option.debug.showInternalNameOnRightClick": "Show Internal Names on Right Click",

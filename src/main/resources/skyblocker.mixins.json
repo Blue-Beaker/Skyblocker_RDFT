@@ -7,6 +7,8 @@
     "ChatScreenMixin",
     "ClientPlayerEntityMixin",
     "ClientPlayNetworkHandlerMixin",
+    "EntityMixin",
+    "PlayerEntityMixin",
     "InGameHudMixin",
     "ItemRendererMixin",
     "FarmlandBlockMixin",
