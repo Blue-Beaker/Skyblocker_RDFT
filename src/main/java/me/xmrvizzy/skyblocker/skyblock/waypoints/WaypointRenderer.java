@@ -30,10 +30,10 @@ public class WaypointRenderer {
                     Waypoint waypoint = WaypointList.get(Utils.serverArea).get(name);
                     //Locator.drawLineEnds(target, new Vec3d(client.player.getX(),client.player.getEyeY(),client.player.getZ()), 0.0f,0.0f,1.0f,1.0f);
                     GL11.glDisable(GL11.GL_DEPTH_TEST);
-                    Double distance = Math.sqrt(waypoint.blockPos.getSquaredDistance(client.player.getPos(), false));
-                    Double cameraDistance = Math.sqrt(waypoint.blockPos.getSquaredDistance(client.cameraEntity.getPos(),false));
-                    RenderUtils.drawOutlineBox(waypoint.blockPos, waypoint.color[0], waypoint.color[1], waypoint.color[2],1.0f, SkyblockerConfig.get().waypoint.outlineWidth);
-                    RenderUtilsLiving.drawTextColored(matrices, String.format("%s[%.0fm]", name,distance), waypoint.blockPos.getX()+0.5, waypoint.blockPos.getY()+0.5, waypoint.blockPos.getZ()+0.5, cameraDistance*SkyblockerConfig.get().waypoint.labelSize, waypoint.color[0], waypoint.color[1], waypoint.color[2], 1.0f);
+                    Double distance = Math.sqrt(waypoint.getBlockPos().getSquaredDistance(client.player.getPos(), false));
+                    Double cameraDistance = Math.sqrt(waypoint.getBlockPos().getSquaredDistance(client.cameraEntity.getPos(),false));
+                    RenderUtils.drawOutlineBox(waypoint.getBlockPos(), waypoint.color[0], waypoint.color[1], waypoint.color[2],1.0f, SkyblockerConfig.get().waypoint.outlineWidth);
+                    RenderUtilsLiving.drawTextColored(matrices, String.format("%s[%.0fm]", name,distance), waypoint.getBlockPos().getX()+0.5, waypoint.getBlockPos().getY()+0.5, waypoint.getBlockPos().getZ()+0.5, cameraDistance*SkyblockerConfig.get().waypoint.labelSize, waypoint.color[0], waypoint.color[1], waypoint.color[2], 1.0f);
                     GL11.glEnable(GL11.GL_DEPTH_TEST);
                     for(double[] line : waypoint.locatorLines){
                         PointedLocator.drawLine(line, waypoint.color[0], waypoint.color[1], waypoint.color[2], SkyblockerConfig.get().waypoint.lineWidth);

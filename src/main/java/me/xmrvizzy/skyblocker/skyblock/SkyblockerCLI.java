@@ -191,7 +191,7 @@ public class SkyblockerCLI {
         if(list!=null){
             context.getSource().sendFeedback(new LiteralText(String.format("======[Skyblocker Waypoints in %s]======",area)).formatted(Formatting.GREEN));
             for(String name : list.keySet()){
-                BlockPos pos = list.get(name).blockPos;
+                BlockPos pos = list.get(name).getBlockPos();
                 float[] color = list.get(name).color;
                 context.getSource().sendFeedback(new LiteralText(String.format("%s at (%d,%d,%d) ",name,pos.getX(),pos.getY(),pos.getZ())).formatted(Formatting.GREEN)
                 .append(new LiteralText("[COLOR]").styled((style) -> {
