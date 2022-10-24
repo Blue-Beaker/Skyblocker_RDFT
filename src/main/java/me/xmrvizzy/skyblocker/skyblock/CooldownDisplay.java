@@ -48,6 +48,7 @@ public class CooldownDisplay {
     }
     public static Ability getAbility(int button,ItemStack item){
         Ability ability;
+        if(PriceInfoTooltip.getInternalNameForItem(item)==null) return null;
         List<List<String>> lines = ItemUtils.getTooltipStringsBlocks(item);
         for(List<String> block:lines){
             String firstLine = block.get(0);
@@ -69,8 +70,8 @@ public class CooldownDisplay {
         }
         return null;
     }
-    public static Ability getAbilityCached(int button,ItemStack item){
-        return abilitiyOwners.get(button).get(PriceInfoTooltip.getInternalNameForItem(item));
+    public static Ability getAbilityCached(int button,String id){
+        return abilitiyOwners.get(button).get(id);
     }
     public static void setCooldown(String ability,int seconds){
         cooldowns.put(ability, seconds*20);

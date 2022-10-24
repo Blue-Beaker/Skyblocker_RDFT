@@ -14,17 +14,18 @@ public class HotmLevel {
     public static int getHotmPerkLevel(ItemStack stack){
         if(Utils.isSkyblock && SkyblockerConfig.get().locations.dwarvenMines.hotmPerkLevels){
             String name = ItemUtils.getId(stack);
-            List<Text> tooltip = ItemUtils.getTooltip(stack);
-            if(("diamond".equals(name)||"emerald".equals(name)||"redstone_block".equals(name))&& tooltip.size()>=2 && PriceInfoTooltip.getInternalNameForItem(stack)==null){
-                
-                String levels = tooltip.get(1).getString();
-                if(levels.contains("Level ")){
-                    try{
-                    int level = Integer.parseInt(levels.split("/",2)[0].replace("Level ", ""));
-                    return level;
-                    }
-                    catch(Exception e){
-                        return 0;
+            if("diamond".equals(name)||"emerald".equals(name)||"redstone_block".equals(name)){
+                List<Text> tooltip = ItemUtils.getTooltip(stack);
+                if(tooltip.size()>=2 && PriceInfoTooltip.getInternalNameForItem(stack)==null){
+                    String levels = tooltip.get(1).getString();
+                    if(levels.contains("Level ")){
+                        try{
+                        int level = Integer.parseInt(levels.split("/",2)[0].replace("Level ", ""));
+                        return level;
+                        }
+                        catch(Exception e){
+                            return 0;
+                        }
                     }
                 }
             }

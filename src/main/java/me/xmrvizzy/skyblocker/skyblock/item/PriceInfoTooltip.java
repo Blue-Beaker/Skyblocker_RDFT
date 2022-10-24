@@ -45,12 +45,7 @@ public class PriceInfoTooltip {
         String name = getInternalNameForItem(stack);
         try {
             if(SkyblockerConfig.get().general.readableBazaarGraphs && stack.isItemEqual(Items.PAPER.getDefaultStack()) && list.toString().contains("·")){
-                for(int i=0; i<list.size();i++){
-                    Text line = list.get(i);
-                    if(line.getString().contains("·")){
-                        list.set(i, new LiteralText(line.getString().replace("·", "-").replace("+", "│")).setStyle(line.getStyle()));
-                    }
-                }
+                readableBaaarGraphs(list);
             }
             if(!list.toString().contains("Avg. BIN Price") && prices.has(name) ){
                 if(prices != null){
@@ -150,5 +145,13 @@ public class PriceInfoTooltip {
         }
         fis.close();
         bis.close();
+    }
+    public static void readableBaaarGraphs(List<Text> list){
+        for(int i=0; i<list.size();i++){
+            Text line = list.get(i);
+            if(line.getString().contains("·")){
+                list.set(i, new LiteralText(line.getString().replace("·", "-").replace("+", "│")).setStyle(line.getStyle()));
+            }
+        }
     }
 }

@@ -83,14 +83,15 @@ public abstract class ItemRendererMixin {
 
     @Inject(method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V", at = @At("HEAD"))
     public void renderItemCooldown(TextRenderer renderer, ItemStack stack, int x, int y, @Nullable String countLabel, CallbackInfo ci) {
-        if(Utils.isSkyblock && SkyblockerConfig.get().general.cooldownDisplay && PriceInfoTooltip.getInternalNameForItem(stack)!=null){
+        String sbid = PriceInfoTooltip.getInternalNameForItem(stack);
+        if(Utils.isSkyblock && SkyblockerConfig.get().general.cooldownDisplay && sbid!=null){
             float k=0.0f;
-            Ability ability = CooldownDisplay.getAbilityCached(CooldownDisplay.RIGHT_CLICK, stack);
+            Ability ability = CooldownDisplay.getAbilityCached(CooldownDisplay.RIGHT_CLICK, sbid);
             if(ability!=null){
                 k = CooldownDisplay.getCooldownProgress(ability);
             }
             else{
-                ability = CooldownDisplay.getAbilityCached(CooldownDisplay.LEFT_CLICK, stack);
+                ability = CooldownDisplay.getAbilityCached(CooldownDisplay.LEFT_CLICK, sbid);
                 if(ability!=null) k = CooldownDisplay.getCooldownProgress(ability);
             }
             if (k > 0.0F) {

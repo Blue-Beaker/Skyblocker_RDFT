@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL11;
 
 import me.xmrvizzy.skyblocker.utils.RenderUtils;
 import me.xmrvizzy.skyblocker.utils.RenderUtilsLiving;
+import me.xmrvizzy.skyblocker.utils.Utils;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -97,6 +98,7 @@ public class DungeonBlaze {
         }
     }
     public static void blazeRenderer(WorldRenderContext wrc) {
+        if(Utils.isDungeons)
         try {
         TextRenderer tr = client.textRenderer;
         DebugRenderer wc = client.debugRenderer;
