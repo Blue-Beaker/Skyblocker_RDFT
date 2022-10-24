@@ -4,11 +4,6 @@ import java.util.HashMap;
 import java.util.Set;
 
 import me.xmrvizzy.skyblocker.utils.Utils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.LiteralText;
-import net.minecraft.util.Formatting;
 
 
 

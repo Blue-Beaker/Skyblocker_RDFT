@@ -48,4 +48,7 @@ public class Waypoint {
     public BlockPos getBlockPos(){
         return new BlockPos(pos[0],pos[1],pos[2]);
     }
+    public Vec3d getCenterPos(){
+        return new Vec3d(pos[0]+0.5,pos[1]+0.5,pos[2]+0.5);
+    }
 }
