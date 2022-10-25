@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.lang.model.util.ElementScanner6;
+
 import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
 import me.xmrvizzy.skyblocker.utils.ItemUtils;
 import net.minecraft.client.MinecraftClient;
@@ -57,12 +59,22 @@ public class CooldownDisplay {
                     String abilityName = firstLine.replace("Ability: ", "").replace(" "+buttonNames[button], "");
                     for(String line:block){
                         if(line.contains("Cooldown:")){
-                            int cooldown = Integer.parseInt(line.replace("Cooldown: ", "").replace("s", ""));
-                            ability = new Ability(abilityName, button, cooldown);
-                            String skyblockId = PriceInfoTooltip.getInternalNameForItem(item);
-                            abilitiyOwners.get(button).put(skyblockId, ability);
-                            abilities.put(abilityName, ability);
-                            return ability;
+                            int cooldown;
+                            try{
+                                if(line.contains("s"))
+                                cooldown = Integer.parseInt(line.replace("Cooldown: ", "").replace("s", ""));
+                                else if(line.contains("m"))
+                                cooldown = Integer.parseInt(line.replace("Cooldown: ", "").replace("m", ""))*60;
+                                else return null;
+                                ability = new Ability(abilityName, button, cooldown);
+                                String skyblockId = PriceInfoTooltip.getInternalNameForItem(item);
+                                abilitiyOwners.get(button).put(skyblockId, ability);
+                                abilities.put(abilityName, ability);
+                                return ability;
+                            }
+                            catch(NumberFormatException e){
+                                return null;
+                            }
                         }
                     }
                 }
