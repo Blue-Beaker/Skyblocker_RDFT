@@ -18,6 +18,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay.Ability;
 import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
+import me.xmrvizzy.skyblocker.skyblock.solver.ContainerScreenSolverManager;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.Waypoint;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointList;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointStorage;
@@ -128,6 +129,13 @@ public class SkyblockerDebugCLI {
                         return 0;
                     }
                 })))
+            )
+            .then(literal("screen")
+            .then(literal("containerName")
+            .executes(context -> {
+                context.getSource().sendFeedback(new LiteralText(ContainerScreenSolverManager.currentContainer));
+                return 1;
+            }))
             )
         );
         dispatcher.register(ClientCommandManager.literal("skyblockerdebug").redirect(sbrDebug));

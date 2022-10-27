@@ -10,7 +10,6 @@ import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.Waypoint;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointList;
 import me.xmrvizzy.skyblocker.utils.RenderUtils;
-import me.xmrvizzy.skyblocker.utils.Utils;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
@@ -22,7 +21,6 @@ import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 public class PointedLocator {
@@ -217,7 +215,8 @@ public class PointedLocator {
         }
     }
     public static void clearLocatorLines(){
-        rayLists.get(locationOnLastCompassUse).clear();
+        for(ArrayList<double[]> list :rayLists.values())
+        list.clear();
     }
     public static Vec3d calculatePosition(double[] line1,double[] line2){
         double ky1=line1[0];

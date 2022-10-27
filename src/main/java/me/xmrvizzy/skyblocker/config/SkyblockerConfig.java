@@ -29,12 +29,17 @@ public class SkyblockerConfig implements ConfigData {
     public Waypoint waypoint = new Waypoint();
 
     @ConfigEntry.Category("hitbox")
-    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+    @ConfigEntry.Gui.TransitiveObject
     public Hitbox hitbox = new Hitbox();
+    
+    @ConfigEntry.Category("solvers")
+    @ConfigEntry.Gui.TransitiveObject
+    public Solvers solvers = new Solvers();
     
     @ConfigEntry.Category("debug")
     @ConfigEntry.Gui.TransitiveObject
     public Debug debug = new Debug();
+
 
     public static class General {
         public String apiKey;
@@ -97,7 +102,9 @@ public class SkyblockerConfig implements ConfigData {
     public static class Events {
         public boolean ancestorSpadeLocator = true;
     }
-
+    public static class Solvers {
+        public boolean networkRelaySolver = true;
+    }
     public static class Messages {
         public boolean hideAbility = false;
         public boolean autoOpenMenu = false;

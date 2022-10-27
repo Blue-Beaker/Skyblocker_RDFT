@@ -57,6 +57,8 @@
   "text.autoconfig.skyblocker.option.debug.debugDistancedLocator": "Debug Metal Locator",
   "text.autoconfig.skyblocker.option.debug.forceSkyblock": "Force everywhere as Skyblock for debug",
   "text.autoconfig.skyblocker.option.debug.forceDungeons": "Force dungeons (only when force skyblock is on)",
-  "text.autoconfig.skyblocker.option.debug.forceArea": "Force area (only when force skyblock is on)"
-
+  "text.autoconfig.skyblocker.option.debug.forceArea": "Force area (only when force skyblock is on)",
+  
+  "text.autoconfig.skyblocker.category.solvers": "Solvers",
+  "text.autoconfig.skyblocker.option.solvers.networkRelaySolver": "9f™ Network Relay solver"
 }

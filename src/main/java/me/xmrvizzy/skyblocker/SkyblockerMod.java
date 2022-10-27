@@ -23,6 +23,8 @@ import net.minecraft.text.Text;
 import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
 import me.xmrvizzy.skyblocker.skyblock.locator.DistancedLocator;
 import me.xmrvizzy.skyblocker.skyblock.locator.PointedLocator;
+import me.xmrvizzy.skyblocker.skyblock.solver.ContainerScreenSolverManager;
+import me.xmrvizzy.skyblocker.skyblock.solver.NetworkRelaySolverSound;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.AutoWaypoint;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointRenderer;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointStorage;
@@ -89,7 +91,9 @@ public class SkyblockerMod implements ClientModInitializer {
 		if (TICKS % 20 == 0) {
 			if (client.world != null && (!client.isInSingleplayer()||SkyblockerConfig.get().debug.forceSkyblock))
 				Utils.sbChecker();
-
+			if(Utils.isSkyblock){
+				ContainerScreenSolverManager.screenChecker(client.currentScreen);
+			}
 			TICKS = 0;
 		}
 	}
