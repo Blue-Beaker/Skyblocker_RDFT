@@ -16,10 +16,10 @@ public class StringUtils {
     }
     public static List<String> addQuotesIfNeeded(Collection<String> list){
         List<String> list2 = new ArrayList<String>();
-        String pattern = "\\W";
+        String pattern = ".*\\W.*";
         for(String line:list){
             if(Pattern.matches(pattern, line)){
-                list2.add(String.format("\'%s\'", line).replace("\\", "\\\\").replace('"', '\"'));
+                list2.add(String.format("\'%s\'", line.replace("\\", "\\\\").replace("\'", "\\\'")));
             }
             else
             list2.add(line);
