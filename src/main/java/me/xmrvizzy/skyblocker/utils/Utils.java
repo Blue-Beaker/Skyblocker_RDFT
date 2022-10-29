@@ -169,11 +169,16 @@ public class Utils {
         return("None");
     }
     public static String getSubLocation(List<String> lines){
+        try{
         String line = lines.get(4);
             if(line.contains(" ⏣ ")){
                 return(line.replace(" ⏣ ", ""));
             }
+        }
+        catch(IndexOutOfBoundsException e){
+        }
         return("None");
+
     }
     public static String getHeldItemId(){
         return PriceInfoTooltip.getInternalNameForItem(client.player.getMainHandStack());
