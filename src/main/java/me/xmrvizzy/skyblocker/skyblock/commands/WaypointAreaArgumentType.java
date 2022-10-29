@@ -10,18 +10,19 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointList;
+import me.xmrvizzy.skyblocker.utils.StringUtils;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.command.CommandSource;
 
 public class WaypointAreaArgumentType implements ArgumentType<String> {
     @Override
     public String parse(StringReader reader) throws CommandSyntaxException {
-        String string = reader.readUnquotedString();
+        String string = reader.readString();
         return string;
     }
     
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        return CommandSource.suggestMatching(WaypointList.getAreas(), builder);
+        return CommandSource.suggestMatching(StringUtils.addQuotesIfNeeded(WaypointList.getAreas()), builder);
     }
     public static WaypointAreaArgumentType string(){
         return new WaypointAreaArgumentType();

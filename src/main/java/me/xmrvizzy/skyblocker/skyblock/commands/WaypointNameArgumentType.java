@@ -10,6 +10,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointList;
+import me.xmrvizzy.skyblocker.utils.StringUtils;
 import me.xmrvizzy.skyblocker.utils.Utils;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.command.CommandSource;
@@ -17,7 +18,7 @@ import net.minecraft.command.CommandSource;
 public class WaypointNameArgumentType implements ArgumentType<String> {
     @Override
     public String parse(StringReader reader) throws CommandSyntaxException {
-        String string = reader.readUnquotedString();
+        String string = reader.readString();
         return string;
     }
     
@@ -29,7 +30,7 @@ public class WaypointNameArgumentType implements ArgumentType<String> {
             area=Utils.serverArea;
         }
         try{
-            return CommandSource.suggestMatching(WaypointList.get(area).keySet(), builder);
+            return CommandSource.suggestMatching(StringUtils.addQuotesIfNeeded(WaypointList.get(area).keySet()), builder);
         }
         catch(Exception e){
             return CommandSource.suggestMatching(new String[]{"INVALID AREA"}, builder);
