@@ -1,11 +1,6 @@
 package me.xmrvizzy.skyblocker;
 
 import java.nio.file.Path;
-import java.util.Map;
-
-import com.google.gson.JsonObject;
-
-import org.apache.commons.lang3.ObjectUtils.Null;
 
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
 import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay;
@@ -15,20 +10,15 @@ import me.xmrvizzy.skyblocker.skyblock.SkyblockerDebugCLI;
 import me.xmrvizzy.skyblocker.skyblock.dungeon.DungeonBlaze;
 import me.xmrvizzy.skyblocker.utils.Utils;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
-import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
 import me.xmrvizzy.skyblocker.skyblock.locator.DistancedLocator;
 import me.xmrvizzy.skyblocker.skyblock.locator.PointedLocator;
 import me.xmrvizzy.skyblocker.skyblock.solver.ContainerScreenSolverManager;
-import me.xmrvizzy.skyblocker.skyblock.solver.NetworkRelaySolverSound;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.AutoWaypoint;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointRenderer;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointStorage;
-import me.xmrvizzy.skyblocker.skyblock.SkyblockerCLI;
 
 public class SkyblockerMod implements ClientModInitializer {
 	public static final String NAMESPACE = "skyblocker";

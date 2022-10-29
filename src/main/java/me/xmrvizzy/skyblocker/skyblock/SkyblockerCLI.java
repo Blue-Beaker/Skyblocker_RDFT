@@ -1,7 +1,10 @@
 package me.xmrvizzy.skyblocker.skyblock;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.EntitySelectorReader;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
@@ -9,13 +12,18 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay.Ability;
+import me.xmrvizzy.skyblocker.skyblock.commands.WaypointAreaArgumentType;
+import me.xmrvizzy.skyblocker.skyblock.commands.WaypointNameArgumentType;
 import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.Waypoint;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointList;
@@ -26,6 +34,7 @@ import me.xmrvizzy.skyblocker.utils.Utils;
 import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.literal;
 
 import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
 
 
 public class SkyblockerCLI {
@@ -38,7 +47,7 @@ public class SkyblockerCLI {
                         .then(ClientCommandManager.argument("Y", IntegerArgumentType.integer())
                         .then(ClientCommandManager.argument("Z", IntegerArgumentType.integer())
                         .executes(context -> {
-                            return addWaypoint(context,StringArgumentType.getString(context, "name"), new BlockPos(IntegerArgumentType.getInteger(context, "X"),IntegerArgumentType.getInteger(context, "Y"),IntegerArgumentType.getInteger(context, "Z")));
+                            return addWaypoint(context,StringArgumentType.getString(context, "name"));
                         })
                         )))
                         .executes(context -> {
@@ -46,37 +55,52 @@ public class SkyblockerCLI {
                         })
                     )
                     .executes(context -> {
-                        context.getSource().sendFeedback(new LiteralText("Usage:  /sbwp add (WaypointName) [Coords: X Y Z]").formatted(Formatting.RED));
+                        context.getSource().sendFeedback(new LiteralText("Usage:  /sbwp [area (area)] add (WaypointName) [Coords: X Y Z]").formatted(Formatting.RED));
                         return 0;
                     })
                 )
                 .then(literal("remove")
-                    .then(ClientCommandManager.argument("name",StringArgumentType.string())
+                    .then(ClientCommandManager.argument("name",WaypointNameArgumentType.string())
                         .executes(context -> {
-                            return removeWaypoint(context, StringArgumentType.getString(context, "name"));
+                            return removeWaypoint(context, WaypointNameArgumentType.getString(context, "name"));
                         })
                     )
                 .executes(context -> {
-                    context.getSource().sendFeedback(new LiteralText("Usage:  /sbwp remove (WaypointName)").formatted(Formatting.RED));
+                    context.getSource().sendFeedback(new LiteralText("Usage:  /sbwp [area (area)] remove (WaypointName)").formatted(Formatting.RED));
                     return 0;
                 })
                 )
                 .then(literal("rename")
-                    .then(ClientCommandManager.argument("name1",StringArgumentType.string())
+                    .then(ClientCommandManager.argument("name1",WaypointNameArgumentType.string())
                     .then(ClientCommandManager.argument("name2",StringArgumentType.string())
                         .executes(context -> {
-                            return renameWaypoint(context, StringArgumentType.getString(context, "name1"), StringArgumentType.getString(context, "name2"));
+                            return renameWaypoint(context, WaypointNameArgumentType.getString(context, "name1"), StringArgumentType.getString(context, "name2"));
                         })
                     ))
                 .executes(context -> {
-                    context.getSource().sendFeedback(new LiteralText("Usage:  /sbwp rename (Waypoint) (NewName)").formatted(Formatting.RED));
+                    context.getSource().sendFeedback(new LiteralText("Usage:  /sbwp [area (area)] rename (Waypoint) (NewName)").formatted(Formatting.RED));
                     return 0;
                 })
                 )
+                .then(literal("color")
+                    .then(ClientCommandManager.argument("name", WaypointNameArgumentType.string())
+                    .then(ClientCommandManager.argument("R", FloatArgumentType.floatArg(0.0f,1.0f))
+                    .then(ClientCommandManager.argument("G", FloatArgumentType.floatArg(0.0f,1.0f))
+                    .then(ClientCommandManager.argument("B", FloatArgumentType.floatArg(0.0f,1.0f))
+                    .executes(context -> {
+                        return setColor(context,WaypointNameArgumentType.getString(context, "name"), new float[]{FloatArgumentType.getFloat(context, "R"),FloatArgumentType.getFloat(context, "G"),FloatArgumentType.getFloat(context, "B")});
+                    })
+                    )))
+                    )
+                    .executes(context -> {
+                        context.getSource().sendFeedback(new LiteralText("Usage: /sbwp [area (area)] color (WaypointName) [Color: R G B]").formatted(Formatting.RED));
+                        return 0;
+                    })
+                )
                 .then(literal("list")
-                    .then(ClientCommandManager.argument("area",StringArgumentType.string())
+                    .then(ClientCommandManager.argument("area",WaypointAreaArgumentType.string())
                         .executes(context -> {
-                            listWaypoint(context, StringArgumentType.getString(context, "area"));
+                            listWaypoint(context, WaypointAreaArgumentType.getString(context, "area"));
                             return 1;
                         })
                     )
@@ -86,30 +110,15 @@ public class SkyblockerCLI {
                     })
                 )
                 .then(literal("clear")
-                    .then(ClientCommandManager.argument("area",StringArgumentType.string())
+                    .then(ClientCommandManager.argument("area",WaypointAreaArgumentType.string())
                         .executes(context -> {
-                            clearWaypoint(context, StringArgumentType.getString(context, "area"));
+                            clearWaypoint(context, WaypointAreaArgumentType.getString(context, "area"));
                             return 1;
                         })
                     )
                     .executes(context -> {
                         clearWaypoint(context);
                         return 1;
-                    })
-                )
-                .then(literal("color")
-                    .then(ClientCommandManager.argument("name", StringArgumentType.string())
-                    .then(ClientCommandManager.argument("R", FloatArgumentType.floatArg(0.0f,1.0f))
-                    .then(ClientCommandManager.argument("G", FloatArgumentType.floatArg(0.0f,1.0f))
-                    .then(ClientCommandManager.argument("B", FloatArgumentType.floatArg(0.0f,1.0f))
-                    .executes(context -> {
-                        return setColor(context,StringArgumentType.getString(context, "name"), new float[]{FloatArgumentType.getFloat(context, "R"),FloatArgumentType.getFloat(context, "G"),FloatArgumentType.getFloat(context, "B")});
-                    })
-                    )))
-                    )
-                    .executes(context -> {
-                        context.getSource().sendFeedback(new LiteralText("Usage: /sbwp color (WaypointName) [Color: R G B]").formatted(Formatting.RED));
-                        return 0;
                     })
                 )
                 .then(literal("listall")
@@ -129,15 +138,77 @@ public class SkyblockerCLI {
                         return reload(context);
                     })
                 )
+                .then(literal("area")
+                    .then(ClientCommandManager.argument("area",WaypointAreaArgumentType.string())
+                    .then(literal("add")
+                        .then(ClientCommandManager.argument("name", StringArgumentType.string())
+                            .then(ClientCommandManager.argument("X", IntegerArgumentType.integer())
+                            .then(ClientCommandManager.argument("Y", IntegerArgumentType.integer())
+                            .then(ClientCommandManager.argument("Z", IntegerArgumentType.integer())
+                            .executes(context -> {
+                                return addWaypoint(context,StringArgumentType.getString(context, "name"));
+                            })
+                            )))
+                            .executes(context -> {
+                                return addWaypoint(context,StringArgumentType.getString(context, "name"));
+                            })
+                        )
+                        .executes(context -> {
+                            context.getSource().sendFeedback(new LiteralText("Usage:  /sbwp [area (area)] add (WaypointName) [Coords: X Y Z]").formatted(Formatting.RED));
+                            return 0;
+                        })
+                    )
+                    .then(literal("remove")
+                        .then(ClientCommandManager.argument("name",WaypointNameArgumentType.string())
+                            .executes(context -> {
+                                return removeWaypoint(context, WaypointNameArgumentType.getString(context, "name"));
+                            })
+                        )
+                    .executes(context -> {
+                        context.getSource().sendFeedback(new LiteralText("Usage:  /sbwp [area (area)] remove (WaypointName)").formatted(Formatting.RED));
+                        return 0;
+                    })
+                    )
+                    .then(literal("rename")
+                        .then(ClientCommandManager.argument("name1",WaypointNameArgumentType.string())
+                        .then(ClientCommandManager.argument("name2",StringArgumentType.string())
+                            .executes(context -> {
+                                return renameWaypoint(context, WaypointNameArgumentType.getString(context, "name1"), StringArgumentType.getString(context, "name2"));
+                            })
+                        ))
+                    .executes(context -> {
+                        context.getSource().sendFeedback(new LiteralText("Usage:  /sbwp [area (area)] rename (Waypoint) (NewName)").formatted(Formatting.RED));
+                        return 0;
+                    })
+                    )
+                    .then(literal("color")
+                        .then(ClientCommandManager.argument("name", WaypointNameArgumentType.string())
+                        .then(ClientCommandManager.argument("R", FloatArgumentType.floatArg(0.0f,1.0f))
+                        .then(ClientCommandManager.argument("G", FloatArgumentType.floatArg(0.0f,1.0f))
+                        .then(ClientCommandManager.argument("B", FloatArgumentType.floatArg(0.0f,1.0f))
+                        .executes(context -> {
+                            return setColor(context,WaypointNameArgumentType.getString(context, "name"), new float[]{FloatArgumentType.getFloat(context, "R"),FloatArgumentType.getFloat(context, "G"),FloatArgumentType.getFloat(context, "B")});
+                        })
+                        )))
+                        )
+                        .executes(context -> {
+                            context.getSource().sendFeedback(new LiteralText("Usage: /sbwp [area (area)] color (WaypointName) [Color: R G B]").formatted(Formatting.RED));
+                            return 0;
+                        })
+                    )
+                )
+            )
         );
         dispatcher.register(ClientCommandManager.literal("waypoint").redirect(waypointCommand));
         dispatcher.register(ClientCommandManager.literal("skyblockerwaypoint").redirect(waypointCommand));
-        
     }
-    public int addWaypoint(CommandContext<FabricClientCommandSource> context, String name, BlockPos pos, float[] color){
+    public int addWaypoint(CommandContext<FabricClientCommandSource> context, String name){
         try{
+            String area = getAreaFromContext(context);
+            BlockPos pos = getCoordsFromContext(context);
+            float[] color = getColorFromContext(context);
             Waypoint waypoint = new Waypoint(pos,color);
-            if(WaypointList.add(Utils.serverArea, name, waypoint)){
+            if(WaypointList.add(area, name, waypoint)){
                 context.getSource().sendFeedback(new LiteralText(String.format("Added waypoint \'%s\' at %d,%d,%d ",name, pos.getX(),pos.getY(),pos.getZ())).formatted(Formatting.GREEN)
                 .append(new LiteralText("[VIEW]").styled((style) -> {
                     return style.withColor(Formatting.GREEN).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sbwp list")).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("/sbwp list")));
@@ -145,7 +216,7 @@ public class SkyblockerCLI {
                 return 1;
             }
             else{
-                context.getSource().sendError(new LiteralText(String.format("The waypoint with name \'%s\' already exists, please use another name instead",name)).formatted(Formatting.YELLOW));
+                context.getSource().sendError(new LiteralText(String.format("The waypoint with name \'%s\' already exists in \'%s\', please use another name instead",name,area)).formatted(Formatting.YELLOW));
                 return 0;
             }
         }
@@ -155,28 +226,19 @@ public class SkyblockerCLI {
         }
     }
 
-    public int addWaypoint(CommandContext<FabricClientCommandSource> context, String name, BlockPos pos){
-        return addWaypoint(context, name, pos, new float[]{1.0f,1.0f,1.0f});
-    }
-
-    public int addWaypoint(CommandContext<FabricClientCommandSource> context, String name, float[] color){
-        return addWaypoint(context, name, new BlockPos(context.getSource().getPosition()), color);
-    }
-    public int addWaypoint(CommandContext<FabricClientCommandSource> context, String name){
-        return addWaypoint(context, name, new BlockPos(context.getSource().getPosition()), new float[]{1.0f,1.0f,1.0f});
-    }
     public int removeWaypoint(CommandContext<FabricClientCommandSource> context, String name){
-        if(WaypointList.remove(name)){
+        String area = getAreaFromContext(context);
+        if(WaypointList.remove(area,name)){
             context.getSource().sendFeedback(new LiteralText(String.format("Removed waypoint \'%s\'",name)).formatted(Formatting.GREEN));
             return(1);
         }
         else{
-            context.getSource().sendFeedback(new LiteralText(String.format("Waypoint \'%s\' doesn't exist here",name)).formatted(Formatting.RED));
+            context.getSource().sendFeedback(new LiteralText(String.format("Waypoint \'%s\' doesn't exist in \'%s\'",name,area)).formatted(Formatting.RED));
             return(0);
         }
     }
     public int renameWaypoint(CommandContext<FabricClientCommandSource> context, String name1, String name2){
-        if(WaypointList.rename(name1,name2)){
+        if(WaypointList.rename(getAreaFromContext(context),name1,name2)){
             context.getSource().sendFeedback(new LiteralText(String.format("Renamed waypoint \'%s\' to \'%s\'",name1,name2)).formatted(Formatting.GREEN));
             return(1);
         }
@@ -233,8 +295,9 @@ public class SkyblockerCLI {
         clearWaypoint(context,Utils.serverArea);
     }
     public int setColor(CommandContext<FabricClientCommandSource> context,String name, float[] color){
-        if(!WaypointList.setColor(name, color)){
-            context.getSource().sendFeedback(new LiteralText(String.format("Waypoint \'%s\' doesn't exist here",name)).formatted(Formatting.RED));
+        String area = getAreaFromContext(context);
+        if(!WaypointList.setColor(area,name, color)){
+            context.getSource().sendFeedback(new LiteralText(String.format("Waypoint \'%s\' doesn't exist in \'%s\'",name,area)).formatted(Formatting.RED));
             return(0);
         }
         else{
@@ -248,7 +311,33 @@ public class SkyblockerCLI {
             return 1;
         } catch (Exception e) {
             context.getSource().sendError(new LiteralText(e.getStackTrace().toString()).formatted(Formatting.RED));
+            e.printStackTrace();
             return 0;
         }
     }
+    public String getAreaFromContext(CommandContext<FabricClientCommandSource> context){
+        try{
+            return WaypointAreaArgumentType.getString(context, "area");
+        }
+        catch(Exception e){
+            return Utils.serverArea;
+        }
+    }
+    public BlockPos getCoordsFromContext(CommandContext<FabricClientCommandSource> context){
+        try{
+            return new BlockPos(IntegerArgumentType.getInteger(context, "X"),IntegerArgumentType.getInteger(context, "Y"),IntegerArgumentType.getInteger(context, "Z"));
+        }
+        catch(Exception e){
+            return client.player.getBlockPos();
+        }
+    }
+    public float[] getColorFromContext(CommandContext<FabricClientCommandSource> context){
+        try{
+            return new float[]{IntegerArgumentType.getInteger(context, "R"),IntegerArgumentType.getInteger(context, "G"),IntegerArgumentType.getInteger(context, "B")};
+        }
+        catch(Exception e){
+            return new float[]{1f,1f,1f};
+        }
+    }
+
 }
