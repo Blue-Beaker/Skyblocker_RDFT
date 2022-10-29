@@ -163,7 +163,7 @@ public class Utils {
     public static String getArea(List<String> tabLines){
         for(String line:tabLines){
             if(line.contains("Area:")){
-                return(line.replace("Area:", "").replaceAll(" ", ""));
+                return(line.replace("Area:", "").replaceAll(" ", "").replaceAll("'", ""));
             }
         }
         return("None");
