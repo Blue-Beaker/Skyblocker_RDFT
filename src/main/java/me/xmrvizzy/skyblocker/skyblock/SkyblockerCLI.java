@@ -29,6 +29,7 @@ import me.xmrvizzy.skyblocker.skyblock.waypoints.Waypoint;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointList;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointStorage;
 import me.xmrvizzy.skyblocker.utils.ItemUtils;
+import me.xmrvizzy.skyblocker.utils.StringUtils;
 import me.xmrvizzy.skyblocker.utils.Utils;
 
 import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.literal;
@@ -257,16 +258,16 @@ public class SkyblockerCLI {
                 float[] color = list.get(name).color;
                 context.getSource().sendFeedback(new LiteralText(String.format("%s at (%d,%d,%d) ",name,pos.getX(),pos.getY(),pos.getZ())).formatted(Formatting.GREEN)
                 .append(new LiteralText("[COLOR]").styled((style) -> {
-                    return style.withColor(Formatting.BLUE).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, String.format("/sbwp color '%s' %.2f %.2f %.2f", name,color[0],color[1],color[2]))).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("/sbwp color '"+name+"' (R G B)")));
+                    return style.withColor(Formatting.BLUE).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, String.format("/sbwp area %s color %s %.2f %.2f %.2f",StringUtils.addQuotesIfNeeded(area),StringUtils.addQuotesIfNeeded(name),color[0],color[1],color[2]))).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("/sbwp color '"+name+"' (R G B)")));
                 }))
                 .append(new LiteralText("[SHARE]").styled((style) -> {
                     return style.withColor(Formatting.AQUA).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, String.format("%s %d %d %d", name,pos.getX(),pos.getY(),pos.getZ()))).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Share this in the chat!")));
                 }))
                 .append(new LiteralText("[REMOVE]").styled((style) -> {
-                    return style.withColor(Formatting.RED).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sbwp remove '"+name+"'")).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("/sbwp remove '"+name+"'")));
+                    return style.withColor(Formatting.RED).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, String.format("/sbwp area %s remove %s",StringUtils.addQuotesIfNeeded(area),StringUtils.addQuotesIfNeeded(name)))).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("/sbwp remove '"+name+"'")));
                 })));
             }
-            context.getSource().sendFeedback(new LiteralText("======[Skyblocker Stored Locations END]======").formatted(Formatting.GREEN));
+            context.getSource().sendFeedback(new LiteralText("=========================").formatted(Formatting.GREEN));
         }
         else{
             context.getSource().sendError(new LiteralText(String.format("There are no waypoints in %s",area)).formatted(Formatting.GREEN));

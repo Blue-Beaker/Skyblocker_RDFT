@@ -26,4 +26,12 @@ public class StringUtils {
         }
         return list2;
     }
+    public static String addQuotesIfNeeded(String line){
+        String pattern = ".*\\W.*";
+        if(Pattern.matches(pattern, line)){
+            return(String.format("\'%s\'", line.replace("\\", "\\\\").replace("\'", "\\\'")));
+        }
+        else
+        return(line);
+    }
 }
