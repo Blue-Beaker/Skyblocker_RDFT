@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
 import me.xmrvizzy.skyblocker.utils.ItemUtils;
 import me.xmrvizzy.skyblocker.utils.StatIcons;
 import net.minecraft.client.font.TextRenderer;
@@ -18,6 +19,7 @@ import net.minecraft.util.Formatting;
 public class PotionOverlay {
     static final HashMap<String,String> ROMAN_NUMERALS = new HashMap<>();
     static final HashMap<String,Text> POTION_TYPES = new HashMap<>();
+    static final HashMap<String,Text> XPBOOST_TYPES = new HashMap<>();
     static {
         ROMAN_NUMERALS.put(" I Potion", "1");
         ROMAN_NUMERALS.put(" II Potion", "2");
@@ -30,6 +32,7 @@ public class PotionOverlay {
         ROMAN_NUMERALS.put(" IX Potion", "9");
         ROMAN_NUMERALS.put(" X Potion", "10");
         ROMAN_NUMERALS.put(" Potions", "");
+
         POTION_TYPES.put("Healing", StatIcons.HEALTH);
         POTION_TYPES.put("Damage", new LiteralText("❤-").formatted(Formatting.DARK_RED));
         POTION_TYPES.put("Poison", new LiteralText("❤-").formatted(Formatting.DARK_GREEN));
@@ -54,6 +57,15 @@ public class PotionOverlay {
         POTION_TYPES.put("Adrenaline", StatIcons.ABSORPTION.shallowCopy().append(StatIcons.SPEED));
         POTION_TYPES.put("Stamina", StatIcons.HEALTH.shallowCopy().append(StatIcons.INTELLIGENCE));
         POTION_TYPES.put("Pet Luck", StatIcons.HEALTH.shallowCopy().append(StatIcons.PET_LUCK));
+        POTION_TYPES.put("Spirit", StatIcons.SPEED.shallowCopy().append(StatIcons.CRIT_DAMAGE));
+
+        XPBOOST_TYPES.put("Farming", StatIcons.FORTUNE.formatted(Formatting.YELLOW));
+        XPBOOST_TYPES.put("Mining", StatIcons.MINING_SPEED);
+        XPBOOST_TYPES.put("Combat", new LiteralText("🗡").formatted(Formatting.RED));
+        XPBOOST_TYPES.put("Foraging", new LiteralText("🪓").formatted(Formatting.GREEN));
+        XPBOOST_TYPES.put("Fishing", StatIcons.FISHING_SPEED);
+        XPBOOST_TYPES.put("Enchanting", StatIcons.INTELLIGENCE);
+        XPBOOST_TYPES.put("Alchemy", StatIcons.ABILITY_DAMAGE.formatted(Formatting.DARK_PURPLE));
     }
     public static Text getPotionOverlay(ItemStack stack){
         String id = ItemUtils.getId(stack);
@@ -69,6 +81,11 @@ public class PotionOverlay {
                     }
                 }
                 if(nameString.contains("XP Boost")){
+                    if(SkyblockerConfig.get().items.potionOverlayXPBoostTypes)
+                    for(String type:XPBOOST_TYPES.keySet()){
+                        if(nameString.startsWith(type))
+                        return XPBOOST_TYPES.get(type).shallowCopy().append(StatIcons.WISDOM.shallowCopy().append(level));
+                    }
                     return StatIcons.WISDOM.shallowCopy().append(level);
                 }
                 return new LiteralText(level);

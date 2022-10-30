@@ -71,6 +71,8 @@ public class SkyblockerConfig implements ConfigData {
 
     public static class Items {
         public boolean potionOverlay = true;
+        public boolean potionOverlayXPBoostTypes = true;
+        public float potionOverlayScale = 1f;
     }
 
     public static class Locations {

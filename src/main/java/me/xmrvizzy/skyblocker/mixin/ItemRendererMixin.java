@@ -133,11 +133,10 @@ public abstract class ItemRendererMixin {
                 matrixStack.translate(0.0D, 0.0D, (double)(this.zOffset + 200.0F));
                 float drawx = (float)(x + 8 - renderer.getWidth(overlay)/2);
                 float drawy = (float)(y + 6);
-                if(renderer.getWidth(overlay)>=20){
-                matrixStack.scale(0.5f, 0.5f, 1.0f);
-                drawx = (float)((x + 8)*2 - renderer.getWidth(overlay)/2);
-                drawy=2*drawy;
-                }
+                float scale = Math.min(SkyblockerConfig.get().items.potionOverlayScale,16f/renderer.getWidth(overlay));
+                matrixStack.scale(scale, scale, 1.0f);
+                drawx = (float)((x + 8)/scale - renderer.getWidth(overlay)/2);
+                drawy=(float)(y+6)/scale;
                 VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
                 renderer.draw((Text)overlay, drawx, drawy, -1, true, matrixStack.peek().getModel(), immediate, false, 0, 15728880);
                 immediate.draw();
