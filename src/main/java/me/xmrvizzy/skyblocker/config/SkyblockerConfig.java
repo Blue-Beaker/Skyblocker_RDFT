@@ -31,6 +31,10 @@ public class SkyblockerConfig implements ConfigData {
     @ConfigEntry.Category("hitbox")
     @ConfigEntry.Gui.TransitiveObject
     public Hitbox hitbox = new Hitbox();
+
+    @ConfigEntry.Category("items")
+    @ConfigEntry.Gui.TransitiveObject
+    public Items items = new Items();
     
     @ConfigEntry.Category("solvers")
     @ConfigEntry.Gui.TransitiveObject
@@ -63,6 +67,10 @@ public class SkyblockerConfig implements ConfigData {
         public boolean oldPlayerHitbox = false;
         public boolean oldSneakingEyeHeight = true;
         public boolean oldFarmlandHitbox = true;
+    }
+
+    public static class Items {
+        public boolean potionOverlay = true;
     }
 
     public static class Locations {

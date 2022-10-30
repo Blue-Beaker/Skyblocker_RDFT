@@ -5,6 +5,7 @@ import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
 import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay;
 import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay.Ability;
 import me.xmrvizzy.skyblocker.skyblock.dwarven.HotmLevel;
+import me.xmrvizzy.skyblocker.skyblock.item.PotionOverlay;
 import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
 import me.xmrvizzy.skyblocker.utils.ItemUtils;
 import me.xmrvizzy.skyblocker.utils.Utils;
@@ -16,6 +17,8 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
 
 import org.jetbrains.annotations.Nullable;
@@ -118,6 +121,27 @@ public abstract class ItemRendererMixin {
             VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
             renderer.draw((String)string, (float)(x + 19 - 2 - renderer.getWidth(string)), (float)(y + 6 + 3), 16777215, true, matrixStack.peek().getModel(), immediate, false, 0, 15728880);
             immediate.draw();
+        }
+    }
+
+    @Inject(method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V", at = @At("HEAD"))
+    public void renderPotionOverlay(TextRenderer renderer, ItemStack stack, int x, int y, @Nullable String countLabel, CallbackInfo ci) {
+        if(Utils.isSkyblock && SkyblockerConfig.get().items.potionOverlay){
+            Text overlay = PotionOverlay.getPotionOverlay(stack);
+            if(overlay!=null){
+                MatrixStack matrixStack = new MatrixStack();
+                matrixStack.translate(0.0D, 0.0D, (double)(this.zOffset + 200.0F));
+                float drawx = (float)(x + 8 - renderer.getWidth(overlay)/2);
+                float drawy = (float)(y + 6);
+                if(renderer.getWidth(overlay)>=20){
+                matrixStack.scale(0.5f, 0.5f, 1.0f);
+                drawx = (float)((x + 8)*2 - renderer.getWidth(overlay)/2);
+                drawy=2*drawy;
+                }
+                VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
+                renderer.draw((Text)overlay, drawx, drawy, -1, true, matrixStack.peek().getModel(), immediate, false, 0, 15728880);
+                immediate.draw();
+            }
         }
     }
 }
