@@ -70,9 +70,31 @@ public class SkyblockerConfig implements ConfigData {
     }
 
     public static class Items {
+        public boolean priceInfoTooltip = true;
         public boolean potionOverlay = true;
+        public boolean potionOverlayLevels = false;
         public boolean potionOverlayXPBoostTypes = true;
         public float potionOverlayScale = 1f;
+
+        @ConfigEntry.Category("cornerMarks")
+        @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+        public CornerMarks cornerMarks = new CornerMarks();
+    }
+
+    public static class CornerMarks {
+        public enum MarkPosition{
+            UPPER_RIGHT,
+            UPPER_LEFT,
+            LOWER_LEFT
+        }
+        public MarkPosition markPosition = MarkPosition.UPPER_RIGHT;
+        public float scale = 0.5f;
+        public boolean potionLevels = true;
+        public boolean enchBookLevels = true;
+        public boolean wishingCompassUses = true;
+        public boolean jerryPotionIntelligence = true;
+        public boolean defuserTraps = true;
+        public boolean trainingWeightsStrength = true;
     }
 
     public static class Locations {

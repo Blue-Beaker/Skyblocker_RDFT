@@ -42,6 +42,7 @@ public class PriceInfoTooltip {
     public static JsonObject prices = PriceInfoTooltip.downloadPrices();
     static MinecraftClient client = MinecraftClient.getInstance();
     public static void onInjectTooltip(ItemStack stack, TooltipContext context, List<Text> list) {
+        if(!SkyblockerConfig.get().items.priceInfoTooltip) return;
         String name = getInternalNameForItem(stack);
         try {
             if(SkyblockerConfig.get().general.readableBazaarGraphs && stack.isItemEqual(Items.PAPER.getDefaultStack()) && list.toString().contains("·")){
@@ -56,7 +57,8 @@ public class PriceInfoTooltip {
                     list.add(new LiteralText("Avg. BIN Price: ").formatted(Formatting.GOLD).append(new LiteralText(price + " Coins").formatted(Formatting.DARK_AQUA)));
                 }
             }
-        }catch(Exception e) {
+        }catch(Exception e){
+            if(prices!=null)
             client.player.sendMessage(new LiteralText(e.toString()), false);
         }
     
@@ -102,6 +104,7 @@ public class PriceInfoTooltip {
 
     public static JsonObject downloadPrices() {
         try {
+            if(!SkyblockerConfig.get().items.priceInfoTooltip) return null;
             downloadUsingStream("https://moulberry.codes/auction_averages_lbin/3day.json.gz", "3day.json.gz");
             decompressGzipFile("3day.json.gz", "3day.json");
             Gson gson = new Gson();

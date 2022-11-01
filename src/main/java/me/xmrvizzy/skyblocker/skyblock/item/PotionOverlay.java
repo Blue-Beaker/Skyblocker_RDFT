@@ -13,25 +13,26 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stat.Stat;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.math.BlockPos.Mutable;
 
 public class PotionOverlay {
     static final HashMap<String,String> ROMAN_NUMERALS = new HashMap<>();
     static final HashMap<String,Text> POTION_TYPES = new HashMap<>();
     static final HashMap<String,Text> XPBOOST_TYPES = new HashMap<>();
     static {
-        ROMAN_NUMERALS.put(" I Potion", "1");
-        ROMAN_NUMERALS.put(" II Potion", "2");
-        ROMAN_NUMERALS.put(" III Potion", "3");
-        ROMAN_NUMERALS.put(" IV Potion", "4");
-        ROMAN_NUMERALS.put(" V Potion", "5");
-        ROMAN_NUMERALS.put(" VI Potion", "6");
-        ROMAN_NUMERALS.put(" VII Potion", "7");
-        ROMAN_NUMERALS.put(" VIII Potion", "8");
-        ROMAN_NUMERALS.put(" IX Potion", "9");
-        ROMAN_NUMERALS.put(" X Potion", "10");
-        ROMAN_NUMERALS.put(" Potions", "");
+        ROMAN_NUMERALS.put(" I", "1");
+        ROMAN_NUMERALS.put(" II", "2");
+        ROMAN_NUMERALS.put(" III", "3");
+        ROMAN_NUMERALS.put(" IV", "4");
+        ROMAN_NUMERALS.put(" V", "5");
+        ROMAN_NUMERALS.put(" VI", "6");
+        ROMAN_NUMERALS.put(" VII", "7");
+        ROMAN_NUMERALS.put(" VIII", "8");
+        ROMAN_NUMERALS.put(" IX", "9");
+        ROMAN_NUMERALS.put(" X", "10");
 
         POTION_TYPES.put("Healing", StatIcons.HEALTH);
         POTION_TYPES.put("Damage", new LiteralText("❤-").formatted(Formatting.DARK_RED));
@@ -72,30 +73,39 @@ public class PotionOverlay {
         if(id!=null && id.contains("potion")){
             Text name = stack.getName();
             String nameString = name.getString();
-            String level;
-            level = getLevel(nameString);
-            if(level!=null){
-                for(String type:POTION_TYPES.keySet()){
-                    if(nameString.startsWith(type)){
-                        return POTION_TYPES.get(type).shallowCopy().append(level);
-                    }
-                }
-                if(nameString.contains("XP Boost")){
-                    if(SkyblockerConfig.get().items.potionOverlayXPBoostTypes)
-                    for(String type:XPBOOST_TYPES.keySet()){
-                        if(nameString.startsWith(type))
-                        return XPBOOST_TYPES.get(type).shallowCopy().append(StatIcons.WISDOM.shallowCopy().append(level));
-                    }
-                    return StatIcons.WISDOM.shallowCopy().append(level);
-                }
-                return new LiteralText(level);
+            String level = null;
+            if(SkyblockerConfig.get().items.potionOverlayLevels) level = getLevel(nameString);
+            MutableText type = getPotionType(nameString);
+            if(type!=null){
+                if(level!=null)
+                return type.append(level);
+                else
+                return type;
             }
+            else if(level!=null)
+            return new LiteralText(level);
+            }
+        return null;
+    }
+    public static MutableText getPotionType(String name){
+        for(String type:POTION_TYPES.keySet()){
+            if(name.startsWith(type)){
+                return POTION_TYPES.get(type).shallowCopy();
+            }
+        }
+        if(name.contains("XP Boost")){
+            if(SkyblockerConfig.get().items.potionOverlayXPBoostTypes)
+            for(String type:XPBOOST_TYPES.keySet()){
+                if(name.startsWith(type))
+                return XPBOOST_TYPES.get(type).shallowCopy().append(StatIcons.WISDOM.shallowCopy());
+            }
+            return StatIcons.WISDOM.shallowCopy();
         }
         return null;
     }
     public static String getLevel(String name){
         for(String str:ROMAN_NUMERALS.keySet()){
-            if(name.endsWith(str))
+            if(name.replace(" Potions", "").endsWith(str))
             return ROMAN_NUMERALS.get(str);
         }
         return null;

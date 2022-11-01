@@ -2,9 +2,11 @@ package me.xmrvizzy.skyblocker.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
+import me.xmrvizzy.skyblocker.config.SkyblockerConfig.CornerMarks.MarkPosition;
 import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay;
 import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay.Ability;
 import me.xmrvizzy.skyblocker.skyblock.dwarven.HotmLevel;
+import me.xmrvizzy.skyblocker.skyblock.item.ItemCornerMark;
 import me.xmrvizzy.skyblocker.skyblock.item.PotionOverlay;
 import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
 import me.xmrvizzy.skyblocker.utils.ItemUtils;
@@ -17,6 +19,7 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
@@ -140,6 +143,35 @@ public abstract class ItemRendererMixin {
                 VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
                 renderer.draw((Text)overlay, drawx, drawy, -1, true, matrixStack.peek().getModel(), immediate, false, 0, 15728880);
                 immediate.draw();
+            }
+        }
+    }
+
+    @Inject(method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V", at = @At("HEAD"))
+    public void renderCornerMark(TextRenderer renderer, ItemStack stack, int x, int y, @Nullable String countLabel, CallbackInfo ci) {
+        if(Utils.isSkyblock){
+            Text overlay = ItemCornerMark.getCornerMark(stack);
+            if(overlay!=null){
+                try{
+                    MatrixStack matrixStack = new MatrixStack();
+                    matrixStack.translate(0.0D, 0.0D, (double)(this.zOffset + 200.0F));
+                    float drawx;
+                    float scale = Math.min(SkyblockerConfig.get().items.cornerMarks.scale,16f/renderer.getWidth(overlay));
+                    float drawy=(float)(y)/scale;
+                    matrixStack.scale(scale, scale, 1.0f);
+                    if(SkyblockerConfig.get().items.cornerMarks.markPosition==MarkPosition.UPPER_RIGHT){
+                        drawx = (float)((x + 16)/scale - renderer.getWidth(overlay));
+                    }else{
+                        drawx = (float)((x)/scale);
+                        if(SkyblockerConfig.get().items.cornerMarks.markPosition==MarkPosition.LOWER_LEFT)
+                        drawy=(float)(y+15)/scale-6;
+                    }
+                    VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
+                    renderer.draw((Text)overlay, drawx, drawy, -1, true, matrixStack.peek().getModel(), immediate, false, 0, 15728880);
+                    immediate.draw();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
             }
         }
     }
