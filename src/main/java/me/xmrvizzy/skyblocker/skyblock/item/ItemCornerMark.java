@@ -43,7 +43,7 @@ public class ItemCornerMark {
                     return new LiteralText(String.valueOf(3)).formatted(Formatting.YELLOW);
                 }
                 else if(config.defuserTraps && "DEFUSE_KIT".equals(sbid) && stack.getTag()!=null && stack.getTag().contains("ExtraAttributes") && stack.getTag().getCompound("ExtraAttributes").contains("trapsDefused")){
-                    return new LiteralText("+"+String.valueOf(stack.getTag().getCompound("ExtraAttributes").getInt("trapsDefused"))).formatted(Formatting.GREEN);
+                    return new LiteralText(String.valueOf(stack.getTag().getCompound("ExtraAttributes").getInt("trapsDefused"))).formatted(Formatting.GREEN);
                     
                 }
                 else if(config.trainingWeightsStrength && "TRAINING_WEIGHTS".equals(sbid)){
