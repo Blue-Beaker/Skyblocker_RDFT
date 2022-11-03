@@ -33,8 +33,9 @@ public class ItemUtils {
         return list;
     }
 
-    public static List<List<String>> getTooltipStringsBlocks(ItemStack item) {
+    public static List<List<String>> getTooltipStringsBlocks(ItemStack item, Boolean withName) {
         List<Text> lines = getTooltip(item);
+        if(!withName) lines.remove(0);
         List<List<String>> list = new ArrayList<List<String>>();
         list.add(new ArrayList<String>());
         for (Text line : lines) {
@@ -50,6 +51,10 @@ public class ItemUtils {
         }
 
         return list;
+    }
+
+    public static List<List<String>> getTooltipStringsBlocks(ItemStack item) {
+        return getTooltipStringsBlocks(item, true);
     }
     public static String getId(Item item){
         return Registry.ITEM.getId(item).getPath();

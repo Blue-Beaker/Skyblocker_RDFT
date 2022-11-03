@@ -76,16 +76,16 @@ public class ChatHudListenerMixin {
                     Puzzler.solve(msg);
             }
             if(SkyblockerConfig.get().general.cooldownDisplay){
-                if(msg.contains(" is now available!")){
+                if(msg.endsWith(" is now available!")){
                     String abilityName = msg.replace(" is now available!", "");
                     CooldownDisplay.cooldowns.remove(abilityName);
                 }
-                else if(msg.contains("You used your Mining Speed Boost Pickaxe Ability!")){
-                    String abilityName = "Mining Speed Boost";
+                else if(msg.startsWith("You used your ") && msg.endsWith(" Pickaxe Ability!")){
+                    String abilityName = msg.replace("You used your ", "").replace(" Pickaxe Ability!", "");
                     Ability ability = CooldownDisplay.abilities.get(abilityName);
                     CooldownDisplay.setCooldown(abilityName, ability.cooldown);
                 }
-                else if(msg.contains("Used ") && msg.contains("!")){
+                else if(msg.startsWith("Used ") && msg.endsWith("!")){
                     String abilityName = msg.replace("Used ", "").replace("!", "");
                     Ability ability = CooldownDisplay.abilities.get(abilityName);
                     if(ability!=null)

@@ -105,7 +105,7 @@ public class PotionOverlay {
     }
     public static String getLevel(String name){
         for(String str:ROMAN_NUMERALS.keySet()){
-            if(name.replace(" Potions", "").endsWith(str))
+            if(name.replace(" Potion", "").endsWith(str))
             return ROMAN_NUMERALS.get(str);
         }
         return null;

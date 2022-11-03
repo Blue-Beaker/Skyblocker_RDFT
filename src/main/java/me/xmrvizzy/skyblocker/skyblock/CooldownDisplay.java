@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.lang.model.util.ElementScanner6;
-
 import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
 import me.xmrvizzy.skyblocker.utils.ItemUtils;
 import net.minecraft.client.MinecraftClient;
@@ -14,9 +12,12 @@ import net.minecraft.item.ItemStack;
 public class CooldownDisplay {
     public static final int RIGHT_CLICK = 0;
     public static final int LEFT_CLICK = 1;
+    public static final int ON_BREAK = 2;
+    public static final int DUMMY = 3;
     public static final String[] buttonNames = new String[]{"RIGHT CLICK","LEFT CLICK"};
     public static HashMap<String,Integer> cooldowns = new HashMap<String,Integer>();
     public static HashMap<String,Ability> abilities = new HashMap<String,Ability>();
+    public static HashMap<String,Ability> extraAbilities = new HashMap<String,Ability>();
     public static ArrayList<HashMap<String,Ability>> abilitiyOwners = new ArrayList<HashMap<String,Ability>>(2);
     public static MinecraftClient client = MinecraftClient.getInstance();
     public static class Ability{
@@ -51,10 +52,10 @@ public class CooldownDisplay {
     public static Ability getAbility(int button,ItemStack item){
         Ability ability;
         if(PriceInfoTooltip.getInternalNameForItem(item)==null) return null;
-        List<List<String>> lines = ItemUtils.getTooltipStringsBlocks(item);
+        List<List<String>> lines = ItemUtils.getTooltipStringsBlocks(item,false);
         for(List<String> block:lines){
             String firstLine = block.get(0);
-            if(firstLine.contains("Ability:")){
+            if(firstLine.startsWith("Ability:")){
                 if(firstLine.contains(buttonNames[button])){
                     String abilityName = firstLine.replace("Ability: ", "").replace(" "+buttonNames[button], "");
                     for(String line:block){
