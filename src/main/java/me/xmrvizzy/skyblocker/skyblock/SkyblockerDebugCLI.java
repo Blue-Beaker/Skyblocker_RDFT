@@ -45,6 +45,11 @@ public class SkyblockerDebugCLI {
                     context.getSource().sendFeedback(new LiteralText(ItemUtils.getTooltipStringsBlocks(context.getSource().getPlayer().getMainHandStack()).toString()));
                     return 1;
                 }))
+                .then(literal("getHeldItemTooltipBlocksWithoutName")
+                .executes(context -> {
+                    context.getSource().sendFeedback(new LiteralText(ItemUtils.getTooltipStringsBlocks(context.getSource().getPlayer().getMainHandStack(),false).toString()));
+                    return 1;
+                }))
                 .then(literal("getHeldItemAbilities")
                 .executes(context -> {
                     Ability ability1=CooldownDisplay.getAbility(0, context.getSource().getPlayer().getMainHandStack());

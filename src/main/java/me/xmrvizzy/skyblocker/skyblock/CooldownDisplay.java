@@ -54,31 +54,35 @@ public class CooldownDisplay {
         if(PriceInfoTooltip.getInternalNameForItem(item)==null) return null;
         List<List<String>> lines = ItemUtils.getTooltipStringsBlocks(item,false);
         for(List<String> block:lines){
-            String firstLine = block.get(0);
-            if(firstLine.startsWith("Ability:")){
-                if(firstLine.contains(buttonNames[button])){
-                    String abilityName = firstLine.replace("Ability: ", "").replace(" "+buttonNames[button], "");
-                    for(String line:block){
-                        if(line.contains("Cooldown:")){
-                            int cooldown;
-                            try{
-                                if(line.contains("s"))
-                                cooldown = Integer.parseInt(line.replace("Cooldown: ", "").replace("s", ""));
-                                else if(line.contains("m"))
-                                cooldown = Integer.parseInt(line.replace("Cooldown: ", "").replace("m", ""))*60;
-                                else return null;
-                                ability = new Ability(abilityName, button, cooldown);
-                                String skyblockId = PriceInfoTooltip.getInternalNameForItem(item);
-                                abilitiyOwners.get(button).put(skyblockId, ability);
-                                abilities.put(abilityName, ability);
-                                return ability;
-                            }
-                            catch(NumberFormatException e){
-                                return null;
+            try{
+                String firstLine = block.get(0);
+                if(firstLine.startsWith("Ability:")){
+                    if(firstLine.contains(buttonNames[button])){
+                        String abilityName = firstLine.replace("Ability: ", "").replace(" "+buttonNames[button], "");
+                        for(String line:block){
+                            if(line.contains("Cooldown:")){
+                                int cooldown;
+                                try{
+                                    if(line.contains("s"))
+                                    cooldown = Integer.parseInt(line.replace("Cooldown: ", "").replace("s", ""));
+                                    else if(line.contains("m"))
+                                    cooldown = Integer.parseInt(line.replace("Cooldown: ", "").replace("m", ""))*60;
+                                    else return null;
+                                    ability = new Ability(abilityName, button, cooldown);
+                                    String skyblockId = PriceInfoTooltip.getInternalNameForItem(item);
+                                    abilitiyOwners.get(button).put(skyblockId, ability);
+                                    abilities.put(abilityName, ability);
+                                    return ability;
+                                }
+                                catch(NumberFormatException e){
+                                    return null;
+                                }
                             }
                         }
                     }
                 }
+            }catch(IndexOutOfBoundsException e){
+
             }
         }
         return null;
