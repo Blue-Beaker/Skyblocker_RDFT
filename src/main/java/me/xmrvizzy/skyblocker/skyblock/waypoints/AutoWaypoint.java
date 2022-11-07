@@ -24,7 +24,7 @@ public class AutoWaypoint {
     public static void autoWaypoint(String subLocation){
         subLocation = subLocation.replace("Khazad-dûm", "Khazad-dum");
         if(LOCATIONS.containsKey(subLocation)){
-            if(WaypointList.get(Utils.serverArea)==null || WaypointList.get(Utils.serverArea).get(subLocation)==null){
+            if(WaypointList.get(Utils.getLobbyAutoCH())==null || WaypointList.get(Utils.getLobbyAutoCH()).get(subLocation)==null){
                 MinecraftClient client = MinecraftClient.getInstance();
                 Waypoint waypint = new Waypoint(client.player.getBlockPos(),LOCATIONS.get(subLocation));
                 WaypointList.add(subLocation, waypint);

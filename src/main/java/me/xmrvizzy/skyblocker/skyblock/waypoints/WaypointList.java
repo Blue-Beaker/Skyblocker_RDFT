@@ -20,17 +20,14 @@ public class WaypointList {
         return list.get(area);
     }
     public static HashMap<String, Waypoint> get(){
-        return list.get(Utils.serverArea);
+        return list.get(Utils.getLobbyAutoCH());
     }
     public static Set<String> getAreas(){
         return list.keySet();
     }
 
     public static Boolean add(String name, Waypoint waypoint){
-        if("CrystalHollows".equals(Utils.serverArea))
-        return add(Utils.getCrystalHollowsLobby(),name,waypoint);
-        else
-        return add(Utils.serverArea,name,waypoint);
+        return add(Utils.getLobbyAutoCH(),name,waypoint);
     }
     public static Boolean add(String area, String name, Waypoint waypoint){
         list.putIfAbsent(area, new HashMap<String, Waypoint>());
@@ -42,7 +39,7 @@ public class WaypointList {
     }
 
     public static Boolean remove(String name){
-        return remove(Utils.serverArea,name);
+        return remove(Utils.getLobbyAutoCH(),name);
     }
     public static Boolean remove(String area, String name){
         list.putIfAbsent(area, new HashMap<String, Waypoint>());
@@ -63,7 +60,7 @@ public class WaypointList {
         }
     }
     public static Boolean rename(String name, String name2){
-        return rename(Utils.serverArea,name,name2);
+        return rename(Utils.getLobbyAutoCH(),name,name2);
     }
 
     public static String addAutoRenaming(String area, String name, Waypoint waypoint){
@@ -78,10 +75,7 @@ public class WaypointList {
         }
     }
     public static String addAutoRenaming(String name, Waypoint waypoint){
-        if("CrystalHollows".equals(Utils.serverArea))
-        return addAutoRenaming(Utils.getCrystalHollowsLobby(),name,waypoint);
-        else
-        return addAutoRenaming(Utils.serverArea,name,waypoint);
+        return addAutoRenaming(Utils.getLobbyAutoCH(),name,waypoint);
     }
 
     public static void clear(String area){
@@ -90,7 +84,7 @@ public class WaypointList {
         store();
     }
     public static void clear(){
-        clear(Utils.serverArea);
+        clear(Utils.getLobbyAutoCH());
     }
 
     public static Boolean setColor(String area, String name, float[] color){
@@ -105,14 +99,14 @@ public class WaypointList {
         }
     }
     public static Boolean setColor(String name, float[] color){
-        return setColor(Utils.serverArea, name, color);
+        return setColor(Utils.getLobbyAutoCH(), name, color);
     }
     public static void store(){
         WaypointStorage.storeJsonFile();
     }
     public static void checkCrystalHollowsLobby(){
         if("CrystalHollows".equals(Utils.serverArea)){
-            String name = Utils.getCrystalHollowsLobby();
+            String name = Utils.getLobbyAutoCH();
             if(!crystalHollowsTime.containsKey(name)){
                 crystalHollowsTime.put(name,Utils.getCrystalHollowsCloseTime());
             }
@@ -121,7 +115,7 @@ public class WaypointList {
     public static List<String> removeClosedLobby(){
         ArrayList<String> removeList = new ArrayList<String>();
         for(String lobby:crystalHollowsTime.keySet()){
-            if(!lobby.equals(Utils.getCrystalHollowsLobby())){
+            if(!lobby.equals(Utils.getLobbyAutoCH())){
                 if(crystalHollowsTime.get(lobby)<System.currentTimeMillis()/1000){
                     removeList.add(lobby);
                 }

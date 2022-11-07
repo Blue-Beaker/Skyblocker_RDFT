@@ -197,10 +197,13 @@ public class Utils {
     public static boolean useOldHitbox(){
         return isSkyblock ||(SkyblockerConfig.get().hitbox.hitboxForAllHypixel && isHypixel);
     }
-    public static String getCrystalHollowsLobby(){
+    public static String getLobbyAutoCH(){
+        if("CrystalHollows".equals(serverArea))
         return "CH_"+serverId;
+        else
+        return serverArea;
     }
     public static long getCrystalHollowsCloseTime(){
-        return System.currentTimeMillis()/1000+18000-client.world.getTime()/20;
+        return System.currentTimeMillis()/1000+18000-client.world.getTimeOfDay()/20;
     }
 }

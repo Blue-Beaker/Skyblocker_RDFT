@@ -257,7 +257,7 @@ public class SkyblockerWaypointCLI {
             if(area.startsWith("CH_") && WaypointList.crystalHollowsTime.containsKey(area)){
                 SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String time = sdf.format(new Date(WaypointList.crystalHollowsTime.get(area)*1000));
-                context.getSource().sendFeedback(new LiteralText(String.format("%s closing at %s",area,time)).formatted(Formatting.BLUE));
+                context.getSource().sendFeedback(new LiteralText(String.format("%s closing at %s",area,time)).formatted(Formatting.AQUA));
             }
             context.getSource().sendFeedback(new LiteralText(String.format("======[Skyblocker Waypoints in %s]======",area)).formatted(Formatting.GREEN));
 
@@ -288,7 +288,7 @@ public class SkyblockerWaypointCLI {
     public void listWaypoint(CommandContext<FabricClientCommandSource> context){
         listWaypoint(context, Utils.serverArea);
         if("CrystalHollows".equals(Utils.serverArea)){
-            listWaypoint(context, Utils.getCrystalHollowsLobby());
+            listWaypoint(context, Utils.getLobbyAutoCH());
         }
     }
     public void listAll(CommandContext<FabricClientCommandSource> context){
@@ -305,7 +305,7 @@ public class SkyblockerWaypointCLI {
     }
     public void clearWaypoint(CommandContext<FabricClientCommandSource> context){
         if("CrystalHollows".equals(Utils.serverArea))
-        clearWaypoint(context,Utils.getCrystalHollowsLobby());
+        clearWaypoint(context,Utils.getLobbyAutoCH());
         else
         clearWaypoint(context,Utils.serverArea);
     }
@@ -335,7 +335,7 @@ public class SkyblockerWaypointCLI {
             return WaypointAreaArgumentType.getString(context, "area");
         }
         catch(Exception e){
-            if("CrystalHollows".equals(Utils.serverArea)) return Utils.getCrystalHollowsLobby();
+            if("CrystalHollows".equals(Utils.serverArea)) return Utils.getLobbyAutoCH();
             return Utils.serverArea;
         }
     }

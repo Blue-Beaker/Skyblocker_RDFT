@@ -26,7 +26,7 @@ public class WaypointRenderer {
             MatrixStack matrices = new MatrixStack();
             drawWaypoints(matrices, Utils.serverArea);
             if("CrystalHollows".equals(Utils.serverArea)){
-                drawWaypoints(matrices, Utils.getCrystalHollowsLobby());
+                drawWaypoints(matrices, Utils.getLobbyAutoCH());
             }
         }
         catch(Exception e){
