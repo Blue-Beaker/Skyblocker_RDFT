@@ -1,5 +1,6 @@
 package me.xmrvizzy.skyblocker.skyblock.item;
 
+import java.text.Normalizer.Form;
 import java.util.HashMap;
 
 import org.jetbrains.annotations.Nullable;
@@ -60,6 +61,8 @@ public class PotionOverlay {
         POTION_TYPES.put("Pet Luck", StatIcons.HEALTH.shallowCopy().append(StatIcons.PET_LUCK));
         POTION_TYPES.put("Spirit", StatIcons.SPEED.shallowCopy().append(StatIcons.CRIT_DAMAGE));
 
+        POTION_TYPES.put("Awkward", StatIcons.ABILITY_DAMAGE.formatted(Formatting.AQUA));
+
         XPBOOST_TYPES.put("Farming", StatIcons.FORTUNE.formatted(Formatting.YELLOW));
         XPBOOST_TYPES.put("Mining", StatIcons.MINING_SPEED);
         XPBOOST_TYPES.put("Combat", new LiteralText("🗡").formatted(Formatting.RED));
@@ -88,11 +91,6 @@ public class PotionOverlay {
         return null;
     }
     public static MutableText getPotionType(String name){
-        for(String type:POTION_TYPES.keySet()){
-            if(name.startsWith(type)){
-                return POTION_TYPES.get(type).shallowCopy();
-            }
-        }
         if(name.contains("XP Boost")){
             if(SkyblockerConfig.get().items.potionOverlayXPBoostTypes)
             for(String type:XPBOOST_TYPES.keySet()){
@@ -100,6 +98,15 @@ public class PotionOverlay {
                 return XPBOOST_TYPES.get(type).shallowCopy().append(StatIcons.WISDOM.shallowCopy());
             }
             return StatIcons.WISDOM.shallowCopy();
+        }else if(name.startsWith("Water Bottle")){
+            return new LiteralText("W").formatted(Formatting.BLUE);
+        }
+        else{
+            for(String type:POTION_TYPES.keySet()){
+                if(name.startsWith(type)){
+                    return POTION_TYPES.get(type).shallowCopy();
+                }
+            }
         }
         return null;
     }

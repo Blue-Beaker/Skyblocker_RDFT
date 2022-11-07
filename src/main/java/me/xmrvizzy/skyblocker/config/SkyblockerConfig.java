@@ -95,6 +95,7 @@ public class SkyblockerConfig implements ConfigData {
         public boolean jerryPotionIntelligence = true;
         public boolean defuserTraps = true;
         public boolean trainingWeightsStrength = true;
+        public boolean prehistoricEggSteps = true;
     }
 
     public static class Locations {
@@ -116,11 +117,24 @@ public class SkyblockerConfig implements ConfigData {
         public Float outlineWidth = 3.0f;
         public Double labelSize = 0.2d;
         public boolean autoWaypoints = true;
+        public boolean autoClean = true;
+        public boolean autoCleanFeedback = true;
+        public boolean crystalHollowsWarning = true;
     }
 
     public static class Dungeons {
         public boolean enableMap = true;
         public boolean solveThreeWeirdos = true;
+        public enum MapPosition{
+            UPPER_RIGHT,
+            UPPER_LEFT,
+            LOWER_LEFT,
+            LOWER_RIGHT
+        }
+        public MapPosition mapPosition=MapPosition.UPPER_LEFT;
+        public float mapX=2f;
+        public float mapY=2f;
+        public float mapScale=1f;
     }
 
     public static class DwarvenMines {
@@ -151,6 +165,7 @@ public class SkyblockerConfig implements ConfigData {
         public boolean forceSkyblock = false;
         public boolean forceDungeons = false;
         public String forceArea = "CrystalHollows";
+        public String forceServerId = "mini000A";
         public boolean showInternalNameOnRightClick = false;
         public boolean debugPointingLocator = false;
         public boolean debugDistancedLocator = false;

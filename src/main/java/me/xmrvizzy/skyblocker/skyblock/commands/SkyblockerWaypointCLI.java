@@ -1,46 +1,38 @@
-package me.xmrvizzy.skyblocker.skyblock;
+package me.xmrvizzy.skyblocker.skyblock.commands;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
-import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.EntitySelectorReader;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 
+import com.ibm.icu.text.SimpleDateFormat;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay.Ability;
-import me.xmrvizzy.skyblocker.skyblock.commands.WaypointAreaArgumentType;
-import me.xmrvizzy.skyblocker.skyblock.commands.WaypointNameArgumentType;
-import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
+import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.Waypoint;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointList;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointStorage;
-import me.xmrvizzy.skyblocker.utils.ItemUtils;
 import me.xmrvizzy.skyblocker.utils.StringUtils;
 import me.xmrvizzy.skyblocker.utils.Utils;
 
 import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.literal;
 
+import java.sql.Date;
 import java.util.HashMap;
-import java.util.concurrent.CompletableFuture;
 
 
-public class SkyblockerCLI {
+public class SkyblockerWaypointCLI {
 	MinecraftClient client = MinecraftClient.getInstance();
-    public SkyblockerCLI(CommandDispatcher<FabricClientCommandSource> dispatcher){
+    public SkyblockerWaypointCLI(CommandDispatcher<FabricClientCommandSource> dispatcher){
         LiteralCommandNode<FabricClientCommandSource> waypointCommand = dispatcher.register(literal("sbwp")
                 .then(literal("add")
                     .then(ClientCommandManager.argument("name", StringArgumentType.string())
@@ -139,6 +131,11 @@ public class SkyblockerCLI {
                         return reload(context);
                     })
                 )
+                .then(literal("removeClosedLobby")
+                    .executes(context -> {
+                        return removeClosedLobby(context);
+                    })
+                )
                 .then(literal("area")
                     .then(ClientCommandManager.argument("area",WaypointAreaArgumentType.string())
                     .then(literal("add")
@@ -214,6 +211,11 @@ public class SkyblockerCLI {
                 .append(new LiteralText("[VIEW]").styled((style) -> {
                     return style.withColor(Formatting.GREEN).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sbwp list")).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("/sbwp list")));
                 })));
+                if(area.startsWith("CH_") && SkyblockerConfig.get().waypoint.crystalHollowsWarning){
+                    context.getSource().sendFeedback(new LiteralText("Waypoints in CrystalHollows are separated by lobbies. However you can create static waypoints by using ").formatted(Formatting.AQUA)
+                    .append(new LiteralText("/sbwp area CrystalHollows add (name) [X Y Z]").formatted(Formatting.GOLD).append("\nThis message only shows once unless you re-enable it in config.")));
+                    SkyblockerConfig.get().waypoint.crystalHollowsWarning=false;
+                }
                 return 1;
             }
             else{
@@ -252,7 +254,13 @@ public class SkyblockerCLI {
         try{
         HashMap<String,Waypoint> list = WaypointList.get(area);
         if(list!=null){
+            if(area.startsWith("CH_") && WaypointList.crystalHollowsTime.containsKey(area)){
+                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String time = sdf.format(new Date(WaypointList.crystalHollowsTime.get(area)*1000));
+                context.getSource().sendFeedback(new LiteralText(String.format("%s closing at %s",area,time)).formatted(Formatting.BLUE));
+            }
             context.getSource().sendFeedback(new LiteralText(String.format("======[Skyblocker Waypoints in %s]======",area)).formatted(Formatting.GREEN));
+
             for(String name : list.keySet()){
                 BlockPos pos = list.get(name).getBlockPos();
                 float[] color = list.get(name).color;
@@ -279,6 +287,9 @@ public class SkyblockerCLI {
     }
     public void listWaypoint(CommandContext<FabricClientCommandSource> context){
         listWaypoint(context, Utils.serverArea);
+        if("CrystalHollows".equals(Utils.serverArea)){
+            listWaypoint(context, Utils.getCrystalHollowsLobby());
+        }
     }
     public void listAll(CommandContext<FabricClientCommandSource> context){
         for(String area: WaypointList.getAreas()){
@@ -293,6 +304,9 @@ public class SkyblockerCLI {
         context.getSource().sendFeedback(new LiteralText(String.format("Removed all waypoints in %s", area)));
     }
     public void clearWaypoint(CommandContext<FabricClientCommandSource> context){
+        if("CrystalHollows".equals(Utils.serverArea))
+        clearWaypoint(context,Utils.getCrystalHollowsLobby());
+        else
         clearWaypoint(context,Utils.serverArea);
     }
     public int setColor(CommandContext<FabricClientCommandSource> context,String name, float[] color){
@@ -321,6 +335,7 @@ public class SkyblockerCLI {
             return WaypointAreaArgumentType.getString(context, "area");
         }
         catch(Exception e){
+            if("CrystalHollows".equals(Utils.serverArea)) return Utils.getCrystalHollowsLobby();
             return Utils.serverArea;
         }
     }
@@ -339,6 +354,10 @@ public class SkyblockerCLI {
         catch(Exception e){
             return new float[]{1f,1f,1f};
         }
+    }
+    public int removeClosedLobby(CommandContext<FabricClientCommandSource> context){
+        context.getSource().sendFeedback(new LiteralText("Removed closed lobbies:"+WaypointList.removeClosedLobby().toString()).formatted(Formatting.GREEN));
+        return 1;
     }
 
 }

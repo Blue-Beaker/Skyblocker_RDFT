@@ -1,14 +1,21 @@
 package me.xmrvizzy.skyblocker.skyblock.waypoints;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
+import javax.rmi.CORBA.Util;
+
+import me.xmrvizzy.skyblocker.SkyblockerMod;
 import me.xmrvizzy.skyblocker.utils.Utils;
+import net.minecraft.client.MinecraftClient;
 
 
 
 public class WaypointList {
     static HashMap<String, HashMap<String, Waypoint>> list = new HashMap<String, HashMap<String, Waypoint>>();
+    public static HashMap<String,Long> crystalHollowsTime = new HashMap<String,Long>();
     public static HashMap<String, Waypoint> get(String area){
         return list.get(area);
     }
@@ -96,5 +103,28 @@ public class WaypointList {
     }
     public static void store(){
         WaypointStorage.storeJsonFile();
+    }
+    public static void checkCrystalHollowsLobby(){
+        if("CrystalHollows".equals(Utils.serverArea)){
+            String name = Utils.getCrystalHollowsLobby();
+            if(!crystalHollowsTime.containsKey(name)){
+                crystalHollowsTime.put(name,Utils.getCrystalHollowsCloseTime());
+            }
+        }
+    }
+    public static List<String> removeClosedLobby(){
+        ArrayList<String> removeList = new ArrayList<String>();
+        for(String lobby:crystalHollowsTime.keySet()){
+            if(!lobby.equals(Utils.getCrystalHollowsLobby())){
+                if(crystalHollowsTime.get(lobby)<System.currentTimeMillis()/1000){
+                    removeList.add(lobby);
+                }
+            }
+        }
+        for(String lobby:removeList){
+            list.remove(lobby);
+            crystalHollowsTime.remove(lobby);
+        }
+        return removeList;
     }
 }

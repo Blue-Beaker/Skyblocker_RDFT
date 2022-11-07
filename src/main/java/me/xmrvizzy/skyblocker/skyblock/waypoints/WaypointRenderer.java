@@ -11,7 +11,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Vec3d;
 
 public class WaypointRenderer {
     static boolean renderHooked = false;
@@ -25,24 +24,30 @@ public class WaypointRenderer {
     public static void drawWaypoints(WorldRenderContext wrc){
         try{
             MatrixStack matrices = new MatrixStack();
-            if(WaypointList.get(Utils.serverArea)!=null){
-                for(String name : WaypointList.get(Utils.serverArea).keySet()){
-                    Waypoint waypoint = WaypointList.get(Utils.serverArea).get(name);
-                    //Locator.drawLineEnds(target, new Vec3d(client.player.getX(),client.player.getEyeY(),client.player.getZ()), 0.0f,0.0f,1.0f,1.0f);
-                    GL11.glDisable(GL11.GL_DEPTH_TEST);
-                    Double distance = Math.sqrt(waypoint.getBlockPos().getSquaredDistance(client.player.getPos(), false));
-                    Double cameraDistance = Math.sqrt(waypoint.getCenterPos().squaredDistanceTo(client.cameraEntity.getCameraPosVec(0)));
-                    RenderUtils.drawOutlineBox(waypoint.getBlockPos(), waypoint.color[0], waypoint.color[1], waypoint.color[2],1.0f, SkyblockerConfig.get().waypoint.outlineWidth);
-                    RenderUtilsLiving.drawTextColored(matrices, String.format("%s[%.0fm]", name,distance), waypoint.getX()+0.5, waypoint.getY()+0.5, waypoint.getZ()+0.5, cameraDistance*SkyblockerConfig.get().waypoint.labelSize, waypoint.color[0], waypoint.color[1], waypoint.color[2], 1.0f);
-                    GL11.glEnable(GL11.GL_DEPTH_TEST);
-                    for(double[] line : waypoint.locatorLines){
-                        PointedLocator.drawLine(line, waypoint.color[0], waypoint.color[1], waypoint.color[2], SkyblockerConfig.get().waypoint.lineWidth);
-                    }
-                }
+            drawWaypoints(matrices, Utils.serverArea);
+            if("CrystalHollows".equals(Utils.serverArea)){
+                drawWaypoints(matrices, Utils.getCrystalHollowsLobby());
             }
         }
         catch(Exception e){
             System.out.println("WaypointRenderer: " + e.getMessage());
+        }
+    }
+    public static void drawWaypoints(MatrixStack matrices,String area){
+        if(WaypointList.get(area)!=null){
+            for(String name : WaypointList.get(area).keySet()){
+                Waypoint waypoint = WaypointList.get(area).get(name);
+                //Locator.drawLineEnds(target, new Vec3d(client.player.getX(),client.player.getEyeY(),client.player.getZ()), 0.0f,0.0f,1.0f,1.0f);
+                GL11.glDisable(GL11.GL_DEPTH_TEST);
+                Double distance = Math.sqrt(waypoint.getBlockPos().getSquaredDistance(client.player.getPos(), false));
+                Double cameraDistance = Math.sqrt(waypoint.getCenterPos().squaredDistanceTo(client.cameraEntity.getCameraPosVec(0)));
+                RenderUtils.drawOutlineBox(waypoint.getBlockPos(), waypoint.color[0], waypoint.color[1], waypoint.color[2],1.0f, SkyblockerConfig.get().waypoint.outlineWidth);
+                RenderUtilsLiving.drawTextColored(matrices, String.format("%s[%.0fm]", name,distance), waypoint.getX()+0.5, waypoint.getY()+0.5, waypoint.getZ()+0.5, cameraDistance*SkyblockerConfig.get().waypoint.labelSize, waypoint.color[0], waypoint.color[1], waypoint.color[2], 1.0f);
+                GL11.glEnable(GL11.GL_DEPTH_TEST);
+                for(double[] line : waypoint.locatorLines){
+                    PointedLocator.drawLine(line, waypoint.color[0], waypoint.color[1], waypoint.color[2], SkyblockerConfig.get().waypoint.lineWidth);
+                }
+            }
         }
     }
 }

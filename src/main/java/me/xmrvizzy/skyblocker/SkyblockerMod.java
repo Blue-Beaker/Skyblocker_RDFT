@@ -1,22 +1,27 @@
 package me.xmrvizzy.skyblocker;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
 import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay;
 import me.xmrvizzy.skyblocker.skyblock.HotbarSlotLock;
-import me.xmrvizzy.skyblocker.skyblock.SkyblockerCLI;
-import me.xmrvizzy.skyblocker.skyblock.SkyblockerDebugCLI;
+import me.xmrvizzy.skyblocker.skyblock.commands.SkyblockerDebugCLI;
+import me.xmrvizzy.skyblocker.skyblock.commands.SkyblockerWaypointCLI;
 import me.xmrvizzy.skyblocker.skyblock.dungeon.DungeonBlaze;
 import me.xmrvizzy.skyblocker.utils.Utils;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.LiteralText;
+import net.minecraft.util.Formatting;
 import me.xmrvizzy.skyblocker.skyblock.locator.DistancedLocator;
 import me.xmrvizzy.skyblocker.skyblock.locator.PointedLocator;
 import me.xmrvizzy.skyblocker.skyblock.solver.ContainerScreenSolverManager;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.AutoWaypoint;
+import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointList;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointRenderer;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointStorage;
 
@@ -33,7 +38,7 @@ public class SkyblockerMod implements ClientModInitializer {
 		AutoWaypoint.init();
 		configDir.toFile().mkdirs();
 		WaypointStorage.readJsonFile();
-        new SkyblockerCLI(ClientCommandManager.DISPATCHER);
+        new SkyblockerWaypointCLI(ClientCommandManager.DISPATCHER);
         new SkyblockerDebugCLI(ClientCommandManager.DISPATCHER);
 	}
 
@@ -81,8 +86,14 @@ public class SkyblockerMod implements ClientModInitializer {
 		if (TICKS % 20 == 0) {
 			if (client.world != null && (!client.isInSingleplayer()||SkyblockerConfig.get().debug.forceSkyblock))
 				Utils.sbChecker();
+				WaypointList.checkCrystalHollowsLobby();
 			if(Utils.isSkyblock){
 				ContainerScreenSolverManager.screenChecker(client.currentScreen);
+				if(SkyblockerConfig.get().waypoint.autoClean){
+					List<String> removed = WaypointList.removeClosedLobby();
+					if(SkyblockerConfig.get().waypoint.autoCleanFeedback && !removed.isEmpty())
+					client.player.sendMessage(new LiteralText("[Skyblocker]Removed closed lobbies:"+removed.toString()).formatted(Formatting.GREEN),false);
+				}
 			}
 			TICKS = 0;
 		}

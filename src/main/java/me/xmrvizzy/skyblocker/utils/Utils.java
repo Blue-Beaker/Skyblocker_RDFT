@@ -33,6 +33,7 @@ public class Utils {
     public static boolean isDungeons = false;
     public static boolean isInjected = false;
     public static String serverArea = "None";
+    public static String serverId = "None";
     public static String subLocation = "None";
     static MinecraftClient client = MinecraftClient.getInstance();
     public static String parseActionBar(String msg) {
@@ -79,6 +80,7 @@ public class Utils {
                 isDungeons = false;
             }
             serverArea=SkyblockerConfig.get().debug.forceArea;
+            serverId=SkyblockerConfig.get().debug.forceServerId;
             return;
         }
         if (sidebar.isEmpty()) return;
@@ -94,6 +96,7 @@ public class Utils {
                 if(SkyblockerConfig.get().waypoint.autoWaypoints)
                 AutoWaypoint.autoWaypoint(subLocation);
                 serverArea=getArea(getTabInfo());
+                serverId=getServer(getTabInfo());
             }
             else isSkyblock = false;
             if (isSkyblock && string.contains("The Catacombs")) isDungeons = true;
@@ -162,8 +165,16 @@ public class Utils {
     }
     public static String getArea(List<String> tabLines){
         for(String line:tabLines){
-            if(line.contains("Area:")){
+            if(line.startsWith("Area:")){
                 return(line.replace("Area:", "").replaceAll(" ", "").replaceAll("'", ""));
+            }
+        }
+        return("None");
+    }
+    public static String getServer(List<String> tabLines){
+        for(String line:tabLines){
+            if(line.startsWith("Server:")){
+                return(line.replace("Server:", "").replaceAll(" ", "").replaceAll("'", ""));
             }
         }
         return("None");
@@ -185,5 +196,11 @@ public class Utils {
     }
     public static boolean useOldHitbox(){
         return isSkyblock ||(SkyblockerConfig.get().hitbox.hitboxForAllHypixel && isHypixel);
+    }
+    public static String getCrystalHollowsLobby(){
+        return "CH_"+serverId;
+    }
+    public static long getCrystalHollowsCloseTime(){
+        return System.currentTimeMillis()/1000+18000-client.world.getTime()/20;
     }
 }

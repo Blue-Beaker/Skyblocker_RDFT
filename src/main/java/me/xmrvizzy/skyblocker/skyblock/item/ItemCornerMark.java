@@ -42,6 +42,23 @@ public class ItemCornerMark {
                     else
                     return new LiteralText(String.valueOf(3)).formatted(Formatting.YELLOW);
                 }
+                else if(config.prehistoricEggSteps && "PREHISTORIC_EGG".equals(sbid) && stack.getTag()!=null && stack.getTag().contains("ExtraAttributes") && stack.getTag().getCompound("ExtraAttributes").contains("blocks_walked")){
+                    int steps = stack.getTag().getCompound("ExtraAttributes").getInt("blocks_walked");
+                    Formatting formatting;
+                    if(steps<4000){
+                        formatting=Formatting.WHITE;
+                    }else if(steps<10000){
+                        formatting=Formatting.GREEN;
+                    }else if(steps<20000){
+                        formatting=Formatting.BLUE;
+                    }else if(steps<40000){
+                        formatting=Formatting.DARK_PURPLE;
+                    }else{
+                        formatting=Formatting.GOLD;
+                    }
+                    return new LiteralText(String.valueOf(steps)).formatted(formatting);
+                    
+                }
                 else if(config.defuserTraps && "DEFUSE_KIT".equals(sbid) && stack.getTag()!=null && stack.getTag().contains("ExtraAttributes") && stack.getTag().getCompound("ExtraAttributes").contains("trapsDefused")){
                     return new LiteralText(String.valueOf(stack.getTag().getCompound("ExtraAttributes").getInt("trapsDefused"))).formatted(Formatting.GREEN);
                     

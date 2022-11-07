@@ -1,4 +1,4 @@
-package me.xmrvizzy.skyblocker.skyblock;
+package me.xmrvizzy.skyblocker.skyblock.commands;
 
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
@@ -16,6 +16,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
+import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay;
 import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay.Ability;
 import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
 import me.xmrvizzy.skyblocker.skyblock.solver.ContainerScreenSolverManager;
@@ -27,6 +28,8 @@ import me.xmrvizzy.skyblocker.utils.Utils;
 
 import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.literal;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
 public class SkyblockerDebugCLI {
@@ -104,6 +107,12 @@ public class SkyblockerDebugCLI {
                     context.getSource().sendFeedback(new LiteralText(Utils.getTabFooter()));
                     return 1;
                 }))
+                .then(literal("getCrystalHollowsCloseTime")
+                .executes(context -> {
+                    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    context.getSource().sendFeedback(new LiteralText(sdf.format(new Date(Utils.getCrystalHollowsCloseTime()*1000))));
+                    return 1;
+                }))
             )
             .then(literal("waypoint")
                 .then(literal("printJson")
@@ -134,6 +143,11 @@ public class SkyblockerDebugCLI {
                         return 0;
                     }
                 })))
+                .then(literal("crystalHollowTimes")
+                .executes(context -> {
+                    context.getSource().sendFeedback(new LiteralText(WaypointList.crystalHollowsTime.toString()));
+                    return 1;
+                }))
             )
             .then(literal("screen")
             .then(literal("containerName")

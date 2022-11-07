@@ -19,10 +19,17 @@
   "text.autoconfig.skyblocker.option.waypoint.outlineWidth": "Waypoint block outline width",
   "text.autoconfig.skyblocker.option.waypoint.labelSize": "Waypoint label size",
   "text.autoconfig.skyblocker.option.waypoint.autoWaypoints": "Auto add waypoints for important locations",
+  "text.autoconfig.skyblocker.option.waypoint.autoClean": "Auto remove waypoints in closed Crystal Hollows lobbies",
+  "text.autoconfig.skyblocker.option.waypoint.autoCleanFeedback": "Show feedback for Auto remove",
+  "text.autoconfig.skyblocker.option.waypoint.crystalHollowsWarning": "Show waypoint warning on crystal hollows waypoint creation",
 
   "text.autoconfig.skyblocker.category.locations": "Locations",
   "text.autoconfig.skyblocker.option.locations.dungeons": "Dungeons",
   "text.autoconfig.skyblocker.option.locations.dungeons.enableMap": "Enable Map",
+  "text.autoconfig.skyblocker.option.locations.dungeons.mapPosition": "Map Position",
+  "text.autoconfig.skyblocker.option.locations.dungeons.mapX": "Map X",
+  "text.autoconfig.skyblocker.option.locations.dungeons.mapY": "Map Y",
+  "text.autoconfig.skyblocker.option.locations.dungeons.mapScale": "Map Scale",
   "text.autoconfig.skyblocker.option.locations.dungeons.solveThreeWeirdos": "Solve Three Weirdos Puzzle",
   "text.autoconfig.skyblocker.option.locations.dwarvenMines": "Dwarven Mines",
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.enableDrillFuel": "Enable Drill Fuel/Pickonimbus Uses",
@@ -65,6 +72,7 @@
   "text.autoconfig.skyblocker.option.items.jerryPotionIntelligence": "Show Bottle of Jyrre Uses",
   "text.autoconfig.skyblocker.option.items.defuserTraps": "Show Defuse Kit defused Traps",
   "text.autoconfig.skyblocker.option.items.trainingWeightsStrength": "Show Training Weights Strength",
+  "text.autoconfig.skyblocker.option.items.prehistoricEggSteps": "Show Prehistoric Egg Steps",
 
   "text.autoconfig.skyblocker.category.debug": "Debug",
   "text.autoconfig.skyblocker.option.debug.showInternalNameOnRightClick": "Show Internal Names on Right Click",
@@ -73,6 +81,7 @@
   "text.autoconfig.skyblocker.option.debug.forceSkyblock": "Force everywhere as Skyblock for debug",
   "text.autoconfig.skyblocker.option.debug.forceDungeons": "Force dungeons (only when force skyblock is on)",
   "text.autoconfig.skyblocker.option.debug.forceArea": "Force area (only when force skyblock is on)",
+  "text.autoconfig.skyblocker.option.debug.forceServerId": "Force server id (only when force skyblock is on)",
   
   "text.autoconfig.skyblocker.category.solvers": "Solvers",
   "text.autoconfig.skyblocker.option.solvers.networkRelaySolver": "9f™ Network Relay solver"

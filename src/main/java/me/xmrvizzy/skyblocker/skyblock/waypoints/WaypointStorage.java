@@ -33,6 +33,13 @@ public class WaypointStorage {
         String json = gson.toJson(WaypointList.list);
         return json;
     }
+    public static String toPrettyJsonString2(){
+        Gson gson = new GsonBuilder()
+        .setPrettyPrinting()
+        .create();
+        String json = gson.toJson(WaypointList.crystalHollowsTime);
+        return json;
+    }
     public static Boolean fromJsonString(String json){
         Gson gson = new Gson();
         java.lang.reflect.Type setType = new TypeToken<HashMap<String, HashMap<String, Waypoint>>>(){}.getType();
@@ -51,6 +58,11 @@ public class WaypointStorage {
             writer.write(toPrettyJsonString());
             writer.flush();
             writer.close();
+            File file2 = SkyblockerMod.configDir.resolve("crystal_hollows_close_times.json").toFile();
+            FileWriter writer2 = new FileWriter(file2);
+            writer2.write(toPrettyJsonString2());
+            writer2.flush();
+            writer2.close();
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -77,6 +89,10 @@ public class WaypointStorage {
             }
         }
         WaypointList.list=list;
+        Path file2 = SkyblockerMod.configDir.resolve("crystal_hollows_close_times.json");
+        java.lang.reflect.Type setType2 = new TypeToken<HashMap<String, Long>>(){}.getType();
+        BufferedReader reader2 = Files.newBufferedReader(file2);
+        WaypointList.crystalHollowsTime = gson.fromJson(reader2, setType2);
     }
     public static void readJsonFile(){
         try {
