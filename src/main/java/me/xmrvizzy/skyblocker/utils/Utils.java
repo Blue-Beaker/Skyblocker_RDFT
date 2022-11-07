@@ -173,8 +173,8 @@ public class Utils {
     }
     public static String getServer(List<String> tabLines){
         for(String line:tabLines){
-            if(line.startsWith("Server:")){
-                return(line.replace("Server:", "").replaceAll(" ", "").replaceAll("'", ""));
+            if(line.startsWith(" Server:")){
+                return(line.replace(" Server:", "").replaceAll(" ", ""));
             }
         }
         return("None");

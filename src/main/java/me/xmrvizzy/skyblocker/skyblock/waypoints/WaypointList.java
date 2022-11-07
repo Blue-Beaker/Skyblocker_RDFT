@@ -27,6 +27,9 @@ public class WaypointList {
     }
 
     public static Boolean add(String name, Waypoint waypoint){
+        if("CrystalHollows".equals(Utils.serverArea))
+        return add(Utils.getCrystalHollowsLobby(),name,waypoint);
+        else
         return add(Utils.serverArea,name,waypoint);
     }
     public static Boolean add(String area, String name, Waypoint waypoint){
@@ -75,6 +78,9 @@ public class WaypointList {
         }
     }
     public static String addAutoRenaming(String name, Waypoint waypoint){
+        if("CrystalHollows".equals(Utils.serverArea))
+        return addAutoRenaming(Utils.getCrystalHollowsLobby(),name,waypoint);
+        else
         return addAutoRenaming(Utils.serverArea,name,waypoint);
     }
 

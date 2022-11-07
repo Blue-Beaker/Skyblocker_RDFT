@@ -27,7 +27,7 @@ public class AutoWaypoint {
             if(WaypointList.get(Utils.serverArea)==null || WaypointList.get(Utils.serverArea).get(subLocation)==null){
                 MinecraftClient client = MinecraftClient.getInstance();
                 Waypoint waypint = new Waypoint(client.player.getBlockPos(),LOCATIONS.get(subLocation));
-                WaypointList.add(Utils.serverArea, subLocation, waypint);
+                WaypointList.add(subLocation, waypint);
                 client.player.sendMessage(new LiteralText(String.format("[Skyblocker] Added %s at (%d,%d,%d) ",subLocation,waypint.getX(),waypint.getY(),waypint.getZ())).formatted(Formatting.AQUA)
                 .append(new LiteralText("[VIEW]").styled((style) -> {
                     return style.withColor(Formatting.GREEN).withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sbwp list")).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("/sbwp list")));
