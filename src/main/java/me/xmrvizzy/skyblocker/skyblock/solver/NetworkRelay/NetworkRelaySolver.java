@@ -1,4 +1,4 @@
-package me.xmrvizzy.skyblocker.skyblock.solver;
+package me.xmrvizzy.skyblocker.skyblock.solver.NetworkRelay;
 
 import me.xmrvizzy.skyblocker.utils.ItemUtils;
 import net.minecraft.client.MinecraftClient;
@@ -18,7 +18,7 @@ public class NetworkRelaySolver{
     public static Screen screen;
     static int lastSlot = 0;
     public static boolean enabled = false;
-    public static void enable(Screen screen){
+    public static void enable(GenericContainerScreen screen){
         if(!enabled){
             NetworkRelaySolver.screen=screen;
             //NETWORK_RELAY_SOLVER_SCREEN.enable(screen);

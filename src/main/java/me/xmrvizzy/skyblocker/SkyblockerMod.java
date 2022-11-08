@@ -7,6 +7,7 @@ import java.util.List;
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
 import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay;
 import me.xmrvizzy.skyblocker.skyblock.HotbarSlotLock;
+import me.xmrvizzy.skyblocker.skyblock.SoundPrinter;
 import me.xmrvizzy.skyblocker.skyblock.commands.SkyblockerDebugCLI;
 import me.xmrvizzy.skyblocker.skyblock.commands.SkyblockerWaypointCLI;
 import me.xmrvizzy.skyblocker.skyblock.dungeon.DungeonBlaze;
@@ -83,10 +84,21 @@ public class SkyblockerMod implements ClientModInitializer {
 			}catch(Exception e) {
 				// do nothing :))
 			}
+			if(Utils.isSkyblock){
+				ContainerScreenSolverManager.tick(client.currentScreen);
+			}
 		if (TICKS % 20 == 0) {
-			if (client.world != null && (!client.isInSingleplayer()||SkyblockerConfig.get().debug.forceSkyblock))
+			if (client.world != null && (!client.isInSingleplayer()||SkyblockerConfig.get().debug.forceSkyblock)){
 				Utils.sbChecker();
 				WaypointList.checkCrystalHollowsLobby();
+				SoundPrinter.instance.check();
+			}
+			else if(client.isInSingleplayer()){
+				Utils.isHypixel=false;
+				Utils.isSkyblock=false;
+				Utils.isDungeons=false;
+				Utils.isInjected=false;
+			}
 			if(Utils.isSkyblock){
 				ContainerScreenSolverManager.screenChecker(client.currentScreen);
 				if(SkyblockerConfig.get().waypoint.autoClean){

@@ -150,6 +150,7 @@ public class SkyblockerConfig implements ConfigData {
     }
     public static class Solvers {
         public boolean networkRelaySolver = true;
+        public boolean expTableSolver = true;
     }
     public static class Messages {
         public boolean hideAbility = false;
@@ -169,6 +170,8 @@ public class SkyblockerConfig implements ConfigData {
         public boolean showInternalNameOnRightClick = false;
         public boolean debugPointingLocator = false;
         public boolean debugDistancedLocator = false;
+        public boolean debugExpTableSolver = false;
+        public boolean printSounds = false;
     }
 
     public static void init() {

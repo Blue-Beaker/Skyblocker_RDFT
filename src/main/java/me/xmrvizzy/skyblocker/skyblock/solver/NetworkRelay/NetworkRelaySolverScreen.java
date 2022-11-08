@@ -1,4 +1,4 @@
-package me.xmrvizzy.skyblocker.skyblock.solver;
+package me.xmrvizzy.skyblocker.skyblock.solver.NetworkRelay;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.GenericContainerScreen;
