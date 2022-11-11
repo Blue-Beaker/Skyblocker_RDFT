@@ -5,6 +5,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
@@ -207,11 +208,12 @@ public class SkyblockerWaypointCLI {
             float[] color = getColorFromContext(context);
             Waypoint waypoint = new Waypoint(pos,color);
             if(WaypointList.add(area, name, waypoint)){
-                context.getSource().sendFeedback(new LiteralText(String.format("Added waypoint \'%s\' at %d,%d,%d ",name, pos.getX(),pos.getY(),pos.getZ())).formatted(Formatting.GREEN)
-                .append(new LiteralText("[VIEW]").styled((style) -> {
-                    return style.withColor(Formatting.GREEN).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sbwp list")).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("/sbwp list")));
-                })));
-                if(area.startsWith("CH_") && SkyblockerConfig.get().waypoint.crystalHollowsWarning){
+                context.getSource().sendFeedback(
+                    SkyblockerWaypointCLI.addButtonsOnCreation(
+                        new LiteralText(String.format("Added waypoint \'%s\' at %d,%d,%d ",name, pos.getX(),pos.getY(),pos.getZ())).formatted(Formatting.GREEN),
+                    name,area,waypoint)
+                );
+                if(SkyblockerConfig.get().waypoint.crystalHollowsWarning && area.startsWith("CH_")){
                     context.getSource().sendFeedback(new LiteralText("Waypoints in CrystalHollows are separated by lobbies. However you can create static waypoints by using ").formatted(Formatting.AQUA)
                     .append(new LiteralText("/sbwp area CrystalHollows add (name) [X Y Z]").formatted(Formatting.GOLD).append("\nThis message only shows once unless you re-enable it in config.")));
                     SkyblockerConfig.get().waypoint.crystalHollowsWarning=false;
@@ -359,5 +361,24 @@ public class SkyblockerWaypointCLI {
         context.getSource().sendFeedback(new LiteralText("Removed closed lobbies:"+WaypointList.removeClosedLobby().toString()).formatted(Formatting.GREEN));
         return 1;
     }
-
+    public static MutableText addButtonsOnCreation(MutableText text,String name,String area,Waypoint waypoint){
+        return addButtons(
+            text.append(new LiteralText("[VIEW]").styled((style) -> {
+                return style.withColor(Formatting.GREEN).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sbwp list")).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("/sbwp list")));
+            })), name, area, waypoint);
+    }
+    public static MutableText addButtons(MutableText text,String name,String area,Waypoint waypoint){
+        float[] color = waypoint.color;
+        int[] pos = waypoint.pos;
+        return text
+        .append(new LiteralText("[COLOR]").styled((style) -> {
+            return style.withColor(Formatting.BLUE).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, String.format("/sbwp area %s color %s %.2f %.2f %.2f",StringUtils.addQuotesIfNeeded(area),StringUtils.addQuotesIfNeeded(name),color[0],color[1],color[2]))).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("/sbwp color '"+name+"' (R G B)")));
+        }))
+        .append(new LiteralText("[SHARE]").styled((style) -> {
+            return style.withColor(Formatting.AQUA).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, String.format("%s %d %d %d", name,pos[0],pos[1],pos[2]))).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Share this in the chat!")));
+        }))
+        .append(new LiteralText("[REMOVE]").styled((style) -> {
+            return style.withColor(Formatting.RED).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, String.format("/sbwp area %s remove %s",StringUtils.addQuotesIfNeeded(area),StringUtils.addQuotesIfNeeded(name)))).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("/sbwp remove '"+name+"'")));
+        }));
+    }
 }

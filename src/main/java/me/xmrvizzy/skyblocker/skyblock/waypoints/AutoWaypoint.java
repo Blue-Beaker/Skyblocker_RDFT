@@ -3,6 +3,7 @@ package me.xmrvizzy.skyblocker.skyblock.waypoints;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import me.xmrvizzy.skyblocker.skyblock.commands.SkyblockerWaypointCLI;
 import me.xmrvizzy.skyblocker.utils.Utils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.ClickEvent;
@@ -26,12 +27,12 @@ public class AutoWaypoint {
         if(LOCATIONS.containsKey(subLocation)){
             if(WaypointList.get(Utils.getLobbyAutoCH())==null || WaypointList.get(Utils.getLobbyAutoCH()).get(subLocation)==null){
                 MinecraftClient client = MinecraftClient.getInstance();
-                Waypoint waypint = new Waypoint(client.player.getBlockPos(),LOCATIONS.get(subLocation));
-                WaypointList.add(subLocation, waypint);
-                client.player.sendMessage(new LiteralText(String.format("[Skyblocker] Added %s at (%d,%d,%d) ",subLocation,waypint.getX(),waypint.getY(),waypint.getZ())).formatted(Formatting.AQUA)
-                .append(new LiteralText("[VIEW]").styled((style) -> {
-                    return style.withColor(Formatting.GREEN).withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sbwp list")).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("/sbwp list")));
-                })), false);
+                Waypoint waypoint = new Waypoint(client.player.getBlockPos(),LOCATIONS.get(subLocation));
+                WaypointList.add(subLocation, waypoint);
+                client.player.sendMessage(
+                    SkyblockerWaypointCLI.addButtonsOnCreation(new LiteralText(String.format("[Skyblocker] Added %s at (%d,%d,%d) ",subLocation,waypoint.getX(),waypoint.getY(),waypoint.getZ())).formatted(Formatting.AQUA),
+                    subLocation,Utils.getLobbyAutoCH(),waypoint), 
+                false);
             }
         }
     }

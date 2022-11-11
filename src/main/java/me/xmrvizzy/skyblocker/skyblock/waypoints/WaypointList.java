@@ -125,6 +125,7 @@ public class WaypointList {
             list.remove(lobby);
             crystalHollowsTime.remove(lobby);
         }
+        WaypointStorage.storeJsonFile();
         return removeList;
     }
 }
