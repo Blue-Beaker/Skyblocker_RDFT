@@ -13,6 +13,7 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerListener;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.LiteralText;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.collection.DefaultedList;
 
 public class ExpTableScreenListener implements ScreenHandlerListener{
@@ -29,18 +30,15 @@ public class ExpTableScreenListener implements ScreenHandlerListener{
             screen.getScreenHandler().addListener(this);
             if(SkyblockerConfig.get().debug.debugExpTableSolver)
             client.player.sendMessage(new LiteralText("ExpTableListener added for ").append(screen.getTitle()), false);
-            if(screen.getTitle().getString().startsWith("Chronomatron (")){
-                ChronomatronSolver.instance.enable();
-            }
             enabled=true;
         }
     }
     public void disable(){
         if(enabled){
             this.screen.getScreenHandler().removeListener(this);
-            ChronomatronSolver.instance.disable();
             if(SkyblockerConfig.get().debug.debugExpTableSolver)
             client.player.sendMessage(new LiteralText("ExpTableListener stopped for ").append(screen.getTitle()), false);
+            ChronomatronSolver.instance.disable();
             enabled=false;
         }
     }
@@ -53,6 +51,7 @@ public class ExpTableScreenListener implements ScreenHandlerListener{
     @Override
     public void onSlotUpdate(ScreenHandler handler, int slotId, ItemStack stack) {
         String id = ItemUtils.getId(stack);
+        if(SkyblockerConfig.get().debug.debugExpTableSolver)
         client.player.sendMessage(new LiteralText(id+slotId), false);
         if(id==null) return;
         Slot slot = handler.slots.get(slotId);
@@ -77,12 +76,16 @@ public class ExpTableScreenListener implements ScreenHandlerListener{
         ItemStack indicatorItem = handler.slots.get(handler.slots.size()-41).getStack();
         if(indicatorItem.isEmpty()) return;
         String id = ItemUtils.getId(indicatorItem);
-        if(SkyblockerConfig.get().debug.debugExpTableSolver)
-        client.player.sendMessage(new LiteralText(id), false);
+        //if(SkyblockerConfig.get().debug.debugExpTableSolver)
+        //client.player.sendMessage(new LiteralText(id), false);
         if(id.equals("glowstone")){
             update=true;
+            if(screen.getTitle().getString().startsWith("Chronomatron (")){
+                ChronomatronSolver.instance.enable();
+            }
         }else{
             update=false;
+            ChronomatronSolver.instance.disable();
         }
     }
 }

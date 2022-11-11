@@ -36,6 +36,7 @@ public class PotionOverlay {
         ROMAN_NUMERALS.put(" X", "10");
 
         POTION_TYPES.put("Healing", StatIcons.HEALTH);
+        POTION_TYPES.put("Health Potion", StatIcons.HEALTH);
         POTION_TYPES.put("Damage", new LiteralText("❤-").formatted(Formatting.DARK_RED));
         POTION_TYPES.put("Poison", new LiteralText("❤-").formatted(Formatting.DARK_GREEN));
         POTION_TYPES.put("Regeneration", StatIcons.HEALTH_REGEN);
@@ -112,7 +113,7 @@ public class PotionOverlay {
     }
     public static String getLevel(String name){
         for(String str:ROMAN_NUMERALS.keySet()){
-            if(name.replace(" Potion", "").endsWith(str))
+            if(name.replace(" Splash Potion", "").replace(" Potion", "").endsWith(str))
             return ROMAN_NUMERALS.get(str);
         }
         return null;
