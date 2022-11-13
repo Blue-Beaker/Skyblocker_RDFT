@@ -168,6 +168,7 @@ public class SkyblockerConfig implements ConfigData {
         public boolean chatCoords = true;
     }
     public static class Network {
+        @ConfigEntry.Gui.PrefixText
         public Type proxyType = Type.DIRECT;
         public String proxyAddress = "";
         public int proxyPort = 8080;
