@@ -13,11 +13,15 @@ import me.xmrvizzy.skyblocker.utils.Utils;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.toast.Toast;
+import net.minecraft.client.toast.ToastManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
 import org.lwjgl.glfw.GLFW;
 
@@ -32,12 +36,14 @@ import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.Proxy.Type;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class WikiLookup {
+    private static ExecutorService pool = Executors.newSingleThreadExecutor();
     public static KeyBinding wikiLookup;
     public static KeyBinding wikiLookupOfficial;
     static MinecraftClient client = MinecraftClient.getInstance();
-    static String id;
     public static Gson gson = new Gson();
 
     public static void init(){
@@ -59,18 +65,28 @@ public class WikiLookup {
         //Grabbing the skyblock NBT data
         ItemStack selectedStack = slot.getStack();
         CompoundTag nbt = selectedStack.getSubTag("ExtraAttributes");
+        String id = null;
         if (nbt != null) {
             id = nbt.getString("id");
         }
         return id;
     }
 
-    public static void openWiki(Slot slot){
-        openWiki(slot, false);
-    }
     public static void openWiki(Slot slot, Boolean official){
+        pool.execute(new Runnable() {
+            @Override
+            public void run() {
+                openWikiOriginal(slot, official);
+            }
+        });
+    }
+    public static void openWikiOriginal(Slot slot, Boolean official){
         if (Utils.isSkyblock){
-            id = getSkyblockId(slot);
+            String id = getSkyblockId(slot);
+            if(id==null){
+                client.player.sendMessage(new LiteralText("Not a skyblock Item!").formatted(Formatting.RED), false);
+                return;
+            }
             int index;
             if(official)index=1;
             else index=0;
@@ -113,7 +129,7 @@ public class WikiLookup {
     }
     public static void openWikiOfficial(Slot slot){
         if (Utils.isSkyblock){
-            id = getSkyblockId(slot);
+            String id = getSkyblockId(slot);
             client.player.sendChatMessage("/wiki "+id);
         }
     }

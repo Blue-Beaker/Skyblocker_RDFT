@@ -26,7 +26,7 @@ public abstract class HandledScreenMixin extends Screen {
     public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (this.focusedSlot != null){
             if (keyCode != 256 && !this.client.options.keyInventory.matchesKey(keyCode, scanCode)){
-                if (WikiLookup.wikiLookup.matchesKey(keyCode, scanCode)) WikiLookup.openWiki(this.focusedSlot);
+                if (WikiLookup.wikiLookup.matchesKey(keyCode, scanCode)) WikiLookup.openWiki(this.focusedSlot,false);
                 if (WikiLookup.wikiLookupOfficial.matchesKey(keyCode, scanCode)) WikiLookup.openWiki(this.focusedSlot,true);
             }
         }
