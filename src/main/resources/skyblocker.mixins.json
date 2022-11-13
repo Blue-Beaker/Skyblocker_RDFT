@@ -9,6 +9,7 @@
     "ClientPlayNetworkHandlerMixin",
     "EntityMixin",
     "PlayerEntityMixin",
+    "HandledScreenMixin",
     "InGameHudMixin",
     "ItemRendererMixin",
     "FarmlandBlockMixin",

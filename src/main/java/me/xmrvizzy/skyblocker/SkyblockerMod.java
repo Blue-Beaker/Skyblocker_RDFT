@@ -11,6 +11,7 @@ import me.xmrvizzy.skyblocker.skyblock.SoundPrinter;
 import me.xmrvizzy.skyblocker.skyblock.commands.SkyblockerDebugCLI;
 import me.xmrvizzy.skyblocker.skyblock.commands.SkyblockerWaypointCLI;
 import me.xmrvizzy.skyblocker.skyblock.dungeon.DungeonBlaze;
+import me.xmrvizzy.skyblocker.skyblock.item.WikiLookup;
 import me.xmrvizzy.skyblocker.utils.Utils;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
@@ -37,6 +38,7 @@ public class SkyblockerMod implements ClientModInitializer {
 		PointedLocator.init();
 		CooldownDisplay.init();
 		AutoWaypoint.init();
+		WikiLookup.init();
 		configDir.toFile().mkdirs();
 		WaypointStorage.readJsonFile();
         new SkyblockerWaypointCLI(ClientCommandManager.DISPATCHER);

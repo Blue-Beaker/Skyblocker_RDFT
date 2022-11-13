@@ -6,6 +6,7 @@ import me.sargunvohra.mcmods.autoconfig1u.annotation.Config;
 import me.sargunvohra.mcmods.autoconfig1u.annotation.ConfigEntry;
 import me.sargunvohra.mcmods.autoconfig1u.serializer.GsonConfigSerializer;
 
+import java.net.Proxy.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,10 @@ public class SkyblockerConfig implements ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     public Solvers solvers = new Solvers();
     
+    @ConfigEntry.Category("network")
+    @ConfigEntry.Gui.TransitiveObject
+    public Network network = new Network();
+
     @ConfigEntry.Category("debug")
     @ConfigEntry.Gui.TransitiveObject
     public Debug debug = new Debug();
@@ -161,6 +166,11 @@ public class SkyblockerConfig implements ConfigData {
         public boolean hideImplosion = false;
         public boolean hideMoltenWave = false;
         public boolean chatCoords = true;
+    }
+    public static class Network {
+        public Type proxyType = Type.DIRECT;
+        public String proxyAddress = "";
+        public int proxyPort = 8080;
     }
     public static class Debug {
         public boolean forceSkyblock = false;

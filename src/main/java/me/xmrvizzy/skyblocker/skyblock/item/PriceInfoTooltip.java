@@ -5,10 +5,12 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
@@ -35,6 +37,7 @@ import com.google.gson.JsonPrimitive;
 import me.xmrvizzy.skyblocker.SkyblockerMod;
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig.General;
+import me.xmrvizzy.skyblocker.utils.NetworkUtils;
 
 public class PriceInfoTooltip {
     private JsonObject auctionPricesJson = null;
@@ -135,10 +138,11 @@ public class PriceInfoTooltip {
         }
         
     }
-    
     private static void downloadUsingStream(String urlStr, String file) throws IOException{
         URL url = new URL(urlStr);
-        BufferedInputStream bis = new BufferedInputStream(url.openStream());
+        URLConnection request = url.openConnection(NetworkUtils.proxy());
+        request.connect();
+        BufferedInputStream bis = new BufferedInputStream((InputStream) request.getContent());
         FileOutputStream fis = new FileOutputStream(file);
         byte[] buffer = new byte[1024];
         int count=0;
