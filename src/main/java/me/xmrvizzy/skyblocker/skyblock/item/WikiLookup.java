@@ -4,6 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.stream.JsonReader;
 
 import me.xmrvizzy.skyblocker.utils.NetworkUtils;
 import me.xmrvizzy.skyblocker.utils.Utils;
@@ -18,9 +21,13 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 import org.lwjgl.glfw.GLFW;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
@@ -74,9 +81,22 @@ public class WikiLookup {
                 URLConnection request = url.openConnection(NetworkUtils.proxy());
                 request.connect();
 
-                //yoinking the wiki link
-                JsonElement root = JsonParser.parseReader(new InputStreamReader((InputStream) request.getContent()));
-                JsonObject rootobj = root.getAsJsonObject();
+                //yoinking the wiki link]
+                int length = request.getContentLength();
+                StringBuffer buffer = new StringBuffer(length);
+                BufferedInputStream reader = new BufferedInputStream((InputStream)request.getContent());
+                /* 
+                for(int i=0;i<length;i++){
+                    buffer.append((char)reader.read());
+                }
+                reader.close();*/
+                String jsonString = String.valueOf(buffer);
+                JsonObject rootobj;
+                try{
+                    rootobj = JsonParser.parseReader(new JsonReader(new InputStreamReader((InputStream)request.getContent()))).getAsJsonObject();
+                }catch(NoSuchMethodError e){
+                    rootobj = new JsonParser().parse(new JsonReader(new InputStreamReader((InputStream)request.getContent()))).getAsJsonObject();
+                }
                 String wikiLink = rootobj.getAsJsonArray("info").get(index).getAsString();
                 Util.getOperatingSystem().open(wikiLink);
             } catch (IOException | NullPointerException | IllegalStateException e) {

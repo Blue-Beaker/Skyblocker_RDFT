@@ -22,7 +22,7 @@ public abstract class HandledScreenMixin extends Screen {
     @Shadow protected int backgroundHeight;
     @Shadow
     @Nullable protected Slot focusedSlot;
-    @Inject(at = @At("HEAD"), method = "keyPressed", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "keyPressed(III)Z", cancellable = true)
     public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (this.focusedSlot != null){
             if (keyCode != 256 && !this.client.options.keyInventory.matchesKey(keyCode, scanCode)){
