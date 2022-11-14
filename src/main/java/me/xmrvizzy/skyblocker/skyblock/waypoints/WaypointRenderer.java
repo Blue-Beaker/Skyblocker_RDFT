@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.Vec3d;
 
 public class WaypointRenderer {
     static boolean renderHooked = false;
@@ -38,11 +39,17 @@ public class WaypointRenderer {
             for(String name : WaypointList.get(area).keySet()){
                 Waypoint waypoint = WaypointList.get(area).get(name);
                 //Locator.drawLineEnds(target, new Vec3d(client.player.getX(),client.player.getEyeY(),client.player.getZ()), 0.0f,0.0f,1.0f,1.0f);
-                GL11.glDisable(GL11.GL_DEPTH_TEST);
+                Vec3d cameraPos = client.gameRenderer.getCamera().getPos();
                 Double distance = Math.sqrt(waypoint.getBlockPos().getSquaredDistance(client.player.getPos(), false));
-                Double cameraDistance = Math.sqrt(waypoint.getCenterPos().squaredDistanceTo(client.cameraEntity.getCameraPosVec(0)));
+                Double cameraDistance = Math.sqrt(waypoint.getCenterPos().squaredDistanceTo(cameraPos));
+                Vec3d direction = waypoint.getCenterPos().subtract(cameraPos).normalize().multiply(10.0);
+                Vec3d renderPos;
+                if(cameraDistance>10.0)renderPos = direction.add(cameraPos);
+                else renderPos=waypoint.getCenterPos();
+                Double renderSize = Math.min(cameraDistance,10.0)*SkyblockerConfig.get().waypoint.labelSize;
+                GL11.glDisable(GL11.GL_DEPTH_TEST);
                 RenderUtils.drawOutlineBox(waypoint.getBlockPos(), waypoint.color[0], waypoint.color[1], waypoint.color[2],1.0f, SkyblockerConfig.get().waypoint.outlineWidth);
-                RenderUtilsLiving.drawTextColored(matrices, String.format("%s[%.0fm]", name,distance), waypoint.getX()+0.5, waypoint.getY()+0.5, waypoint.getZ()+0.5, cameraDistance*SkyblockerConfig.get().waypoint.labelSize, waypoint.color[0], waypoint.color[1], waypoint.color[2], 1.0f);
+                RenderUtilsLiving.drawTextColored(matrices, String.format("%s[%.0fm]", name,distance), renderPos.x,renderPos.y,renderPos.z, renderSize, waypoint.color[0], waypoint.color[1], waypoint.color[2], 1.0f);
                 GL11.glEnable(GL11.GL_DEPTH_TEST);
                 for(double[] line : waypoint.locatorLines){
                     PointedLocator.drawLine(line, waypoint.color[0], waypoint.color[1], waypoint.color[2], SkyblockerConfig.get().waypoint.lineWidth);

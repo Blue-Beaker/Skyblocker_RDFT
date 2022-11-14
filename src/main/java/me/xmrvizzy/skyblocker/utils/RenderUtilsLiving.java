@@ -21,6 +21,7 @@ package me.xmrvizzy.skyblocker.utils;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.VertexFormats;
@@ -32,7 +33,10 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Matrix4f;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
@@ -127,6 +131,26 @@ public class RenderUtilsLiving {
         GL11.glEnable(GL11.GL_BLEND);
         GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 
+    }    public static void glSetupNoDepth(double x, double y, double z) {
+        GL11.glPushMatrix();
+        RenderUtils.offsetRender();
+        GL11.glTranslated(x, y, z);
+        GL11.glNormal3f(0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(-mc.player.yaw, 0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(mc.player.pitch, 1.0F, 0.0F, 0.0F);
+        //GL11.glDisable(GL11.GL_LIGHTING);
+        //GL11.glDisable(GL11.GL_DEPTH_TEST);
+
+        GL11.glEnable(GL11.GL_BLEND);
+        GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+
+    }
+    public static void glCleanupNoDepth() {
+        //GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        //GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glPopMatrix();
     }
     public static void glCleanup() {
         //GL11.glEnable(GL11.GL_LIGHTING);
@@ -136,7 +160,7 @@ public class RenderUtilsLiving {
         GL11.glPopMatrix();
     }
     public static void drawTextColored(MatrixStack matrices,String str, double x, double y, double z, double scale, float red, float green, float blue,float transparency) {
-        glSetup(x, y, z);
+        glSetupNoDepth(x, y, z);
 
         GL11.glScaled(-0.025 * scale, -0.025 * scale, 0.025 * scale);
 
@@ -159,9 +183,17 @@ public class RenderUtilsLiving {
         int colorT = Math.round(transparency*255);
         int color = colorT*16777216+Math.round(colorR*65536+colorG*256+colorB);
         //mc.textRenderer.draw(matrices, str, -i, 0, color);
-        VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
-        mc.textRenderer.draw(str, -i, 0f, color, false, matrices.peek().getModel(), immediate, true, bgT*16777216, 15728880);
+        VertexConsumerProvider.Immediate immediate = mc.getBufferBuilders().getEntityVertexConsumers();
+        //VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
+        mc.textRenderer.draw(new LiteralText(str), -i, 0f, color, false, (Matrix4f)matrices.peek().getModel(), immediate, true, bgT*16777216, LightmapTextureManager.pack(15,15));
         immediate.draw();
-        glCleanup();
+        glCleanupNoDepth();
+    }
+    public static Integer getColor(float r, float g, float b, float a){
+        int colorR = Math.round(r*255);
+        int colorG = Math.round(g*255);
+        int colorB = Math.round(b*255);
+        int colorT = Math.round(a*255);
+        return colorT*16777216+Math.round(colorR*65536+colorG*256+colorB);
     }
 }

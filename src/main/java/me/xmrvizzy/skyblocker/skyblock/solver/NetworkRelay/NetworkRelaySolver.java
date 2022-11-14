@@ -38,6 +38,7 @@ public class NetworkRelaySolver{
     public static void onSoundPlayed(SoundInstance sound, WeightedSoundSet soundSet) {
         if(client.world!=null){
             String name = sound.getId().toString();
+            if("minecraft:block.fire.ambient".equals(name)) return;
             Float pitch = sound.getPitch();
             client.player.sendMessage(new LiteralText(String.format("%.3f %s", pitch,name)).formatted(Formatting.AQUA), false);
         }
