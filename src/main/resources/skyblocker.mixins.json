@@ -15,7 +15,8 @@
     "FarmlandBlockMixin",
     "MinecraftClientMixin",
     "MixinParticleManager",
-    "PlayerListHudAccessor"
+    "PlayerListHudAccessor",
+    "PlayerListHudMixin"
 
   ],
   "injectors": {

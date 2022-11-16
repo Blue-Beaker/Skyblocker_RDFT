@@ -55,12 +55,22 @@ public class SkyblockerConfig implements ConfigData {
         public boolean cooldownDisplay = true;
         public boolean readableBazaarGraphs = false;
 
+        @ConfigEntry.Category("tabList")
+        @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+        public TabList tabList = new TabList();
+
         @ConfigEntry.Category("bars")
         @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
         public Bars bars = new Bars();
 
         @ConfigEntry.Gui.Excluded
         public List<Integer> lockedSlots = new ArrayList<>();
+    }
+
+    public static class TabList {
+        @ConfigEntry.Gui.PrefixText
+        public float tabSize = 1.0F;
+        public boolean hideStatus = true;
     }
 
     public static class Bars {
