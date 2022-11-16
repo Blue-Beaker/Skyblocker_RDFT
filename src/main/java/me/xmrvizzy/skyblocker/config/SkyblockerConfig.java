@@ -184,6 +184,7 @@ public class SkyblockerConfig implements ConfigData {
         public int proxyPort = 8080;
     }
     public static class Debug {
+        @ConfigEntry.Gui.PrefixText
         public boolean forceSkyblock = false;
         public boolean forceDungeons = false;
         public String forceArea = "CrystalHollows";

@@ -84,6 +84,7 @@
   "text.autoconfig.skyblocker.option.debug.showInternalNameOnRightClick": "Show Internal Names on Right Click",
   "text.autoconfig.skyblocker.option.debug.debugPointingLocator": "Debug Compass/Spade Locators",
   "text.autoconfig.skyblocker.option.debug.debugDistancedLocator": "Debug Metal Locator",
+  "text.autoconfig.skyblocker.option.debug.forceSkyblock.@PrefixText": "These features are meant for debug, not for normal playing. Only use these when you know what you are doing.",
   "text.autoconfig.skyblocker.option.debug.forceSkyblock": "Force everywhere as Skyblock for debug",
   "text.autoconfig.skyblocker.option.debug.forceDungeons": "Force dungeons (only when force skyblock is on)",
   "text.autoconfig.skyblocker.option.debug.forceArea": "Force area (only when force skyblock is on)",
@@ -96,5 +97,6 @@
   "text.autoconfig.skyblocker.option.network.proxyPort": "Proxy port",
 
   "text.autoconfig.skyblocker.category.solvers": "Solvers",
-  "text.autoconfig.skyblocker.option.solvers.networkRelaySolver": "9f™ Network Relay solver"
+  "text.autoconfig.skyblocker.option.solvers.networkRelaySolver": "9f™ Network Relay solver(ALPHA)",
+  "text.autoconfig.skyblocker.option.solvers.expTableSolver": "Experiment Table solver(UNCOMPLETED)"
 }
