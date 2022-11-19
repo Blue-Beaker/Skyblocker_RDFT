@@ -1,9 +1,11 @@
 package me.xmrvizzy.skyblocker.mixin;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,6 +31,16 @@ public class MixinParticleManager {
 		    //MinecraftClient client = MinecraftClient.getInstance();
             PointedLocator.spadeParticleList.add(particlePos);
             //client.player.sendMessage(Text.of(""+x+","+y+","+z), false);
+        }
+        if (SkyblockerConfig.get().locations.events.ancestorSpadeLocator && PointedLocator.spadeLocator>0 && parameters.getType().equals(ParticleTypes.FIREWORK)){
+            Vec3d particlePos = new Vec3d(x,y,z);
+		    //MinecraftClient client = MinecraftClient.getInstance();
+            PointedLocator.spadeParticleList2.add(particlePos);
+            //client.player.sendMessage(Text.of(""+x+","+y+","+z), false);
+        }
+        if (SkyblockerConfig.get().debug.printParticles){
+            MinecraftClient client = MinecraftClient.getInstance();
+            client.player.sendMessage(Text.of(""+x+","+y+","+z+parameters.getType().toString()), false);
         }
     }
 }

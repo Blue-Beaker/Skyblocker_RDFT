@@ -39,6 +39,7 @@ public class PointedLocator {
     public static int spadeLocator = 0;
     public static ArrayList<Vec3d> compassParticleList = new ArrayList<Vec3d>();
     public static ArrayList<Vec3d> spadeParticleList = new ArrayList<Vec3d>();
+    public static ArrayList<Vec3d> spadeParticleList2 = new ArrayList<Vec3d>();
     static int locationOnLastCompassUse = 0;
     static double[] currentLine = {0.0,0.0,0.0,0.0};
     static boolean hasCurrentLine = false;
@@ -79,7 +80,7 @@ public class PointedLocator {
         else if(SkyblockerConfig.get().locations.events.ancestorSpadeLocator && "ANCESTRAL_SPADE".equals(skyblockId)){
             spadeParticleList.clear();
             locationOnLastCompassUse=LOCATION_BURROW;
-            spadeLocator = 20;
+            spadeLocator = 60;
             String targetName = LOCATION_NAMES[locationOnLastCompassUse];
             client.player.sendMessage(new LiteralText("[Skyblocker] Started Locating "+targetName).formatted(Formatting.AQUA), false);
         }
@@ -91,7 +92,16 @@ public class PointedLocator {
         if(compassLocator >0){compassLocator--;}
         if(compassLocator == 1){calculateLine(removeDuplicatedPoints(compassParticleList));}
         if(spadeLocator >0){spadeLocator--;}
-        if(spadeLocator == 1){calculateLine(removeDuplicatedPoints(spadeParticleList));}
+        if(spadeLocator == 1){
+            ArrayList<Vec3d> list1 = removeDuplicatedPoints(spadeParticleList);
+            ArrayList<Vec3d> list2 = removeDuplicatedPoints(spadeParticleList2);
+            for(Vec3d pos:list1){
+                if(!list2.contains(pos)){
+                    list1.remove(pos);
+                }
+            }
+            calculateLine(list1);
+        }
         try{
             if(!renderHooked){
                 WorldRenderEvents.END.register(PointedLocator::lineRenderer);

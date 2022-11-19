@@ -194,6 +194,7 @@ public class SkyblockerConfig implements ConfigData {
         public boolean debugDistancedLocator = false;
         public boolean debugExpTableSolver = false;
         public boolean printSounds = false;
+        public boolean printParticles = false;
     }
 
     public static void init() {
