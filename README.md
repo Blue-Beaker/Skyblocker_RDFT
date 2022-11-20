@@ -1,4 +1,4 @@
-## Skyblocker-RDFT
+# Skyblocker-RDFT
 #### Skyblocker-RanDom FeaTures
 ----
 A Fork of [a Hypixel Skyblock Mod](https://github.com/Kraineff/Skyblocker) with random new features from its forks and me.  
@@ -26,7 +26,8 @@ For 1.17+, use [Skyblocker-LIAP](https://modrinth.com/mod/skyblocker-liap) inste
 - Configureable position and size for dungeon map
 - Waypoints feature optimized for skyblock
 - Add coords from chat to waypoints quickly
-- Wishing compass and Ancestral spade locator(Alpha but usable)
+- Wishing compass and Ancestral spade locator(Alpha but usable)  
+######    Andestral spade locator is inaccurate because the spade draws curves instead of lines. However this can still be useful for digging multiple burrow chains at the same time.
 - Display HotM perk level as count
 - Hide spamming messages when mining in unbreakable area in crystal hollows
 - 1.8 Player hitbox
