@@ -95,12 +95,16 @@ public class PointedLocator {
         if(spadeLocator == 1){
             ArrayList<Vec3d> list1 = removeDuplicatedPoints(spadeParticleList);
             ArrayList<Vec3d> list2 = removeDuplicatedPoints(spadeParticleList2);
+            ArrayList<Vec3d> list3 = new ArrayList<Vec3d>();
+            list3.addAll(list1);
             for(Vec3d pos:list1){
                 if(!list2.contains(pos)){
-                    list1.remove(pos);
+                    list3.remove(pos);
                 }
             }
-            calculateLine(list1);
+            while(list3.size()>3)
+            list3.remove(0);
+            calculateLine(list3);
         }
         try{
             if(!renderHooked){
