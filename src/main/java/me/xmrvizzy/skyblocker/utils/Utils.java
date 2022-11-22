@@ -146,6 +146,7 @@ public class Utils {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.world == null) return lines;
         Collection<PlayerListEntry> players = tabList;
+        if (players == null) return lines;
         //Collection<PlayerListEntry> players = client.player.networkHandler.getPlayerList();
         for (PlayerListEntry player:players){
             if(player.getDisplayName()!=null){
