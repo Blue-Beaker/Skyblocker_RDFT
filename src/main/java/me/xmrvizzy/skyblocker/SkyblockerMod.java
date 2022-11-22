@@ -7,6 +7,7 @@ import java.util.List;
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
 import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay;
 import me.xmrvizzy.skyblocker.skyblock.HotbarSlotLock;
+import me.xmrvizzy.skyblocker.skyblock.SidebarDisplay;
 import me.xmrvizzy.skyblocker.skyblock.SoundPrinter;
 import me.xmrvizzy.skyblocker.skyblock.commands.SkyblockerDebugCLI;
 import me.xmrvizzy.skyblocker.skyblock.commands.SkyblockerWaypointCLI;
@@ -92,6 +93,7 @@ public class SkyblockerMod implements ClientModInitializer {
 		if (TICKS % 20 == 0) {
 			if (client.world != null && (!client.isInSingleplayer()||SkyblockerConfig.get().debug.forceSkyblock)){
 				Utils.sbChecker();
+				SidebarDisplay.tick();
 				WaypointList.checkCrystalHollowsLobby();
 				SoundPrinter.instance.check();
 			}

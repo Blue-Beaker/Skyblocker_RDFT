@@ -19,6 +19,9 @@
   "text.autoconfig.skyblocker.option.general.tabList.tabSize.@PrefixText": "Resize tab list in skyblock without changing Global GUI Scale",
   "text.autoconfig.skyblocker.option.general.tabList.tabSize": "Tab List Size (Relative, 1.0 for unchanged)",
   "text.autoconfig.skyblocker.option.general.tabList.hideStatus": "Hide connection status icon in skyblock",
+  "text.autoconfig.skyblocker.option.general.sidebar": "Sidebar Options",
+  "text.autoconfig.skyblocker.option.general.sidebar.spookyCandy": "Show Spooky Festival candy in sidebar",
+  "text.autoconfig.skyblocker.option.general.sidebar.lastCommission": "Show last commission in DM in sidebar",
 
   "text.autoconfig.skyblocker.category.waypoint": "Waypoint",
   "text.autoconfig.skyblocker.option.waypoint.lineWidth": "Waypoint ray width",

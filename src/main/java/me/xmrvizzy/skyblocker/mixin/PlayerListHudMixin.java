@@ -1,5 +1,7 @@
 package me.xmrvizzy.skyblocker.mixin;
 
+import java.util.List;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -15,6 +17,7 @@ import me.xmrvizzy.skyblocker.utils.Utils;
 import org.spongepowered.asm.mixin.injection.At;
 
 import net.minecraft.client.gui.hud.PlayerListHud;
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
@@ -45,5 +48,11 @@ public class PlayerListHudMixin {
         if(Utils.isSkyblock) this.size = SkyblockerConfig.get().general.tabList.tabSize;
         else this.size = 1.0F;
         return this.size;
+    }
+
+    @ModifyVariable(method = "render", at = @At("STORE"), ordinal = 0)
+    private List<PlayerListEntry> injected(List<PlayerListEntry> list) {
+        Utils.tabList = list;
+        return list;
     }
 }

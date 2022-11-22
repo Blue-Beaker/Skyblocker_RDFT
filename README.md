@@ -34,3 +34,4 @@ For 1.17+, use [Skyblocker-LIAP](https://modrinth.com/mod/skyblocker-liap) inste
 - Item corner marks for potion/book levels, prehistoric egg steps and some other items
 - Pickonimbus durability bar
 - Potion type overlay
+- Sidebar Display: Spooky festival candy, last commission on mining islands

@@ -59,6 +59,10 @@ public class SkyblockerConfig implements ConfigData {
         @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
         public TabList tabList = new TabList();
 
+        @ConfigEntry.Category("sidebar")
+        @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+        public Sidebar sidebar = new Sidebar();
+
         @ConfigEntry.Category("bars")
         @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
         public Bars bars = new Bars();
@@ -71,6 +75,11 @@ public class SkyblockerConfig implements ConfigData {
         @ConfigEntry.Gui.PrefixText
         public float tabSize = 1.0F;
         public boolean hideStatus = true;
+    }
+
+    public static class Sidebar {
+        public boolean spookyCandy = true;
+        public boolean lastCommission = true;
     }
 
     public static class Bars {

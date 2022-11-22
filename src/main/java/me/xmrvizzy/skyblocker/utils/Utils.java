@@ -2,21 +2,21 @@ package me.xmrvizzy.skyblocker.utils;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
+
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
 import me.xmrvizzy.skyblocker.mixin.PlayerListHudAccessor;
 import me.xmrvizzy.skyblocker.skyblock.Attribute;
 import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.AutoWaypoint;
-import me.xmrvizzy.skyblocker.skyblock.waypoints.WaypointList;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
-import net.minecraft.block.PlantBlock;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
+import net.minecraft.text.Text;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,8 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import javax.lang.model.util.ElementScanner6;
 
 public class Utils {
     public static boolean isSkyblock = false;
@@ -36,6 +34,7 @@ public class Utils {
     public static String serverId = "None";
     public static String subLocation = "None";
     static MinecraftClient client = MinecraftClient.getInstance();
+    public static List<PlayerListEntry> tabList = null;
     public static String parseActionBar(String msg) {
         String[] sections = msg.split(" {3,}");
         List<String> unused = new ArrayList<String>();
@@ -146,11 +145,28 @@ public class Utils {
         List<String> lines = new ArrayList<>();
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.world == null) return lines;
-        Collection<PlayerListEntry> players = client.player.networkHandler.getPlayerList();
+        Collection<PlayerListEntry> players = tabList;
+        //Collection<PlayerListEntry> players = client.player.networkHandler.getPlayerList();
         for (PlayerListEntry player:players){
             if(player.getDisplayName()!=null){
                 String line = player.getDisplayName().getString();
                 if(line.length()>0){
+                    lines.add(line);
+                }
+            }
+        }
+        return lines;
+    }
+    public static List<Text> getTabInfoText(){
+        List<Text> lines = new ArrayList<Text>();
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.world == null) return lines;
+        Collection<PlayerListEntry> players = tabList;
+        //Collection<PlayerListEntry> players = client.player.networkHandler.getPlayerList();
+        for (PlayerListEntry player:players){
+            if(player.getDisplayName()!=null){
+                Text line = player.getDisplayName();
+                if(line.getString().length()>0){
                     lines.add(line);
                 }
             }
