@@ -74,6 +74,11 @@ public class SkyblockerDebugCLI {
                     context.getSource().sendFeedback(new LiteralText(ItemUtils.getId(context.getSource().getPlayer().getMainHandStack())));
                     return 1;
                 }))
+                .then(literal("checkHotbar")
+                .executes(context -> {
+                    context.getSource().sendFeedback(new LiteralText(Utils.hasItemInHotbar.toString()));
+                    return 1;
+                }))
                 )
             .then(literal("server")
                 .then(literal("getTabInfo")

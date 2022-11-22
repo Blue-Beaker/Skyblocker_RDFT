@@ -21,6 +21,7 @@ import net.minecraft.text.Text;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -30,6 +31,11 @@ public class Utils {
     public static boolean isHypixel = false;
     public static boolean isDungeons = false;
     public static boolean isInjected = false;
+    public static HashMap<String,Boolean> hasItemInHotbar = new HashMap<String,Boolean>();
+    static{
+        hasItemInHotbar.put("FROZEN_SCYTHE", false);
+        hasItemInHotbar.put("CRYPT_DREADLORD_SWORD", false);
+    }
     public static String serverArea = "None";
     public static String serverId = "None";
     public static String subLocation = "None";
@@ -68,6 +74,7 @@ public class Utils {
     public static void sbChecker() {
         List<String> sidebar = getSidebar();
         String string = sidebar.toString();
+        hotbarChecker();
         if (SkyblockerConfig.get().debug.forceSkyblock){
             isSkyblock = true;
             isInjected = true;
@@ -227,5 +234,17 @@ public class Utils {
     }
     public static long getCrystalHollowsCloseTime(){
         return System.currentTimeMillis()/1000+18000-client.world.getTimeOfDay()/20;
+    }
+    public static void hotbarChecker(){
+        for(String id:hasItemInHotbar.keySet()){
+            Boolean exist = false;
+            for(int i=0;i<9;i++){
+                if(id.equals(PriceInfoTooltip.getInternalNameForItem(client.player.inventory.getStack(i)))){
+                    exist=true;
+                    break;
+                }
+            }
+            hasItemInHotbar.put(id, exist);
+        }
     }
 }

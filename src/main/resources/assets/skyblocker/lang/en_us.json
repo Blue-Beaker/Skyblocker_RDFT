@@ -72,6 +72,8 @@
   "text.autoconfig.skyblocker.option.items.potionOverlayLevels": "Potion Overlay show levels",
   "text.autoconfig.skyblocker.option.items.potionOverlayXPBoostTypes": "Show XP Boost types for potion overlay",
   "text.autoconfig.skyblocker.option.items.potionOverlayScale": "Potion Overlay Scale",
+  "text.autoconfig.skyblocker.option.items.hideParticleFrozenScythe": "Hide Frozen Scythe 'Spit' Particles",
+  "text.autoconfig.skyblocker.option.items.hideParticleDreadlord": "Hide Dreadlord Sword 'Smoke' Particles",
   "text.autoconfig.skyblocker.option.items.cornerMarks": "Item CornerMarks",
   "text.autoconfig.skyblocker.option.items.cornerMarks.markPosition": "CornerMark position",
   "text.autoconfig.skyblocker.option.items.cornerMarks.scale": "Scale",

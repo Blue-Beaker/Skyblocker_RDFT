@@ -98,11 +98,15 @@ public class SkyblockerConfig implements ConfigData {
         public boolean potionOverlay = true;
         public boolean potionOverlayLevels = false;
         public boolean potionOverlayXPBoostTypes = true;
+        public boolean hideParticleFrozenScythe = true;
+        public boolean hideParticleDreadlord = true;
         public float potionOverlayScale = 1f;
 
         @ConfigEntry.Category("cornerMarks")
         @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
         public CornerMarks cornerMarks = new CornerMarks();
+
+
     }
 
     public static class CornerMarks {
