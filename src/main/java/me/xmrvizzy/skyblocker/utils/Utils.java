@@ -175,10 +175,14 @@ public class Utils {
         return lines;
     }
     public static String getTabHeader(){
-        return ((PlayerListHudAccessor)client.inGameHud.getPlayerListHud()).getHeader().getString();
+        Text text = ((PlayerListHudAccessor)client.inGameHud.getPlayerListHud()).getHeader();
+        if(text!=null) return text.getString();
+        else return "";
     }
     public static String getTabFooter(){
-        return ((PlayerListHudAccessor)client.inGameHud.getPlayerListHud()).getFooter().getString();
+        Text text = ((PlayerListHudAccessor)client.inGameHud.getPlayerListHud()).getFooter();
+        if(text!=null) return text.getString();
+        else return "";
     }
     public static String getArea(List<String> tabLines){
         for(String line:tabLines){
