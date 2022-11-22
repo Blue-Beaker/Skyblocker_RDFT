@@ -71,6 +71,7 @@ public class SidebarDisplay {
     public static List<Text> getComms(){
         List<Text> comms = new ArrayList<Text>();
         List<Text> list = Utils.getTabInfoText();
+        if(list==null) return comms;
         Iterator<Text> it = list.iterator();
         while(it.hasNext()){
             Text line = it.next();

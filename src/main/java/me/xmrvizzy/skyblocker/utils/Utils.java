@@ -163,6 +163,7 @@ public class Utils {
         if (client.world == null) return lines;
         Collection<PlayerListEntry> players = tabList;
         //Collection<PlayerListEntry> players = client.player.networkHandler.getPlayerList();
+        if(players==null) return lines;
         for (PlayerListEntry player:players){
             if(player.getDisplayName()!=null){
                 Text line = player.getDisplayName();
