@@ -31,7 +31,10 @@ public class ItemCornerMark {
             }
         }else if(config.enchBookLevels && "enchanted_book".equals(id)){
             try{
-                return new LiteralText(sbid.split(";")[1]).setStyle(stack.getName().getStyle());
+                if(sbid.startsWith("ULTIMATE_"))
+                return new LiteralText(sbid.split(";")[1]).formatted(Formatting.LIGHT_PURPLE);
+                else
+                return new LiteralText(sbid.split(";")[1]).formatted(Formatting.WHITE);
             }catch(Exception e){
                 return null;
             }

@@ -37,6 +37,7 @@ import com.google.gson.JsonPrimitive;
 import me.xmrvizzy.skyblocker.SkyblockerMod;
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig.General;
+import me.xmrvizzy.skyblocker.utils.ItemUtils;
 import me.xmrvizzy.skyblocker.utils.NetworkUtils;
 
 public class PriceInfoTooltip {
@@ -48,7 +49,7 @@ public class PriceInfoTooltip {
         if(!SkyblockerConfig.get().items.priceInfoTooltip) return;
         String name = getInternalNameForItem(stack);
         try {
-            if(SkyblockerConfig.get().general.readableBazaarGraphs && stack.isItemEqual(Items.PAPER.getDefaultStack()) && list.toString().contains("·")){
+            if(SkyblockerConfig.get().general.readableBazaarGraphs && "paper".equals(ItemUtils.getId(stack)) && getInternalNameForItem(stack)==null){
                 readableBaaarGraphs(list);
             }
             if(!list.toString().contains("Avg. BIN Price") && prices.has(name) ){
@@ -156,9 +157,25 @@ public class PriceInfoTooltip {
     public static void readableBaaarGraphs(List<Text> list){
         for(int i=0; i<list.size();i++){
             Text line = list.get(i);
-            if(line.getString().contains("·")){
-                list.set(i, new LiteralText(line.getString().replace("·", "-").replace("+", "│")).setStyle(line.getStyle()));
+            replaceAllInText(line);
+            //if(line.getString().contains("·")){
+            //    list.set(i, new LiteralText(line.getString().replace("·", "-").replace("+", "│")).setStyle(line.getStyle()));
+            //}
+        }
+    }
+    public static Text replaceAllInText(Text line){
+        List<Text> texts = line.getSiblings();
+        if(texts.size()>0){
+            for(int j=0;j<texts.size();j++){
+                Text text = texts.get(j);
+                if(text.asString().contains("·")){
+                    texts.set(j, new LiteralText("-").setStyle(text.getStyle()));
+                }else if(text.asString().contains("+")){
+                    texts.set(j, new LiteralText("|").setStyle(text.getStyle()));
+                }
+                replaceAllInText(text);
             }
         }
+        return line;
     }
 }
