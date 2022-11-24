@@ -171,7 +171,7 @@ public class PriceInfoTooltip {
                 if(text.asString().contains("·")){
                     texts.set(j, new LiteralText("-").setStyle(text.getStyle()));
                 }else if(text.asString().contains("+")){
-                    texts.set(j, new LiteralText("|").setStyle(text.getStyle()));
+                    texts.set(j, new LiteralText("│").setStyle(text.getStyle()));
                 }
                 replaceAllInText(text);
             }
