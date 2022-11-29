@@ -88,7 +88,7 @@ public class AutoWaypoint {
             String[] sbeWaypoints = split1[1].split("\\\\n");
             for(String wp : sbeWaypoints){
                 try{
-                    String[] wpsplit = wp.split("@");
+                    String[] wpsplit = wp.split("@-");
                     finalText.append(addWaypointButton(wpsplit[0], wpsplit[1].replace(",", " ")));
                 }catch(IndexOutOfBoundsException e){
                 }
