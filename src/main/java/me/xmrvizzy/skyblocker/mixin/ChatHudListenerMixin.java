@@ -6,6 +6,7 @@ import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay.Ability;
 import me.xmrvizzy.skyblocker.skyblock.dungeon.DungeonPuzzles;
 import me.xmrvizzy.skyblocker.skyblock.dwarven.Fetchur;
 import me.xmrvizzy.skyblocker.skyblock.dwarven.Puzzler;
+import me.xmrvizzy.skyblocker.skyblock.waypoints.AutoWaypoint;
 import me.xmrvizzy.skyblocker.utils.Utils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHudListener;
@@ -128,29 +129,7 @@ public class ChatHudListenerMixin {
     public Text onMessage(Text message) {
         Text finalText = message;
         if(SkyblockerConfig.get().messages.chatCoords){
-            String msg = message.getString();
-            Pattern coordsPattern = Pattern.compile("([0-9]+ [0-9]+ [0-9]+)");
-            Matcher coordsMatcher = coordsPattern.matcher(msg);
-            if(coordsMatcher.find()){
-                String coords = coordsMatcher.group(1);
-                Pattern namePattern = Pattern.compile("(temple|odawa|key guardian|divan|corleone|city|lpc|king|queen|bal|Khazad|grotto)",Pattern.CASE_INSENSITIVE);
-                Matcher nameMatcher = namePattern.matcher(msg);
-                MutableText addWaypointButton;
-                if(nameMatcher.find()){
-                    String name = nameMatcher.group(1);
-                    String command = String.format("/sbwp add '%s' %s", name,coords);
-                    addWaypointButton = new LiteralText(" [Add Waypoint "+name+"]").styled((style) -> {
-                        return style.withColor(Formatting.GREEN).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,command )).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(command)));
-                    });
-                }
-                else{
-                    String command = String.format("/sbwp add '%s' %s", "name",coords);
-                    addWaypointButton = new LiteralText(" [Add Waypoint]").styled((style) -> {
-                        return style.withColor(Formatting.GREEN).withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,command )).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(command)));
-                    });
-                }
-                finalText = message.shallowCopy().append(addWaypointButton);
-            }
+            finalText=AutoWaypoint.chatCoords((MutableText)message);
         }
         return finalText;
     }

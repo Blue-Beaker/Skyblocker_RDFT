@@ -31,7 +31,7 @@ public class PointedLocator {
     static final int LOCATION_MITHRIL = 4;
     static final int LOCATION_PRECURSOR = 5;
     static final int LOCATION_BURROW = 6;
-    static final String[] LOCATION_NAMES = {"Nucleus","Khazad-dum","Temple/Odawa","King/Queen","Divan","City","Griffin Burrow"};
+    static final String[] LOCATION_NAMES = {"Nucleus","Khazad-dum","Temple/Odawa","King/Queen","Mines of Divan","Lost Precursor City","Griffin Burrow"};
     static final float[][] LOCATION_COLORS = {{1f,1f,1f},{1f,1f,0f},{0.5f,0f,1f},{1f,0.5f,0f},{0f,1f,0f},{0f,0f,1f},{1f,0.5f,0f}};
 
     static MinecraftClient client = MinecraftClient.getInstance();

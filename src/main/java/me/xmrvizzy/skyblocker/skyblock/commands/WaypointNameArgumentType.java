@@ -27,7 +27,7 @@ public class WaypointNameArgumentType implements ArgumentType<String> {
         try {
             area=context.getArgument("area", String.class);
         } catch (Exception e) {
-            area=Utils.serverArea;
+            area=Utils.getLobbyAutoCH();
         }
         try{
             return CommandSource.suggestMatching(StringUtils.addQuotesIfNeeded(WaypointList.get(area).keySet()), builder);

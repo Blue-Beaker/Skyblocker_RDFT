@@ -88,12 +88,12 @@ public class SkyblockerMod implements ClientModInitializer {
 				// do nothing :))
 			}
 			if(Utils.isSkyblock){
+				SidebarDisplay.tick();
 				ContainerScreenSolverManager.tick(client.currentScreen);
 			}
 		if (TICKS % 20 == 0) {
 			if (client.world != null && (!client.isInSingleplayer()||SkyblockerConfig.get().debug.forceSkyblock)){
 				Utils.sbChecker();
-				SidebarDisplay.tick();
 				WaypointList.checkCrystalHollowsLobby();
 				SoundPrinter.instance.check();
 			}
