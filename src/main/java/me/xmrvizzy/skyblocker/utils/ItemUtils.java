@@ -4,6 +4,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.registry.Registry;
 
@@ -61,5 +63,13 @@ public class ItemUtils {
     }
     public static String getId(ItemStack itemStack){
         return getId(itemStack.getItem());
+    }
+    public static ListTag getLore(ItemStack stack){
+        return stack.getTag().getCompound("display").getList("Lore", 8);
+    }
+    public static MutableText getLoreLine(ItemStack stack, int index){
+        ListTag listTag = getLore(stack);
+        String raw = listTag.getString(index);
+        return Text.Serializer.fromJson(raw);
     }
 }

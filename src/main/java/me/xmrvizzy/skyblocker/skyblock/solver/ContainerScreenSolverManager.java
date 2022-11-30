@@ -23,7 +23,11 @@ public class ContainerScreenSolverManager {
         if(Utils.isSkyblock && screen instanceof GenericContainerScreen){
             GenericContainerScreen containerScreen = (GenericContainerScreen)screen;
             String containerName = screen.getTitle().getString();
-            if(containerName==null) return;
+            if(containerName==null){
+                currentContainer="";
+                return;
+            }
+            currentContainer = containerName;
             if(SkyblockerConfig.get().solvers.networkRelaySolver && "9f™ Network Relay".equals(containerName)){
                 NetworkRelaySolver.enable(containerScreen);
             }
@@ -32,7 +36,6 @@ public class ContainerScreenSolverManager {
                 ExpTableScreenListener.instance.enable(containerScreen);
             }
             else ExpTableScreenListener.instance.disable();
-            currentContainer = containerName;
         }
         else{
             NetworkRelaySolver.disable();

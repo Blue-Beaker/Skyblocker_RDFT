@@ -5,7 +5,7 @@ import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig.CornerMarks.MarkPosition;
 import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay;
 import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay.Ability;
-import me.xmrvizzy.skyblocker.skyblock.dwarven.HotmLevel;
+import me.xmrvizzy.skyblocker.skyblock.dwarven.CustomCountLabel;
 import me.xmrvizzy.skyblocker.skyblock.item.ItemCornerMark;
 import me.xmrvizzy.skyblocker.skyblock.item.PotionOverlay;
 import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
@@ -116,13 +116,13 @@ public abstract class ItemRendererMixin {
 
     @Inject(method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V", at = @At("HEAD"))
     public void renderHotmPerkLevels(TextRenderer renderer, ItemStack stack, int x, int y, @Nullable String countLabel, CallbackInfo ci) {
-        int hotmLevel = HotmLevel.getLevel(stack);
-        if(hotmLevel>=1){
+        Text customLabel = CustomCountLabel.getLabel(stack);
+        if(customLabel!=null){
             MatrixStack matrixStack = new MatrixStack();
-            String string = String.valueOf(hotmLevel);
+            //String string = String.valueOf(customLabel);
             matrixStack.translate(0.0D, 0.0D, (double)(this.zOffset + 200.0F));
             VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
-            renderer.draw((String)string, (float)(x + 19 - 2 - renderer.getWidth(string)), (float)(y + 6 + 3), 16777215, true, matrixStack.peek().getModel(), immediate, false, 0, 15728880);
+            renderer.draw(customLabel, (float)(x + 19 - 2 - renderer.getWidth(customLabel)), (float)(y + 6 + 3), 16777215, true, matrixStack.peek().getModel(), immediate, false, 0, 15728880);
             immediate.draw();
         }
     }

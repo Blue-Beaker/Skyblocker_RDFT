@@ -158,6 +158,7 @@ public class SkyblockerConfig implements ConfigData {
     public static class UI {
         public boolean skillLevels = true;
         public boolean hotmPerkLevels = true;
+        public boolean sackItemCount = true;
     }
 
     public static class Dungeons {

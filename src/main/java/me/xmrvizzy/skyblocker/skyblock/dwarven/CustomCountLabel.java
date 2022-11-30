@@ -12,22 +12,27 @@ import me.xmrvizzy.skyblocker.utils.ItemUtils;
 import me.xmrvizzy.skyblocker.utils.RomanNumeralsParser;
 import me.xmrvizzy.skyblocker.utils.Utils;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 
-public class HotmLevel {
-    public static int getLevel(ItemStack stack){
-        if(!Utils.isSkyblock || stack.getCount()>1 || PriceInfoTooltip.getInternalNameForItem(stack)!=null) return 0;
+public class CustomCountLabel {
+    public static Text getLabel(ItemStack stack){
+        if(!Utils.isSkyblock || stack.getCount()>1) return null;
         String name = ItemUtils.getId(stack);
-        if(name.endsWith("glass_pane")) return 0;
-        if(SkyblockerConfig.get().ui.hotmPerkLevels){
+        if(name.endsWith("glass_pane")) return null;
+        if(SkyblockerConfig.get().ui.sackItemCount){
+            String count = getSackCount(stack);
+            if(count!=null) return new LiteralText(count);
+        }
+        if(SkyblockerConfig.get().ui.hotmPerkLevels && PriceInfoTooltip.getInternalNameForItem(stack)==null){
             int level = getPerkLevel(stack);
-            if(level>0) return level;
+            if(level>0) return new LiteralText(String.valueOf(level));
         }
         if(SkyblockerConfig.get().ui.skillLevels){
             int level = getSkillLevel(stack);
-            if(level>0) return level;
+            if(level>0) return new LiteralText(String.valueOf(level));
         }
-        return 0;
+        return null;
     }
     public static int getPerkLevel(ItemStack stack){
         String name = ItemUtils.getId(stack);
@@ -63,5 +68,26 @@ public class HotmLevel {
         }catch(Exception e){
         }
         return 0;
+    }
+    public static String getSackCount(ItemStack stack){
+        //List<Text> tooltip = ItemUtils.getTooltip(stack);
+        try{
+            String line = ItemUtils.getLoreLine(stack, 2).getString();
+            //String line = tooltip.get(3).getString();
+            if(line.startsWith("Stored: ") || line.startsWith(" Amount: ")){
+                int count = Integer.parseInt(line.replaceAll(" ","").substring(7).split("/")[0].replaceAll(",", ""));
+                if(count<1000){
+                    return String.valueOf(count);
+                }else if(count<1000000){
+                    return String.valueOf(count/1000)+"k";
+                }else{
+                    return String.valueOf(count/1000000)+"M";
+                }
+            }
+        }
+        catch(Exception e){
+
+        }
+        return null;
     }
 }
