@@ -46,7 +46,6 @@
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.solvePuzzler": "Solve Puzzler Puzzle",
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.wishingCompassLocator": "Wishing Compass Locator(ALPHA)",
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.metalDetectorLocator": "Metal Detector Locator(UNCOMPLETED)",
-  "text.autoconfig.skyblocker.option.locations.dwarvenMines.hotmPerkLevels": "Display Hotm Perk Levels",
 
   "text.autoconfig.skyblocker.option.locations.events": "Events",
   "text.autoconfig.skyblocker.option.locations.events.ancestorSpadeLocator": "Ancestor Spade Locator(ALPHA)",
@@ -78,12 +77,17 @@
   "text.autoconfig.skyblocker.option.items.cornerMarks.markPosition": "CornerMark position",
   "text.autoconfig.skyblocker.option.items.cornerMarks.scale": "Scale",
   "text.autoconfig.skyblocker.option.items.cornerMarks.potionLevels": "Show Potion Levels",
+  "text.autoconfig.skyblocker.option.items.cornerMarks.petLevels": "Show Pet Levels",
   "text.autoconfig.skyblocker.option.items.cornerMarks.enchBookLevels": "Show Enchanted Book Levels",
   "text.autoconfig.skyblocker.option.items.cornerMarks.wishingCompassUses": "Show Wishing Compass Uses",
   "text.autoconfig.skyblocker.option.items.cornerMarks.jerryPotionIntelligence": "Show Bottle of Jyrre Uses",
   "text.autoconfig.skyblocker.option.items.cornerMarks.defuserTraps": "Show Defuse Kit defused Traps",
   "text.autoconfig.skyblocker.option.items.cornerMarks.trainingWeightsStrength": "Show Training Weights Strength",
   "text.autoconfig.skyblocker.option.items.cornerMarks.prehistoricEggSteps": "Show Prehistoric Egg Steps",
+
+  "text.autoconfig.skyblocker.category.ui": "UI",
+  "text.autoconfig.skyblocker.option.ui.skillLevels": "Show Skill Levels",
+  "text.autoconfig.skyblocker.option.ui.hotmPerkLevels": "Display Hotm Perk Levels",
 
   "text.autoconfig.skyblocker.category.debug": "Debug",
   "text.autoconfig.skyblocker.option.debug.showInternalNameOnRightClick": "Show Internal Names on Right Click",

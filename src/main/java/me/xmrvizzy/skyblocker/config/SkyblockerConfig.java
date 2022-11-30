@@ -37,6 +37,10 @@ public class SkyblockerConfig implements ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     public Items items = new Items();
     
+    @ConfigEntry.Category("ui")
+    @ConfigEntry.Gui.TransitiveObject
+    public UI ui = new UI();
+
     @ConfigEntry.Category("solvers")
     @ConfigEntry.Gui.TransitiveObject
     public Solvers solvers = new Solvers();
@@ -118,6 +122,7 @@ public class SkyblockerConfig implements ConfigData {
         public MarkPosition markPosition = MarkPosition.UPPER_RIGHT;
         public float scale = 0.5f;
         public boolean potionLevels = true;
+        public boolean petLevels = true;
         public boolean enchBookLevels = true;
         public boolean wishingCompassUses = true;
         public boolean jerryPotionIntelligence = true;
@@ -150,6 +155,11 @@ public class SkyblockerConfig implements ConfigData {
         public boolean crystalHollowsWarning = true;
     }
 
+    public static class UI {
+        public boolean skillLevels = true;
+        public boolean hotmPerkLevels = true;
+    }
+
     public static class Dungeons {
         public boolean enableMap = true;
         public boolean solveThreeWeirdos = true;
@@ -171,7 +181,6 @@ public class SkyblockerConfig implements ConfigData {
         public boolean solvePuzzler = true;
         public boolean wishingCompassLocator = true;
         public boolean metalDetectorLocator = true;
-        public boolean hotmPerkLevels = true;
     }
     public static class Events {
         public boolean ancestorSpadeLocator = true;

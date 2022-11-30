@@ -116,7 +116,7 @@ public abstract class ItemRendererMixin {
 
     @Inject(method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V", at = @At("HEAD"))
     public void renderHotmPerkLevels(TextRenderer renderer, ItemStack stack, int x, int y, @Nullable String countLabel, CallbackInfo ci) {
-        int hotmLevel = HotmLevel.getHotmPerkLevel(stack);
+        int hotmLevel = HotmLevel.getLevel(stack);
         if(hotmLevel>=1){
             MatrixStack matrixStack = new MatrixStack();
             String string = String.valueOf(hotmLevel);

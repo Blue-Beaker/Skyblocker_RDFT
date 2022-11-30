@@ -6,8 +6,8 @@ import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
 import me.xmrvizzy.skyblocker.utils.ItemUtils;
 import me.xmrvizzy.skyblocker.utils.StatIcons;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
@@ -71,6 +71,19 @@ public class ItemCornerMark {
                     for(String line:tooltip){
                         if(line.contains("Strength Gain: "))
                         return new LiteralText(line.replace("Strength Gain: ", "")).formatted(Formatting.RED);
+                    }
+                }else if(SkyblockerConfig.get().items.cornerMarks.petLevels){
+                    Text nameText = stack.getName();
+                    String name = stack.getName().getString();
+                    if(name.startsWith("[Lvl ")){
+                        String lvl = name.substring(5, 8).replace("]", "").replace(" ", "");
+                        try{
+                            List<Text> namelist = nameText.getSiblings();
+                            Style style = namelist.get(1).getStyle();
+                            return new LiteralText(""+lvl).setStyle(style);
+                        }catch(Exception e){
+                            return new LiteralText(""+lvl).formatted(Formatting.GRAY);
+                        }
                     }
                 }
         }
