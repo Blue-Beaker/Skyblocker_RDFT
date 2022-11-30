@@ -65,14 +65,22 @@ public class ItemUtils {
         return getId(itemStack.getItem());
     }
     public static ListTag getLore(ItemStack stack){
-        return stack.getTag().getCompound("display").getList("Lore", 8);
+        try{
+            return stack.getTag().getCompound("display").getList("Lore", 8);
+        }catch (Exception e) {
+            return null;
+        }
     }
     public static MutableText getLoreLine(ItemStack stack, int index){
         ListTag listTag = getLore(stack);
-        if(index<0){
-            index=listTag.size()+index;
+        try {
+            if(index<0){
+                index=listTag.size()+index;
+            }
+            String raw = listTag.getString(index);
+            return Text.Serializer.fromJson(raw);
+        } catch (Exception e) {
+            return null;
         }
-        String raw = listTag.getString(index);
-        return Text.Serializer.fromJson(raw);
     }
 }

@@ -87,7 +87,8 @@
   "text.autoconfig.skyblocker.option.items.cornerMarks.prehistoricEggSteps": "Show Prehistoric Egg Steps",
 
   "text.autoconfig.skyblocker.category.ui": "UI",
-  "text.autoconfig.skyblocker.option.ui.skillLevels": "Show Skill/Bestiary/Collection Levels",
+  "text.autoconfig.skyblocker.option.ui.skillLevels": "Show Skill/Bestiary Levels",
+  "text.autoconfig.skyblocker.option.ui.collectionLevels": "Show Collection Levels",
   "text.autoconfig.skyblocker.option.ui.hotmPerkLevels": "Display Hotm Perk Levels",
   "text.autoconfig.skyblocker.option.ui.sackItemCount": "Show Count in Sacks",
 

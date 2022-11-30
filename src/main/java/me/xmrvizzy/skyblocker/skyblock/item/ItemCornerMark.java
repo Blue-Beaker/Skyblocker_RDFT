@@ -77,22 +77,34 @@ public class ItemCornerMark {
                 else if(config.runeLevels && "RUNE".equals(sbid)){
                     int level = CustomCountLabel.getSkillLevel(stack);
                     Text rarity = ItemUtils.getLoreLine(stack, -1);
-                    return new LiteralText(String.valueOf(level)).setStyle(rarity.getSiblings().get(0).getStyle());
+                    return new LiteralText(String.valueOf(level)).setStyle(rarity.getSiblings().get(0).getStyle().withBold(false));
                 }
-                else if(SkyblockerConfig.get().items.cornerMarks.petLevels){
-                    Text nameText = stack.getName();
-                    String name = stack.getName().getString();
-                    if(name.startsWith("[Lvl ")){
-                        String lvl = name.substring(5, 8).replace("]", "").replace(" ", "");
-                        try{
-                            List<Text> namelist = nameText.getSiblings();
-                            Style style = namelist.get(1).getStyle();
-                            return new LiteralText(""+lvl).setStyle(style);
-                        }catch(Exception e){
-                            return new LiteralText(""+lvl).formatted(Formatting.GRAY);
+                else{
+                    if(SkyblockerConfig.get().items.cornerMarks.petLevels){
+                        Text nameText = stack.getName();
+                        String name = stack.getName().getString();
+                        if(name.startsWith("[Lvl ")){
+                            String lvl = name.substring(5, 8).replace("]", "").replace(" ", "");
+                            try{
+                                List<Text> namelist = nameText.getSiblings();
+                                Style style = namelist.get(1).getStyle();
+                                return new LiteralText(""+lvl).setStyle(style.withBold(false));
+                            }catch(Exception e){
+                                return new LiteralText(""+lvl).formatted(Formatting.GRAY);
+                            }
                         }
                     }
+                    if(SkyblockerConfig.get().ui.collectionLevels){
+                    try {
+                        String line2 = ItemUtils.getLoreLine(stack, 0).getString();
+                        if(line2.startsWith("View all your")){
+                            String line5 = ItemUtils.getLoreLine(stack, 3).getString();
+                            return new LiteralText(String.valueOf(CustomCountLabel.getSkillLevel(stack))).formatted((line5.startsWith("Progress to")) ? Formatting.WHITE : Formatting.GOLD);
+                        }
+                    } catch (Exception e) {
+                    }
                 }
+            }
         }
         return null;
     }

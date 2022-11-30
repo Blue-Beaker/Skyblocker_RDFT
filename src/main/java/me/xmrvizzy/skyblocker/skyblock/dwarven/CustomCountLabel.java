@@ -29,6 +29,9 @@ public class CustomCountLabel {
             if(level>0) return new LiteralText(String.valueOf(level));
         }
         if(SkyblockerConfig.get().ui.skillLevels){
+            if(PriceInfoTooltip.getInternalNameForItem(stack)!=null){
+                if(!stack.getName().getString().startsWith("Healer")) return null;
+            }
             int level = getSkillLevel(stack);
             if(level>0 && level<1000) return new LiteralText(String.valueOf(level));
         }
