@@ -30,7 +30,7 @@ public class CustomCountLabel {
         }
         if(SkyblockerConfig.get().ui.skillLevels){
             int level = getSkillLevel(stack);
-            if(level>0) return new LiteralText(String.valueOf(level));
+            if(level>0 && level<1000) return new LiteralText(String.valueOf(level));
         }
         return null;
     }

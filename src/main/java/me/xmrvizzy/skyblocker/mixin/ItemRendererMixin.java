@@ -115,14 +115,23 @@ public abstract class ItemRendererMixin {
     }
 
     @Inject(method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V", at = @At("HEAD"))
-    public void renderHotmPerkLevels(TextRenderer renderer, ItemStack stack, int x, int y, @Nullable String countLabel, CallbackInfo ci) {
+    public void renderCustomCountLabel(TextRenderer renderer, ItemStack stack, int x, int y, @Nullable String countLabel, CallbackInfo ci) {
         Text customLabel = CustomCountLabel.getLabel(stack);
         if(customLabel!=null){
             MatrixStack matrixStack = new MatrixStack();
             //String string = String.valueOf(customLabel);
             matrixStack.translate(0.0D, 0.0D, (double)(this.zOffset + 200.0F));
+            float scale=1f;
+            int width=renderer.getWidth(customLabel);
+            if(width>16){
+                scale=SkyblockerConfig.get().items.cornerMarks.scale;
+            }
+            float drawx = (float)((x + 17)/scale - width);
+            float drawy=(float)(y+15)/scale-6;
+            matrixStack.scale(scale, scale, 1.0f);
             VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
-            renderer.draw(customLabel, (float)(x + 19 - 2 - renderer.getWidth(customLabel)), (float)(y + 6 + 3), 16777215, true, matrixStack.peek().getModel(), immediate, false, 0, 15728880);
+            //renderer.draw(customLabel, (float)(x + 19 - 2 - renderer.getWidth(customLabel)), (float)(y + 6 + 3), 16777215, true, matrixStack.peek().getModel(), immediate, false, 0, 15728880);
+            renderer.draw(customLabel, (float)(drawx), (float)(drawy), 16777215, true, matrixStack.peek().getModel(), immediate, false, 0, 15728880);
             immediate.draw();
         }
     }
