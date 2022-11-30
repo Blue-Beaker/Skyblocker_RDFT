@@ -78,6 +78,7 @@
   "text.autoconfig.skyblocker.option.items.cornerMarks.scale": "Scale",
   "text.autoconfig.skyblocker.option.items.cornerMarks.potionLevels": "Show Potion Levels",
   "text.autoconfig.skyblocker.option.items.cornerMarks.petLevels": "Show Pet Levels",
+  "text.autoconfig.skyblocker.option.items.cornerMarks.runeLevels": "Show Rune Levels",
   "text.autoconfig.skyblocker.option.items.cornerMarks.enchBookLevels": "Show Enchanted Book Levels",
   "text.autoconfig.skyblocker.option.items.cornerMarks.wishingCompassUses": "Show Wishing Compass Uses",
   "text.autoconfig.skyblocker.option.items.cornerMarks.jerryPotionIntelligence": "Show Bottle of Jyrre Uses",

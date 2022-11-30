@@ -127,6 +127,7 @@ public class SkyblockerConfig implements ConfigData {
         public boolean wishingCompassUses = true;
         public boolean jerryPotionIntelligence = true;
         public boolean defuserTraps = true;
+        public boolean runeLevels = true;
         public boolean trainingWeightsStrength = true;
         public boolean prehistoricEggSteps = true;
     }

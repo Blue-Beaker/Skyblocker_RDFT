@@ -19,7 +19,7 @@ public class CustomCountLabel {
     public static Text getLabel(ItemStack stack){
         if(!Utils.isSkyblock || stack.getCount()>1) return null;
         String name = ItemUtils.getId(stack);
-        if(name.endsWith("glass_pane")) return null;
+        if(name.endsWith("glass_pane") || "RUNE".equals(PriceInfoTooltip.getInternalNameForItem(stack))) return null;
         if(SkyblockerConfig.get().ui.sackItemCount){
             String count = getSackCount(stack);
             if(count!=null) return new LiteralText(count);

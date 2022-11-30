@@ -69,6 +69,9 @@ public class ItemUtils {
     }
     public static MutableText getLoreLine(ItemStack stack, int index){
         ListTag listTag = getLore(stack);
+        if(index<0){
+            index=listTag.size()+index;
+        }
         String raw = listTag.getString(index);
         return Text.Serializer.fromJson(raw);
     }

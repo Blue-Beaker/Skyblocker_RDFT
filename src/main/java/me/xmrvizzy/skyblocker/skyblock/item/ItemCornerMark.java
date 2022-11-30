@@ -3,6 +3,7 @@ package me.xmrvizzy.skyblocker.skyblock.item;
 import java.util.List;
 
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
+import me.xmrvizzy.skyblocker.skyblock.dwarven.CustomCountLabel;
 import me.xmrvizzy.skyblocker.utils.ItemUtils;
 import me.xmrvizzy.skyblocker.utils.StatIcons;
 import net.minecraft.item.ItemStack;
@@ -72,7 +73,13 @@ public class ItemCornerMark {
                         if(line.contains("Strength Gain: "))
                         return new LiteralText(line.replace("Strength Gain: ", "")).formatted(Formatting.RED);
                     }
-                }else if(SkyblockerConfig.get().items.cornerMarks.petLevels){
+                }
+                else if(config.runeLevels && "RUNE".equals(sbid)){
+                    int level = CustomCountLabel.getSkillLevel(stack);
+                    Text rarity = ItemUtils.getLoreLine(stack, -1);
+                    return new LiteralText(String.valueOf(level)).setStyle(rarity.getSiblings().get(0).getStyle());
+                }
+                else if(SkyblockerConfig.get().items.cornerMarks.petLevels){
                     Text nameText = stack.getName();
                     String name = stack.getName().getString();
                     if(name.startsWith("[Lvl ")){
