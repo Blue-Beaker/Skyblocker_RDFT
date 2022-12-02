@@ -52,7 +52,7 @@ public class DistancedLocator {
             if(SkyblockerConfig.get().locations.dwarvenMines.metalDetectorLocatorFast){
             calculate(soundListener.pos,nowDistance);
             msg=msg+"§c DISABLE MUSIC";}
-            else if(still>3){
+            else if(still>1){
             calculate(client.player.getPos(),nowDistance);
             msg=msg+"§c Move a bit";
             }
@@ -95,7 +95,7 @@ public class DistancedLocator {
         }
     }
     public static boolean atDistance(BlockPos block,Vec3d pos,float distance){
-        return Math.abs(Math.sqrt(block.getSquaredDistance(pos.x, pos.y, pos.z, true))-distance)<1;
+        return Math.abs(Math.sqrt(block.getSquaredDistance(pos.x, pos.y, pos.z, false))-distance)<0.6;
     }
     public static void render(WorldRenderContext wrc){
         if(active){
