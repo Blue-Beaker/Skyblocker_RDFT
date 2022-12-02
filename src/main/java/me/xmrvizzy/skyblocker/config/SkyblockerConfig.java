@@ -102,6 +102,7 @@ public class SkyblockerConfig implements ConfigData {
         public boolean potionOverlay = true;
         public boolean potionOverlayLevels = false;
         public boolean potionOverlayXPBoostTypes = true;
+        public boolean particleHiderHotbar = false;
         public boolean hideParticleFrozenScythe = true;
         public boolean hideParticleDreadlord = true;
         public float potionOverlayScale = 1f;

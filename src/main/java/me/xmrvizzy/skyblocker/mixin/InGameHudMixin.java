@@ -48,7 +48,7 @@ public abstract class InGameHudMixin extends DrawableHelper {
     @ModifyVariable(method = "setOverlayMessage(Lnet/minecraft/text/Text;Z)V", at = @At("HEAD"))
     private Text setOverlayMessage(Text message) {
         String msg = message.getString();
-        if (SkyblockerConfig.get().locations.dwarvenMines.metalDetectorLocator && msg != null &&  "DWARVEN_METAL_DETECTOR".equals(Utils.getHeldItemId())){
+        if (SkyblockerConfig.get().locations.dwarvenMines.metalDetectorLocator && msg != null &&  "DWARVEN_METAL_DETECTOR".equals(Utils.getHeldItemSBID())){
             try{
                 DistancedLocator.getDistance(msg);
             }

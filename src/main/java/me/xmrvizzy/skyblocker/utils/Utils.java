@@ -220,7 +220,7 @@ public class Utils {
         return("None");
 
     }
-    public static String getHeldItemId(){
+    public static String getHeldItemSBID(){
         return PriceInfoTooltip.getInternalNameForItem(client.player.getMainHandStack());
     }
     public static boolean useOldHitbox(){
