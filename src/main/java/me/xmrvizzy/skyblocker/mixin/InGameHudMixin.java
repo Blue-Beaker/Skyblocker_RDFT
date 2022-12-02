@@ -16,6 +16,7 @@ import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
@@ -50,7 +51,8 @@ public abstract class InGameHudMixin extends DrawableHelper {
         String msg = message.getString();
         if (SkyblockerConfig.get().locations.dwarvenMines.metalDetectorLocator && msg != null &&  "DWARVEN_METAL_DETECTOR".equals(Utils.getHeldItemSBID())){
             try{
-                DistancedLocator.getDistance(msg);
+                
+                msg=DistancedLocator.tick(msg);
             }
             catch(Exception e){
                 System.out.println("DistancedLocator: " + e.getMessage());

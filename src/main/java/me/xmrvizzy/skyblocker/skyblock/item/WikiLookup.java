@@ -1,11 +1,8 @@
 package me.xmrvizzy.skyblocker.skyblock.item;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.stream.JsonReader;
 
 import me.xmrvizzy.skyblocker.utils.NetworkUtils;
@@ -13,8 +10,6 @@ import me.xmrvizzy.skyblocker.utils.Utils;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
-import net.minecraft.client.toast.Toast;
-import net.minecraft.client.toast.ToastManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.ItemStack;
@@ -26,16 +21,11 @@ import net.minecraft.util.Util;
 import org.lwjgl.glfw.GLFW;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.Proxy.Type;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

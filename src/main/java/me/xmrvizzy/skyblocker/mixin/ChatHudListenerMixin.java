@@ -7,6 +7,7 @@ import me.xmrvizzy.skyblocker.skyblock.dungeon.DungeonPuzzles;
 import me.xmrvizzy.skyblocker.skyblock.dwarven.Fetchur;
 import me.xmrvizzy.skyblocker.skyblock.dwarven.Puzzler;
 import me.xmrvizzy.skyblocker.skyblock.waypoints.AutoWaypoint;
+import me.xmrvizzy.skyblocker.skyblock.waypoints.Waypoint;
 import me.xmrvizzy.skyblocker.utils.Utils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHudListener;
@@ -122,6 +123,10 @@ public class ChatHudListenerMixin {
             if (SkyblockerConfig.get().messages.hideUnbreakable &&
                 (msg.contains("A magical force surrounding this area prevents you from breaking blocks!") || msg.contains("You cannot mine this close to an entrance!")))
                 ci.cancel();
+
+            if (SkyblockerConfig.get().waypoint.autoWaypoints &&
+                (msg.startsWith("[NPC] King Yolkar: ")))
+                AutoWaypoint.autoAddWaypointWithFeedback("King", new Waypoint(client.player.getBlockPos(),new float[]{1f,0.5f,0f}));
         }
     }
 

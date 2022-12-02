@@ -45,7 +45,10 @@
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.solveFetchur": "Solve Fetchur Items",
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.solvePuzzler": "Solve Puzzler Puzzle",
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.wishingCompassLocator": "Wishing Compass Locator(ALPHA)",
-  "text.autoconfig.skyblocker.option.locations.dwarvenMines.metalDetectorLocator": "Metal Detector Locator(UNCOMPLETED)",
+  "text.autoconfig.skyblocker.option.locations.dwarvenMines.metalDetectorLocator": "Metal Detector Locator(ALPHA)",
+
+  "text.autoconfig.skyblocker.option.locations.dwarvenMines.metalDetectorLocatorFast.@Tooltip": "Locates faster without the need to standing still\n but you should turn off music with /togglemusic command",
+  "text.autoconfig.skyblocker.option.locations.dwarvenMines.metalDetectorLocatorFast": "Metal Detector Locator Fast mode",
 
   "text.autoconfig.skyblocker.option.locations.events": "Events",
   "text.autoconfig.skyblocker.option.locations.events.ancestorSpadeLocator": "Ancestor Spade Locator(ALPHA)",
@@ -71,7 +74,8 @@
   "text.autoconfig.skyblocker.option.items.potionOverlayLevels": "Potion Overlay show levels",
   "text.autoconfig.skyblocker.option.items.potionOverlayXPBoostTypes": "Show XP Boost types for potion overlay",
   "text.autoconfig.skyblocker.option.items.potionOverlayScale": "Potion Overlay Scale",
-  "text.autoconfig.skyblocker.option.items.particleHiderHotbar": "Hide the particles when item in hotbar - false will only hide when held",
+  "text.autoconfig.skyblocker.option.items.particleHiderHotbar": "Hide the particles for item in hotbar",
+  "text.autoconfig.skyblocker.option.items.particleHiderHotbar.@Tooltip": "Setting this to false\n will only hide particles when held",
   "text.autoconfig.skyblocker.option.items.hideParticleFrozenScythe": "Hide Frozen Scythe 'Spit' Particles",
   "text.autoconfig.skyblocker.option.items.hideParticleDreadlord": "Hide Dreadlord Sword 'Smoke' Particles",
   "text.autoconfig.skyblocker.option.items.cornerMarks": "Item CornerMarks",

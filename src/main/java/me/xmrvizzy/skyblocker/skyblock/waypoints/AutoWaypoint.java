@@ -53,6 +53,14 @@ public class AutoWaypoint {
             }
         }
     }
+    public static void autoAddWaypointWithFeedback(String subLocation, Waypoint waypoint){
+        WaypointList.add(subLocation, waypoint);
+        MinecraftClient client = MinecraftClient.getInstance();
+        client.player.sendMessage(
+            SkyblockerWaypointCLI.addButtonsOnCreation(new LiteralText(String.format("[Skyblocker] Added %s at (%d,%d,%d) ",subLocation,waypoint.getX(),waypoint.getY(),waypoint.getZ())).formatted(Formatting.AQUA),
+            subLocation,Utils.getLobbyAutoCH(),waypoint),false);
+
+    }
     public static MutableText chatCoords(MutableText message){
         MutableText finalText = message;
         String msg = message.getString();

@@ -102,6 +102,7 @@ public class SkyblockerConfig implements ConfigData {
         public boolean potionOverlay = true;
         public boolean potionOverlayLevels = false;
         public boolean potionOverlayXPBoostTypes = true;
+        @ConfigEntry.Gui.Tooltip
         public boolean particleHiderHotbar = false;
         public boolean hideParticleFrozenScythe = true;
         public boolean hideParticleDreadlord = true;
@@ -185,6 +186,8 @@ public class SkyblockerConfig implements ConfigData {
         public boolean solvePuzzler = true;
         public boolean wishingCompassLocator = true;
         public boolean metalDetectorLocator = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean metalDetectorLocatorFast = false;
     }
     public static class Events {
         public boolean ancestorSpadeLocator = true;
