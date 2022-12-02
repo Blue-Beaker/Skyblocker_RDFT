@@ -23,15 +23,19 @@ For 1.17+, use [Skyblocker-LIAP](https://modrinth.com/mod/skyblocker-liap) inste
 #### By myself:
 - Ability Cooldown Display
 - Rescale tablist without changing Global GUI Size
+- Show spooky festival score and mining island last changed commission on sidebar
+- Hide particles from some items
+- Make bazaar graphs readable
 - Configureable position and size for dungeon map
 - Waypoints feature optimized for skyblock
 - Add coords from chat to waypoints quickly
 - Wishing compass and Ancestral spade locator(Alpha but usable)  
 ######    Andestral spade locator is inaccurate because the spade draws curves instead of lines. However this can still be useful for digging multiple burrow chains at the same time.
-- Display HotM perk level as count
+- Metal Detector locator(Alpha)  
+- Display levels in HotM perk, skill, bestiary, and count in sacks as count
 - Hide spamming messages when mining in unbreakable area in crystal hollows
 - 1.8 Player hitbox
-- Item corner marks for potion/book levels, prehistoric egg steps and some other items
+- Item corner marks for pet levels, potion/book levels, prehistoric egg steps, and some other items
 - Pickonimbus durability bar
 - Potion type overlay
 - Sidebar Display: Spooky festival candy, last commission on mining islands
