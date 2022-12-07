@@ -76,6 +76,11 @@ public class ChatHudListenerMixin {
                 if (SkyblockerConfig.get().locations.dwarvenMines.solvePuzzler &&
                         msg.contains("Puzzler"))
                     Puzzler.solve(msg);
+
+                if (SkyblockerConfig.get().waypoint.autoWaypoints &&
+                (msg.contains("King Yolkar")))
+                AutoWaypoint.autoAddWaypointWithFeedback("King", new Waypoint(client.player.getBlockPos(),new float[]{1f,0.5f,0f}));
+
             }
             if(SkyblockerConfig.get().general.cooldownDisplay){
                 if(msg.endsWith(" is now available!")){
@@ -123,10 +128,6 @@ public class ChatHudListenerMixin {
             if (SkyblockerConfig.get().messages.hideUnbreakable &&
                 (msg.contains("A magical force surrounding this area prevents you from breaking blocks!") || msg.contains("You cannot mine this close to an entrance!")))
                 ci.cancel();
-
-            if (SkyblockerConfig.get().waypoint.autoWaypoints &&
-                (msg.startsWith("[NPC] King Yolkar: ")))
-                AutoWaypoint.autoAddWaypointWithFeedback("King", new Waypoint(client.player.getBlockPos(),new float[]{1f,0.5f,0f}));
         }
     }
 

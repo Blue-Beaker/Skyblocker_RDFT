@@ -162,9 +162,10 @@ public class PriceInfoTooltip {
                 Text text = texts.get(j);
                 if(text.asString().contains("·")){
                     texts.set(j, new LiteralText(text.asString().replace("·","-")).setStyle(text.getStyle()));
-                }else if(text.asString().contains("+")){
-                    texts.set(j, new LiteralText(text.asString().replace("+","│")).setStyle(text.getStyle()));
                 }
+                //else if(text.asString().contains("+")){
+                //    texts.set(j, new LiteralText(text.asString().replace("+","│")).setStyle(text.getStyle()));
+                //}
                 replaceAllInText(text);
             }
         }
