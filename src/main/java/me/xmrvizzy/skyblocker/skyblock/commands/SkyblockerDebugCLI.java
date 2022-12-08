@@ -16,7 +16,9 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
+import me.xmrvizzy.skyblocker.config.SkyblockerConfig.Sidebar;
 import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay;
+import me.xmrvizzy.skyblocker.skyblock.SidebarDisplay;
 import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay.Ability;
 import me.xmrvizzy.skyblocker.skyblock.item.PriceInfoTooltip;
 import me.xmrvizzy.skyblocker.skyblock.solver.ContainerScreenSolverManager;
@@ -97,6 +99,12 @@ public class SkyblockerDebugCLI {
                     context.getSource().sendFeedback(new LiteralText(Utils.getSidebar().toString()));
                     return 1;
                 }))
+                .then(literal("findSidebar")
+                .then(ClientCommandManager.argument("text", StringArgumentType.string())
+                .executes(context -> {
+                    context.getSource().sendFeedback(SidebarDisplay.findAndReplace(StringArgumentType.getString(context, "text"), null));
+                    return 1;
+                })))
                 .then(literal("getSublocation")
                 .executes(context -> {
                     context.getSource().sendFeedback(new LiteralText(Utils.subLocation));

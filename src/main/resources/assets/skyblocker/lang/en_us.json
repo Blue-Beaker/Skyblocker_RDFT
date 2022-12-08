@@ -40,6 +40,8 @@
   "text.autoconfig.skyblocker.option.locations.dungeons.mapY": "Map Y",
   "text.autoconfig.skyblocker.option.locations.dungeons.mapScale": "Map Scale",
   "text.autoconfig.skyblocker.option.locations.dungeons.solveThreeWeirdos": "Solve Three Weirdos Puzzle",
+  "text.autoconfig.skyblocker.option.locations.dungeons.sidebarRanking": "Show current ranking in sidebar",
+
   "text.autoconfig.skyblocker.option.locations.dwarvenMines": "Dwarven Mines",
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.enableDrillFuel": "Enable Drill Fuel/Pickonimbus Uses",
   "text.autoconfig.skyblocker.option.locations.dwarvenMines.solveFetchur": "Solve Fetchur Items",

@@ -168,6 +168,7 @@ public class SkyblockerConfig implements ConfigData {
     public static class Dungeons {
         public boolean enableMap = true;
         public boolean solveThreeWeirdos = true;
+        public boolean sidebarRanking = true;
         public enum MapPosition{
             UPPER_RIGHT,
             UPPER_LEFT,

@@ -28,7 +28,38 @@ public class SidebarDisplay {
     public static void tick(){
         text = null;
         String footer = Utils.getTabFooter();
-        if(footer.contains("Your Candy")){
+        if(SkyblockerConfig.get().locations.dungeons.sidebarRanking && Utils.isDungeons){
+            try{
+                Text scoreLine = findAndReplace("Cleared:",null);
+                    if(scoreLine!=null){
+                        String lineString = scoreLine.getString();
+                        if(lineString.endsWith(")")){
+                        String scoreString = lineString.split("\\(")[1].replace(")", "");
+                        float score = Float.parseFloat(scoreString);
+                        Text ranking;
+                        if(score>=300){
+                            ranking = new LiteralText(" S+").formatted(Formatting.GOLD);
+                        }else if(score>=269.5){
+                            ranking = new LiteralText(" S").formatted(Formatting.YELLOW);
+                        }else if(score>=230){
+                            ranking = new LiteralText(" A").formatted(Formatting.DARK_PURPLE);
+                        }else if(score>=160){
+                            ranking = new LiteralText(" B").formatted(Formatting.GREEN);
+                        }else if(score>=100){
+                            ranking = new LiteralText(" C").formatted(Formatting.BLUE);
+                        }else{
+                            ranking = new LiteralText(" D").formatted(Formatting.RED);
+                        }
+                        if(ranking!=null){
+                            findAndReplace("Cleared:", scoreLine.shallowCopy().append(ranking));
+                        }
+                    }
+                }
+            }catch(Exception e){
+                text=new LiteralText(e.getMessage());
+            }
+        }
+        else if(footer.contains("Your Candy")){
             Pattern candyPattern = Pattern.compile("Candy: ([0-9,]+ )Green, ([0-9,]+ )Purple \\(([0-9,]+) pts");
             Matcher candyMatcher = candyPattern.matcher(footer);
             if(SkyblockerConfig.get().general.sidebar.spookyCandy && candyMatcher.find()){
@@ -36,15 +67,17 @@ public class SidebarDisplay {
                 String purple = candyMatcher.group(2);
                 String points = candyMatcher.group(3);
                 text=new LiteralText("Candy: ").append(new LiteralText(green).formatted(Formatting.GREEN)).append(new LiteralText(purple).formatted(Formatting.DARK_PURPLE)).append(new LiteralText("pts: ")).append(new LiteralText(points).formatted(Formatting.GOLD));
+                setLine(2, text);
             }
         }else if(SkyblockerConfig.get().general.sidebar.lastCommission){
             lastComm();
-            if(lastComm!=null) text=lastComm;
+            if(lastComm!=null){
+                text=lastComm;
+                setLine(2, text);
+            }
         }
-        if(text!=null)
-        replaceLine(2, text);
     }
-    public static void replaceLine(int scoreIndex, Text text){
+    public static void setLine(int scoreIndex, Text text){
         Scoreboard scoreboard = client.world.getScoreboard();
         if (scoreboard == null) return;
         ScoreboardObjective sidebar = scoreboard.getObjectiveForSlot(1);
@@ -62,11 +95,45 @@ public class SidebarDisplay {
             }
         }
     }
-    public static String getLine(List<String> list,String startsWith){
-        for(String line : list){
-            if(line.startsWith(startsWith)) return line;
+    public static Text findAndReplace(String startsWith,Text replace){
+        Scoreboard scoreboard = client.world.getScoreboard();
+        List<ScoreboardPlayerScore> list=getSidebarScores();
+        for (ScoreboardPlayerScore score : list) {
+            Team team = scoreboard.getPlayerTeam(score.getPlayerName());
+            if (team == null) return null;
+            Text text = team.getPrefix().shallowCopy().append(team.getSuffix());
+            if(text.getString().startsWith(startsWith)){
+                if(replace!=null){
+                    team.setPrefix(replace);
+                    team.setSuffix(new LiteralText(""));
+                }
+                return text;
+            }
         }
         return null;
+    }
+    public static Text getLine(int scoreIndex){
+        Scoreboard scoreboard = client.world.getScoreboard();
+        List<ScoreboardPlayerScore> list=getSidebarScores();
+        for (ScoreboardPlayerScore score : list) {
+            if(score.getScore()==scoreIndex){
+                Team team = scoreboard.getPlayerTeam(score.getPlayerName());
+                if (team == null) return null;
+                else return team.getPrefix().shallowCopy().append(team.getSuffix());
+            }
+        }
+        return null;
+    }
+    public static List<ScoreboardPlayerScore> getSidebarScores(){
+        Scoreboard scoreboard = client.world.getScoreboard();
+        if (scoreboard == null) return null;
+        ScoreboardObjective sidebar = scoreboard.getObjectiveForSlot(1);
+        if (sidebar == null) return null;
+        Collection<ScoreboardPlayerScore> scores = scoreboard.getAllPlayerScores(sidebar);
+        List<ScoreboardPlayerScore> list = scores.stream()
+                .filter(input -> input != null && input.getPlayerName() != null && !input.getPlayerName().startsWith("#"))
+                .collect(Collectors.toList());
+        return list;
     }
     public static List<Text> getComms(){
         List<Text> comms = new ArrayList<Text>();

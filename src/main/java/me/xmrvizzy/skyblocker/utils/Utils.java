@@ -193,9 +193,17 @@ public class Utils {
         else return "";
     }
     public static String getArea(List<String> tabLines){
-        for(String line:tabLines){
-            if(line.startsWith("Area:")){
-                return(line.replace("Area:", "").replaceAll(" ", "").replaceAll("'", ""));
+        if(isDungeons){
+            for(String line:tabLines){
+                if(line.startsWith("Dungeon:")){
+                    return(line.replace("Dungeon:", "").replaceAll(" ", "").replaceAll("'", ""));
+                }
+            }
+        }else{
+            for(String line:tabLines){
+                if(line.startsWith("Area:")){
+                    return(line.replace("Area:", "").replaceAll(" ", "").replaceAll("'", ""));
+                }
             }
         }
         return("None");
