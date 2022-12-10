@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 import me.xmrvizzy.skyblocker.utils.Utils;
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
-import me.xmrvizzy.skyblocker.mixin.PlayerListHudAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
@@ -59,7 +58,7 @@ public class SidebarDisplay {
                 text=new LiteralText(e.getMessage());
             }
         }
-        else if(footer.contains("Your Candy")){
+        if(footer.contains("Your Candy")){
             Pattern candyPattern = Pattern.compile("Candy: ([0-9,]+ )Green, ([0-9,]+ )Purple \\(([0-9,]+) pts");
             Matcher candyMatcher = candyPattern.matcher(footer);
             if(SkyblockerConfig.get().general.sidebar.spookyCandy && candyMatcher.find()){
@@ -69,12 +68,15 @@ public class SidebarDisplay {
                 text=new LiteralText("Candy: ").append(new LiteralText(green).formatted(Formatting.GREEN)).append(new LiteralText(purple).formatted(Formatting.DARK_PURPLE)).append(new LiteralText("pts: ")).append(new LiteralText(points).formatted(Formatting.GOLD));
                 setLine(2, text);
             }
-        }else if(SkyblockerConfig.get().general.sidebar.lastCommission){
+        }else if(SkyblockerConfig.get().general.sidebar.lastCommission && ("CrystalHollows".equals(Utils.serverArea)||"DwarvenMines".equals(Utils.serverArea))){
             lastComm();
             if(lastComm!=null){
                 text=lastComm;
                 setLine(2, text);
             }
+        }else{
+            text=new LiteralText("");
+            setLine(2, text);
         }
     }
     public static void setLine(int scoreIndex, Text text){

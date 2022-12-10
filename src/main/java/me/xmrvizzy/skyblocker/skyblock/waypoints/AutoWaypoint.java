@@ -40,6 +40,7 @@ public class AutoWaypoint {
         LOCATION_MAPPINGS.put("corl", "Boss Corleone");
     }
     public static void autoWaypoint(String subLocation){
+        if(!"CrystalHollows".equals(Utils.serverArea)) return;
         subLocation = subLocation.replace("Khazad-dûm", "Khazad-dum");
         if(LOCATIONS.containsKey(subLocation)){
             if(WaypointList.get(Utils.getLobbyAutoCH())==null || WaypointList.get(Utils.getLobbyAutoCH()).get(subLocation)==null){
