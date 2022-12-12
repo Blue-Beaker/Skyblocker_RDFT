@@ -57,7 +57,9 @@ public class SkyblockerConfig implements ConfigData {
     public static class General {
         public String apiKey;
         public boolean cooldownDisplay = true;
-        public boolean readableBazaarGraphs = false;
+        public boolean readableBazaarGraphs = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean pickupClipboardAuctionCommands = true;
 
         @ConfigEntry.Category("tabList")
         @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)

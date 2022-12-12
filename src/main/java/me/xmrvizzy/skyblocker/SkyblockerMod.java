@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig;
+import me.xmrvizzy.skyblocker.skyblock.ClipboardChecker;
 import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay;
 import me.xmrvizzy.skyblocker.skyblock.HotbarSlotLock;
 import me.xmrvizzy.skyblocker.skyblock.SidebarDisplay;
@@ -110,6 +111,7 @@ public class SkyblockerMod implements ClientModInitializer {
 					if(SkyblockerConfig.get().waypoint.autoCleanFeedback && !removed.isEmpty())
 					client.player.sendMessage(new LiteralText("[Skyblocker]Removed closed lobbies:"+removed.toString()).formatted(Formatting.GREEN),false);
 				}
+				ClipboardChecker.tick();
 			}
 			TICKS = 0;
 		}

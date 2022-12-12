@@ -15,6 +15,8 @@
   "text.autoconfig.skyblocker.option.general.bars.enableBars": "Enable Bars",
   "text.autoconfig.skyblocker.option.general.cooldownDisplay": "Cooldown Display",
   "text.autoconfig.skyblocker.option.general.readableBazaarGraphs": "Aligned Bazaar Graphs",
+  "text.autoconfig.skyblocker.option.general.pickupClipboardAuctionCommands.@Tooltip": "Works well with auction API websites that can copy auction commands!",
+  "text.autoconfig.skyblocker.option.general.pickupClipboardAuctionCommands": "Auto open copied auction",
   "text.autoconfig.skyblocker.option.general.tabList": "Tab List Options",
   "text.autoconfig.skyblocker.option.general.tabList.tabSize.@PrefixText": "Resize tab list in skyblock without changing Global GUI Scale",
   "text.autoconfig.skyblocker.option.general.tabList.tabSize": "Tab List Size (Relative, 1.0 for unchanged)",
