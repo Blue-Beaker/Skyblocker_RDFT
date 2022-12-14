@@ -78,6 +78,8 @@ public class SkyblockerMod implements ClientModInitializer {
 		if(Utils.isSkyblock && SkyblockerConfig.get().general.cooldownDisplay){
 			CooldownDisplay.tick();
 		}
+		if(SkyblockerConfig.get().network.realPing)
+		Pinger.instance.tick();
 		TICKS++;
 		if (TICKS % 4 == 0) 
 			try {
@@ -113,6 +115,10 @@ public class SkyblockerMod implements ClientModInitializer {
 				}
 				ClipboardChecker.tick();
 			}
+		}
+		if(TICKS%200==0){
+			if(SkyblockerConfig.get().network.realPing)
+			Pinger.instance.ping();
 			TICKS = 0;
 		}
 	}

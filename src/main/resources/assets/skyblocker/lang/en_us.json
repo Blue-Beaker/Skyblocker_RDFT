@@ -112,6 +112,8 @@
   "text.autoconfig.skyblocker.option.debug.forceServerId": "Force server id (only when force skyblock is on)",
   
   "text.autoconfig.skyblocker.category.network": "Network",
+  "text.autoconfig.skyblocker.option.network.realPing": "Use real ping",
+  "text.autoconfig.skyblocker.option.network.realPing.@Tooltip": "Will ping server regularly and replace ping value with result\nThis will affect ping display value of other mods",
   "text.autoconfig.skyblocker.option.network.proxyType.@PrefixText": "You can setup a proxy for this mod if you have problem fetching prices and wiki. This proxy only applies for this mod.",
   "text.autoconfig.skyblocker.option.network.proxyType": "Proxy Type(DIRECT for no proxy)",
   "text.autoconfig.skyblocker.option.network.proxyAddress": "Proxy address",

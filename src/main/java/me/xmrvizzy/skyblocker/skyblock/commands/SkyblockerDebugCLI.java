@@ -16,6 +16,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
+import me.xmrvizzy.skyblocker.Pinger;
 import me.xmrvizzy.skyblocker.config.SkyblockerConfig.Sidebar;
 import me.xmrvizzy.skyblocker.skyblock.CooldownDisplay;
 import me.xmrvizzy.skyblocker.skyblock.SidebarDisplay;
@@ -169,6 +170,12 @@ public class SkyblockerDebugCLI {
                 return 1;
             }))
             )
+            .then(literal("ping")
+            .executes(context -> {
+                context.getSource().sendFeedback(Pinger.instance.showPingResult());
+                return 1;
+            })
+        )
         );
         dispatcher.register(ClientCommandManager.literal("skyblockerdebug").redirect(sbrDebug));
     }
