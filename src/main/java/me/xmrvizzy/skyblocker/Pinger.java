@@ -48,7 +48,6 @@ public class Pinger {
             } catch (Exception e) {
             }
         });
-        client.player.sendMessage(new LiteralText(String.valueOf(client.getCurrentServerEntry().ping)), true);
     }
 
     public void add(final ServerInfo entry, final Runnable runnable) throws UnknownHostException {
