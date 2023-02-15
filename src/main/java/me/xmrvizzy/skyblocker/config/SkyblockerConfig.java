@@ -94,9 +94,12 @@ public class SkyblockerConfig implements ConfigData {
 
     public static class Hitbox {
         public boolean hitboxForAllHypixel = false;
+        @ConfigEntry.Gui.Tooltip
         public boolean oldPlayerHitbox = false;
         public boolean oldSneakingEyeHeight = true;
         public boolean oldFarmlandHitbox = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean removeHoeEfficency = true;
     }
 
     public static class Items {

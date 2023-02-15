@@ -67,11 +67,15 @@
   "text.autoconfig.skyblocker.option.messages.hideMoltenWave": "Hide Molten Wave Message",
   "text.autoconfig.skyblocker.option.messages.chatCoords": "Add coords from chat",
 
-  "text.autoconfig.skyblocker.category.hitbox": "Hitbox",
+  "text.autoconfig.skyblocker.category.hitbox": "1.8 Hitboxes/Behaviors",
   "text.autoconfig.skyblocker.option.hitbox.hitboxForAllHypixel": "Enable old hitbox everywhere in Hypixel",
   "text.autoconfig.skyblocker.option.hitbox.oldFarmlandHitbox": "Use 1.8 Farmland Hitbox",
-  "text.autoconfig.skyblocker.option.hitbox.oldPlayerHitbox": "Use 1.8 player hitbox: no hitbox change when sneaking and no auto crouching",
+
+  "text.autoconfig.skyblocker.option.hitbox.oldPlayerHitbox.@Tooltip": "no hitbox change when sneaking and no auto crouching",
+  "text.autoconfig.skyblocker.option.hitbox.oldPlayerHitbox": "Use 1.8 player hitbox",
   "text.autoconfig.skyblocker.option.hitbox.oldSneakingEyeHeight": "Use 1.8 sneaking eye height",
+  "text.autoconfig.skyblocker.option.hitbox.removeHoeEfficency.@Tooltip": "1.8 behavior, prevents creating ghost blocks from mining leaves with a hoe",
+  "text.autoconfig.skyblocker.option.hitbox.removeHoeEfficency": "Remove hoe effectiveness on leaves",
 
   "text.autoconfig.skyblocker.category.items": "Items",
   "text.autoconfig.skyblocker.option.items.potionOverlay": "Potion type Overlay",
